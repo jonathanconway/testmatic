@@ -6,10 +6,21 @@ export interface TestStep {
   readonly title: string;
 }
 
-export function createTestStep(step: Step, params?: any[]): TestStep {
-  return {
-    step,
-    params,
-    title: step.toString(...(params ?? [])),
-  };
+export type TestStepLine = [Step, any[]] | [Step] | Step;
+
+export function createTestStep(testStepLine: TestStepLine): TestStep {
+  if (Array.isArray(testStepLine)) {
+    const [step, params] = testStepLine;
+    return {
+      step,
+      params,
+      title: step.toString(...(params ?? [])),
+    };
+  } else {
+    const step = testStepLine;
+    return {
+      step,
+      title: step.toString([]),
+    };
+  }
 }

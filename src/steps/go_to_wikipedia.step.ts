@@ -8,6 +8,6 @@ export const go_to_wikipedia = createStep(
   }
 );
 
-// test("go_to_wikipedia", async () => {
-//   go_to_wikipedia.run();
-// });
+test("go_to_wikipedia", async () => {
+  go_to_wikipedia.run();
+});

@@ -2,10 +2,10 @@
 
 ### Tests
 
-- [Topic Can Be Found By Search](../tests/topic_can_be_found_by_search.md)
+- [Topic can be found by search](../tests/topic_can_be_found_by_search.md)
 
 ### Steps
 
-- Go To Wikipedia 
-- Search For Topic [Software Testing](../tokens/software_testing.md)
-- Observe Topic Title Is [Software Testing](../tokens/software_testing.md)
+- Go to wikipedia 
+- Search for topic [Software testing](../tokens/software_testing.md)
+- Observe topic title is [Software testing](../tokens/software_testing.md)

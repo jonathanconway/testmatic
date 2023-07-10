@@ -1,6 +1,5 @@
-import { sentenceCase } from "../utils";
-import { Step } from "./step";
-import { TestStep, createTestStep } from "./test-step";
+import { convertToSentenceCaseWithTokens } from "../utils";
+import { TestStep, TestStepLine, createTestStep } from "./test-step";
 
 export interface Test {
   readonly name: string;
@@ -9,17 +8,20 @@ export interface Test {
   readonly run: () => Promise<void>;
 }
 
-export function createTest(
-  name: string,
-  title: string | undefined,
-  testStepandParamPairs: readonly ([Step, any[]] | [Step])[]
-): Test {
-  const testSteps = testStepandParamPairs.map(([step, params]) =>
-    createTestStep(step, params)
-  );
+export function createTest({
+  name,
+  title,
+  testStepAndParamPairs,
+}: {
+  name: string;
+  title?: string;
+  testStepAndParamPairs: readonly TestStepLine[];
+}): Test {
+  const testSteps = testStepAndParamPairs.map(createTestStep);
+
   return {
     name,
-    title: title ?? sentenceCase(name),
+    title: title ?? convertToSentenceCaseWithTokens(name),
     testSteps,
     run: async () => {
       for await (const testStep of testSteps) {

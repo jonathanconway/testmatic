@@ -1,5 +1,5 @@
 import { Screen } from "./screen";
-import { sentenceCase } from "../utils";
+import { convertToSentenceCaseWithTokens } from "../utils";
 
 export interface Step {
   readonly name: string;
@@ -9,24 +9,22 @@ export interface Step {
 }
 
 export function createStepToString(name: string) {
-  return function (...params: readonly any[]) {
-    const title = sentenceCase(name);
-    const paramTitles = params.map((param) => param.toString()).join(" ");
-
-    return `${title} ${paramTitles}`;
+  return function () {
+    const title = convertToSentenceCaseWithTokens(name);
+    return title;
   };
 }
 
 export function createStep(
   name: string,
-  toString: ((...params: readonly any[]) => string) | undefined,
-  run: (...params: any[]) => Promise<void>,
-  screens: readonly Screen[] = []
+  toString: (() => string) | undefined,
+  run: () => Promise<void>,
+  screens?: readonly Screen[]
 ): Step {
   return {
     name,
     toString: toString ?? createStepToString(name),
     run,
-    screens,
+    screens: screens ?? [],
   };
 }

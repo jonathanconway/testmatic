@@ -1,6 +1,6 @@
 import { writeFileSync } from "fs";
 import { Test } from "../core";
-import { sentenceCase } from "../utils";
+import { convertToSentenceCaseWithTokens } from "../utils";
 
 function screenDocTemplate({
   title,
@@ -26,8 +26,9 @@ ${tests
 `.trim();
 }
 
-export function generateScreenDocs(tests: readonly Test[]) {
+export function generateScreenDocs(docsPath: string, tests: readonly Test[]) {
   const testsByScreen = new Map<string, Set<Test>>();
+
   for (const test of tests) {
     for (const testStep of test.testSteps) {
       for (const screen of testStep.step.screens) {
@@ -39,12 +40,12 @@ export function generateScreenDocs(tests: readonly Test[]) {
     }
   }
 
-  for (const [screenName, tests] of testsByScreen) {
+  for (const [screenName, tests] of Array.from(testsByScreen.entries())) {
     const fileContent = screenDocTemplate({
-      title: sentenceCase(screenName),
+      title: convertToSentenceCaseWithTokens(screenName),
       tests: Array.from(tests),
     });
 
-    writeFileSync(`docs/screens/${screenName}.md`, fileContent);
+    writeFileSync(`${docsPath}/screens/${screenName}.md`, fileContent);
   }
 }
