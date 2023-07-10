@@ -21,7 +21,6 @@ import { createStep } from "../framework";
 
 export const ${stepFnName} = createStep(
   "${stepFnName}",
-  undefined,
   async () => {
     console.log("${stepFnName}");
   }

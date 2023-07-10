@@ -6,10 +6,7 @@ import {
 
 export const recent_topics_are_listed = createTest({
   name: "recent_topics_are_listed",
-  testStepAndParamPairs: [
-    go_to_wikipedia,
-    observe_that_recent_topics_are_listed,
-  ],
+  steps: [go_to_wikipedia, observe_that_recent_topics_are_listed],
 });
 
 test("recent topics are listed", recent_topics_are_listed.run);

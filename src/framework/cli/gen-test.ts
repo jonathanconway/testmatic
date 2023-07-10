@@ -48,6 +48,11 @@ function getGenTestInfoFromPrompts() {
     stepIndex++;
   }
 
+  console.log("getGenTestInfoFromPrompts", {
+    testTitle,
+    steps,
+  });
+
   return {
     testTitle,
     steps,

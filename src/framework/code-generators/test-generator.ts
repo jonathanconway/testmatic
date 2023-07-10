@@ -29,7 +29,7 @@ ${stepFnNames.map((stepFnName) => `  ${stepFnName},`).join("\n")}
 
 export const ${testFnName} = createTest({
   name: "${testFnName}",
-  testStepAndParamPairs: [
+  steps: [
 ${stepFnNames.map((stepFnName) => `    ${stepFnName},`).join("\n")}
   ],
 });
@@ -73,6 +73,7 @@ export function generateTestFile(info: GenerateTestInfo) {
     stepsIndexFilePathAndName,
   } = generateTest(info);
 
+  console.log("generateTestFile", { testFilePathAndName, testFileContent });
   writeFileSync(testFilePathAndName, testFileContent);
   appendFileSync(testsIndexFilePathAndName, testFileExport);
 

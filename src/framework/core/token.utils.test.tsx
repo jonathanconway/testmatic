@@ -1,4 +1,4 @@
-import { parseTokenNameAndTypes } from "../token.utils";
+import { parseTokenNameAndTypes } from "./token.utils";
 
 describe("token.utils", () => {
   describe("parseTokenNameAndTypes", () => {

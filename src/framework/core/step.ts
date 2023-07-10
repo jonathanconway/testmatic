@@ -1,30 +1,15 @@
-import { Screen } from "./screen";
 import { convertToSentenceCaseWithTokens } from "../utils";
 
 export interface Step {
   readonly name: string;
-  readonly toString: (...params: any[]) => string;
-  readonly run: (...params: any[]) => Promise<void>;
-  readonly screens: readonly Screen[];
+  readonly title: string;
+  readonly run: () => Promise<void>;
 }
 
-export function createStepToString(name: string) {
-  return function () {
-    const title = convertToSentenceCaseWithTokens(name);
-    return title;
-  };
-}
-
-export function createStep(
-  name: string,
-  toString: (() => string) | undefined,
-  run: () => Promise<void>,
-  screens?: readonly Screen[]
-): Step {
+export function createStep(name: string, run: () => Promise<void>): Step {
   return {
     name,
-    toString: toString ?? createStepToString(name),
+    title: convertToSentenceCaseWithTokens(name),
     run,
-    screens: screens ?? [],
   };
 }

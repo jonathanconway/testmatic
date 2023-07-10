@@ -1,17 +1,16 @@
 import { createTest } from "../framework";
 import {
   go_to_wikipedia,
-  observe_topic_title_is,
-  search_for_topic,
+  observe_topic_title_is__testing_searchstring__,
+  search_for__software_testing_searchstring__now,
 } from "../steps";
-import { software_testing_search_string } from "../tokens";
 
 export const topic_can_be_found_by_search = createTest({
   name: "topic_can_be_found_by_search",
-  testStepAndParamPairs: [
-    [go_to_wikipedia],
-    [search_for_topic, [software_testing_search_string]],
-    [observe_topic_title_is, [software_testing_search_string]],
+  steps: [
+    go_to_wikipedia,
+    search_for__software_testing_searchstring__now,
+    observe_topic_title_is__testing_searchstring__,
   ],
 });
 

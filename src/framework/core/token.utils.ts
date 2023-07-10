@@ -10,6 +10,19 @@ export function getStepsHavingToken(steps: readonly Step[], token: Token) {
   return steps.filter((step) => getNameHasToken(token)(step.name));
 }
 
+export function getTokensHavingTest(test: Test, tokens: readonly Token[]) {
+  const tokenNameAndTypes = parseTokenNameAndTypes(test.name);
+  const tokensHavingTest = tokens.filter((token) =>
+    Boolean(
+      tokenNameAndTypes.find(
+        ({ nameAndType }) => token.nameAndType === nameAndType
+      )
+    )
+  );
+
+  return tokensHavingTest;
+}
+
 export function getStepTokens(
   step: Step,
   allTokens: readonly Token[]
@@ -53,10 +66,11 @@ export function parseTokenNameAndTypes(input: string) {
   return parseTokens(input).map(parseTokenNameAndType);
 }
 
-export function parseTokenNameAndType(tokenNameAndType: string) {
-  const parts = tokenNameAndType.split("_");
+export function parseTokenNameAndType(nameAndType: string) {
+  const parts = nameAndType.split("_");
   return {
     name: parts.slice(0, -1).join("_"),
     type: parts.slice(-1)[0],
+    nameAndType,
   };
 }

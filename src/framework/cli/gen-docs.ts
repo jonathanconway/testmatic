@@ -1,17 +1,13 @@
-import * as promptSync from "prompt-sync";
 import { rmSync } from "fs";
 
 import {
   generateTestDocs,
-  generateScreenDocs,
   generateStepDocs,
   generateTokenDocs,
 } from "../doc-generators";
 import * as tests from "../../tests";
 import * as steps from "../../steps";
 import * as tokens from "../../tokens";
-
-const prompt = promptSync();
 
 export function cliGenDocs(args: readonly string[]) {
   const docsPath = `${__dirname}/../../../docs`;
@@ -21,11 +17,12 @@ export function cliGenDocs(args: readonly string[]) {
   }
 
   const testsArray = Object.values(tests);
-  const tokensArray = Object.values(tokens);
   const stepsArray = Object.values(steps);
+  const tokensArray = Object.values(tokens);
+
+  console.log("gen-docs", { testsArray, stepsArray, tokensArray });
 
   generateTestDocs(docsPath, testsArray);
-  generateScreenDocs(docsPath, testsArray);
   generateStepDocs(docsPath, stepsArray, tokensArray);
   generateTokenDocs(docsPath, tokensArray, testsArray, stepsArray);
 }

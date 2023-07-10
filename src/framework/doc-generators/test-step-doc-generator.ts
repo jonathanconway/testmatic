@@ -1,8 +1,6 @@
-import { TestStep } from "../core/test-step";
+import { Step } from "../core";
 
-export function generateTestStepDoc(testStep: TestStep, index: number) {
+export function generateTestStepDoc(step: Step, index: number) {
   const stepNumber = index + 1;
-  const stepTitle = testStep.step.toString(...(testStep.params ?? []));
-
-  return `${stepNumber}. ${stepTitle}`;
+  return `${stepNumber}. ${step.title} [🔗](../steps/${step.name}.md)`;
 }

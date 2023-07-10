@@ -2,7 +2,11 @@ import { createStep } from "./step";
 
 export function createStepMock(
   name: string = "mock-step",
-  run: () => Promise<void> = async () => {}
+  run = async () => {}
 ) {
-  return createStep(name, () => name, run);
+  return createStep(name, run);
+}
+
+export function createStepMocks(names: readonly string[]) {
+  return names.map((name) => createStepMock(name, async () => {}));
 }

@@ -14,22 +14,23 @@ export function generateTokenDoc(
   steps: readonly Step[]
 ) {
   return function (token: Token) {
-    const { type, name, getDocTitle } = token;
+    const { type, name, title } = token;
+
     const testsHavingToken = getTestsHavingToken(tests, token);
     const stepsHavingToken = getStepsHavingToken(steps, token);
 
     const text = `
-## ${getDocTitle()}
+## ${title}
 
 ### Tests
 
 ${testsHavingToken.map((test) => `- [${test.title}](../tests/${test.name}.md)`)}
+${testsHavingToken.length === 0 && "(None)"}
 
 ### Steps
 
-${stepsHavingToken.map(
-  (step) => `- [${step.toString()}](../steps/${step.name}.md)`
-)}
+${stepsHavingToken.map((step) => `- [${step.title}](../steps/${step.name}.md)`)}
+${testsHavingToken.length === 0 && "(None)"}
 
 `.trim();
 
