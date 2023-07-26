@@ -1,6 +1,6 @@
 import * as promptSync from "prompt-sync";
 
-import { generateTest } from "../code-generators";
+import { generateTestFile } from "../code-generators";
 
 const prompt = promptSync();
 
@@ -11,7 +11,7 @@ function getGenTestInfoFromArgs(args: readonly string[]) {
     return undefined;
   }
 
-  const testTitle = populatedArgs[0];
+  const title = populatedArgs[0];
 
   const steps = populatedArgs.slice(1);
 
@@ -20,15 +20,15 @@ function getGenTestInfoFromArgs(args: readonly string[]) {
   }
 
   return {
-    testTitle,
+    title,
     steps,
   };
 }
 
 function getGenTestInfoFromPrompts() {
-  const testTitle = prompt("Please enter test title: ");
+  const title = prompt("Please enter test title: ");
 
-  if (!testTitle) {
+  if (!title) {
     return;
   }
 
@@ -48,13 +48,8 @@ function getGenTestInfoFromPrompts() {
     stepIndex++;
   }
 
-  console.log("getGenTestInfoFromPrompts", {
-    testTitle,
-    steps,
-  });
-
   return {
-    testTitle,
+    title,
     steps,
   };
 }
@@ -66,5 +61,5 @@ export function cliGenTest(args: readonly string[]) {
     return;
   }
 
-  generateTest(testInfo);
+  generateTestFile(testInfo);
 }

@@ -5,14 +5,15 @@ import {
   convertToLowerCaseWithTokens,
   convertToSnakeWithTokens,
 } from "../utils";
-import { generateStep } from "./step-generator";
+import { generateStep, generateStepFiles } from "./step-generator";
+import { generateTokenFiles } from "./token-generator";
 
 export interface GenerateTestInfo {
-  readonly testTitle: string;
+  readonly title: string;
   readonly steps: readonly string[];
 }
 
-export function generateTest({ testTitle, steps }: GenerateTestInfo) {
+export function generateTest({ title: testTitle, steps }: GenerateTestInfo) {
   const testFnName = convertToSnakeWithTokens(testTitle);
   const stepFnNames = steps.map(convertToSnakeWithTokens);
 
@@ -71,9 +72,9 @@ export function generateTestFile(info: GenerateTestInfo) {
     },
     stepFiles,
     stepsIndexFilePathAndName,
+    tokens: testTokens,
   } = generateTest(info);
 
-  console.log("generateTestFile", { testFilePathAndName, testFileContent });
   writeFileSync(testFilePathAndName, testFileContent);
   appendFileSync(testsIndexFilePathAndName, testFileExport);
 
@@ -81,10 +82,19 @@ export function generateTestFile(info: GenerateTestInfo) {
     stepFilePathAndName,
     stepFileContent,
     stepFileExport,
+    tokens: stepTokens,
   } of stepFiles) {
     if (!existsSync(stepFilePathAndName)) {
       writeFileSync(stepFilePathAndName, stepFileContent);
       appendFileSync(stepsIndexFilePathAndName, stepFileExport);
     }
+
+    for (const token of stepTokens) {
+      generateTokenFiles({ token });
+    }
+  }
+
+  for (const token of testTokens) {
+    generateTokenFiles({ token });
   }
 }

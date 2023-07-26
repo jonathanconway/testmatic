@@ -11,9 +11,12 @@ export function cliTestList(args: readonly string[]) {
     const tokenFilterValue = tokenFilterArg
       .split("--filter-token=")[1]
       .replaceAll('"', "");
+
+    const token = tokens[tokenFilterValue as keyof typeof tokens];
+
     if (Object.keys(tokens).includes(tokenFilterValue)) {
       testsToDisplay = testsToDisplay.filter((test) =>
-        getTokensHavingTest(test, Object.values(tokens))
+        getTokensHavingTest(test, Object.values(tokens)).includes(token)
       );
     }
   }
