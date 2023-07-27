@@ -4,7 +4,7 @@ export function convertToSentenceCase(input: string) {
 }
 
 export function convertToLowerCaseWithTokens(input: string) {
-  return convertToSentenceCaseWithTokens(input).toLowerCase();
+  return convertToSentenceCaseWithTokens(input).toLowerCase().trim();
 }
 
 function convertTokensToBracketedStrings(input: string) {
@@ -47,9 +47,11 @@ export function convertTokenToSnakeParts(input: string) {
 export function convertToSnakeWithTokens(input: string) {
   return input
     .toLowerCase()
-    .replaceAll("(", "_")
-    .replaceAll(")", "_")
     .replaceAll("  ", " ")
     .replaceAll(" ", "_")
+    .replaceAll("_(", "__")
+    .replaceAll(")_", "__")
+    .replaceAll("(", "__")
+    .replaceAll(")", "__")
     .replaceAll(/\W/g, "");
 }
