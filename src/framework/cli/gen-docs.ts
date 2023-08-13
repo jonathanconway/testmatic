@@ -1,6 +1,7 @@
 import { rmSync } from "fs";
 
 import {
+  generateIndexDoc,
   generateTestDocs,
   generateStepDocs,
   generateTokenDocs,
@@ -20,8 +21,7 @@ export function cliGenDocs(args: readonly string[]) {
   const stepsArray = Object.values(steps);
   const tokensArray = Object.values(tokens);
 
-  console.log("gen-docs", { testsArray, stepsArray, tokensArray });
-
+  generateIndexDoc(docsPath, testsArray, tokensArray);
   generateTestDocs(docsPath, testsArray);
   generateStepDocs(docsPath, stepsArray, tokensArray);
   generateTokenDocs(docsPath, tokensArray, testsArray, stepsArray);

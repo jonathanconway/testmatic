@@ -35,7 +35,7 @@ export function generateToken({ token }: GenerateTokenInfo) {
   const { type, name } = tokenSnakeParts;
 
   const tokenFnName = `${name}_${type}`;
-  const tokenFileNameBody = `${name}.${type}.token`;
+  const tokenFileNameBody = `${name}.${type}.token`.toLowerCase();
   const tokenFileName = `${tokenFileNameBody}.ts`;
   const tokenFilePathAndName = `${__dirname}/../../tokens/${tokenFileName}`;
   const tokenFileContent = `

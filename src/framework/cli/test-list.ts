@@ -1,6 +1,7 @@
 import * as tests from "../../tests";
 import * as tokens from "../../tokens";
 import { getTokensHavingTest } from "../core";
+import { convertToAsciiTable } from "./cli.utils";
 
 export function cliTestList(args: readonly string[]) {
   let testsToDisplay = Object.values(tests);
@@ -21,9 +22,10 @@ export function cliTestList(args: readonly string[]) {
     }
   }
 
-  console.log(
-    testsToDisplay
-      .map((test) => `${test.title} | ./docs/tests/${test.name}.md`)
-      .join("\n")
-  );
+  const testList = testsToDisplay.map((test) => ({
+    title: test.title,
+    doc: `./docs/tests/${test.name}.md`,
+  }));
+
+  console.log(convertToAsciiTable(testList));
 }

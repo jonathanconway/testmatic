@@ -8,9 +8,11 @@ const [cmd, ...args] = getArgsAfter("cli");
 switch (cmd) {
   case "test":
     cliTest(args);
-    console.log("cli", { args });
+    break;
   case "gen":
     cliGen(args);
+    break;
   case "import":
     cliImport(args);
+    break;
 }

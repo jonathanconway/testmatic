@@ -25,12 +25,12 @@ export function generateTokenDoc(
 ### Tests
 
 ${testsHavingToken.map((test) => `- [${test.title}](../tests/${test.name}.md)`)}
-${testsHavingToken.length === 0 && "(None)"}
+${testsHavingToken.length === 0 ? "(None)" : ""}
 
 ### Steps
 
 ${stepsHavingToken.map((step) => `- [${step.title}](../steps/${step.name}.md)`)}
-${testsHavingToken.length === 0 && "(None)"}
+${stepsHavingToken.length === 0 ? "(None)" : ""}
 
 `.trim();
 
