@@ -4,7 +4,7 @@
 
 Testmatic is a framework and command-line tool for quickly and easily writing and organising end-to-end tests.
 
-Simple, human-readable lists of **_steps_** are grouped into **_tests_** and organised by special tags known as **_tokens_**.
+Simple, human-readable lists of **_steps_** are grouped into **_tests_** and can be further organised by various types of **_tags_**.
 
 Documentation is automatically generated in Markdown format, suitable for viewing in the Web interface of a version control repository (e.g. GitHub or BitBucket).
 
@@ -12,12 +12,15 @@ You can place links to Testmatic documentation in external documentation, such a
 
 You can link to:
 
-- **_A test_**, e.g. "User can Login using valid credentials"
-  - http://github.com/myaccount/mytests/blob/main/docs/tests/user_can_login_using_valid_credentails.md
-- **_A step_**, e.g. "Enter username: test@website.com"
-  - http://github.com/myaccount/mytests/blob/main/docs/steps/enter_username_test_website_com.md
-- **_A token's tests_**, e.g. "All tests for the Login screen"
-  - http://github.com/myaccount/mytests/blob/main/docs/tokens/login_screen.md
+- **_A test_**
+  - For example: "User can Login using valid credentials"
+    - [/blob/main/docs/tests/recent_topics_are_listed.md](/blob/main/docs/tests/recent_topics_are_listed.md)
+- **_A step_**
+  - For example: "Enter username: test@website.com"
+    - [/blob/main/docs/steps/go_to_wikipedia.md](/blob/main/docs/steps/go_to_wikipedia.md)
+- **_A tags's tests_**
+  - For example: "All tests for Search (Screen)"
+    - [/blob/main/docs/tags/search_screen.md](/blob/main/docs/tags/search_screen.md)
 
 ## Benefits of testing
 
@@ -37,7 +40,7 @@ Some key benefits of testmatic:
 4. Testmatic tests are easy to link to
 5. Testmatic tests can be hosted in version control, with zero third-party dependencies or additional setup
 6. Testmatic tests are version-controlled
-7. Testmatic tokens provide a powerful way to group related tests
+7. Testmatic tags provide a powerful way to group related tests
 
 ### 1. Testing steps are simple and easy for people to read
 
@@ -73,9 +76,9 @@ If your organisation has a version control system, and you have permission to cr
 
 As your testmatic instance is a forked Git repository by default, you reap all the benefits of version control - tracking the history of changes, branching, ability to revert changes, etc.
 
-As tests, steps and tokens are stored internally as Typescript code, you can easily make modifications - large or small - using the standard tools of your IDE. For example, in VS Code, you can rename a token and automatically have it update all usages, by renaming the file with [Update imports on file move](https://code.visualstudio.com/docs/typescript/typescript-refactoring#_update-imports-on-file-move) and [Rename symbol](https://code.visualstudio.com/docs/editor/refactoring#_rename-symbol).
+As tests, steps and tags are stored internally as Typescript code, you can easily make modifications - large or small - using the standard tools of your IDE. For example, in VS Code, you can rename a token and automatically have it update all usages, by renaming the file with [Update imports on file move](https://code.visualstudio.com/docs/typescript/typescript-refactoring#_update-imports-on-file-move) and [Rename symbol](https://code.visualstudio.com/docs/editor/refactoring#_rename-symbol).
 
-### 7. Testmatic tokens provide a powerful way to group related tests
+### 7. Testmatic tags provide a powerful way to group related tests
 
 For example, you can instantly retrieve a list of all tests for a particular screen, e.g. Login screen or Dashboard screen.
 
@@ -83,7 +86,7 @@ Or you can instantly retrieve a list of tests that utilise a particular test acc
 
 These lists can be conveniently linked from external repositories of information, such as a Solution design in a Wiki, a task tracking system or company chat.
 
-For example, a wiki page for the Login screen could link to a testmatic doc listing all tests for that screen: http://github.com/myaccount/mytests/blob/main/docs/tokens/login_screen.md.
+For example, a wiki page for the Login screen could link to a testmatic doc listing all tests for that screen: http://github.com/myaccount/mytests/blob/main/docs/tags/login_screen.md.
 
 ## Getting started
 
@@ -120,7 +123,9 @@ npm install
 
 Congratulations! You now have a working Testmatic project.
 
-## Adding a test and generating docs
+## Guide
+
+### Adding a test and generating docs
 
 Run the development server:
 
@@ -135,9 +140,9 @@ The `npm run start` command builds your website locally and serves it through a 
 
 Open `docs/intro.md` (this page) and edit some lines: the site **reloads automatically** and displays your changes.
 
-## How testmatic works
+### How testmatic works
 
-Testmatic stores your tests, steps and tokens as Typescript code files.
+Testmatic stores your tests, steps and tags as Typescript code files.
 
 These files are generated / re-generated whenever you run the `testmatic gen test`, `testmatic gen step` or `testmatic gen token` commands in the CLI.
 
@@ -149,7 +154,7 @@ flowchart LR
     B --> C(Generate docs command) -->|testmatic| D[Docs for tests and steps]
 ```
 
-## Generating tests
+### Generating tests
 
 To generate a test, simply run `testmatic gen test`, fill in the title and testing steps, and then enter an empty line to finish.
 
@@ -176,7 +181,7 @@ Testmatic will generate your test file.
 
 > Warning: If a test matching the name already exists, Testmatic will overwrite it with your new test. However, if any matching steps already exist, Testmatic will not overwrite them.
 
-## Generating steps
+### Generating steps
 
 TO generate an individual step, simply run `testmatic gen step`, fill in the step name, and then press Enter/Return.
 
@@ -188,27 +193,25 @@ $
 
 Testmatic will generate your step file.
 
-## Adding tokens
+### Adding tags
 
-Tokens are a tagging system unique to testmatic – they can be attached to test titles and/or test steps and later used for cross-referencing and to help with automation tests (if you decide to add any).
+Tags can be attached to test titles and/or test steps and later used for cross-referencing and to help with automation tests (if you decide to add any).
 
-Tokens are surrounded by curved brackets and the last word is the "type" of token.
+Tags are surrounded by square brackets and the tag type surrounded by rounded brackets.
 
-For example:
+For example the following test step references a tag named "Account settings", of type "screen":
 
 ```
-1. Go to the (Account settings screen)
+1. Go to [Account settings (screen)]
 ```
 
-This references a token named "Account settings", of type "screen".
-
-To add a token, simply reference it somewhere, and testmatic will do the rest.
+To add a token, simply reference it in a test or step and testmatic will do the rest.
 
 For example, if you run the following command, testmatic will generate the "Account settings" token of type "screen":
 
 ```bash
 $ testmatic gen step
-Please enter step: Go to the (Account settings screen)
+Please enter step: Go to the [(Account settings screen)]
 $
 ```
 
@@ -224,21 +227,55 @@ Please enter token name: Account settings screen
 $
 ```
 
-## Runner functions
+### Generating documentation
 
-As Typescript code files, Testmatic tests and steps can be augmented with runner functions. These functions which are called when you run a Testmatic test. In these functions, you can write code to open a browser, simulate user events and assert on DOM elements. This is how you use Testmatic to write web automation tests.
+Testmatic generates documentation for all your tests, steps and tags in markdown format.
 
-However it's not necessary to automate Testmatic tests. You could leave the runner functions empty and simply use Testmatic to organise and document your testing steps.
+Tests docs have links to tags.
 
-## Generating documentation
-
-Testmatic generates documentation for all your tests, steps and tokens in markdown format.
-
-Tests docs have links to tokens.
-
-An index page is also generated, listing all the steps and tokens in the project.
+An index page is also generated, listing all the steps and tags in the project.
 
 The Markdown is 100% GitHub and Bitbucket compatible, so you don't even need to worry about hosting – simply link directly to the applicable Markdown page.
+
+## CLI reference
+
+### `tests list`
+
+#### `--filter:tag="{tag}"`
+
+### `tests add`
+
+### `test {test_name} show`
+
+### `test {test_name} remove`
+
+### `test {test_name} steps add`
+
+### `test {test_name} step {step_name} show`
+
+### `test {test_name} step {step_name} remove`
+
+### `test {test_name} links list`
+
+### `test {test_name} link {link_name} show`
+
+### `test {test_name} link {link_name} open`
+
+### `test {test_name} link {link_name} remove`
+
+### `tags list`
+
+### `tags add`
+
+### `tag {tag_name} show`
+
+### `tag {tag_name} remove`
+
+### `tag {tag_name} tests list`
+
+### `project init`
+
+### `export json {filename}`
 
 ## FAQ
 
@@ -279,7 +316,7 @@ In the meantime, the recommended approach is to fork the testmatic repo and add 
   </tr>
   <tr>
     <th>13-Aug-2023</th>
-    <td>Initial release with core framework and basic support for tests, steps, tokens, doc generation and querying of tests and steps.</td>
+    <td>Initial release with core framework and basic support for tests, steps, tags, doc generation and querying of tests and steps.</td>
   </tr>
 </table>
 

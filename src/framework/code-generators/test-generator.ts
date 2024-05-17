@@ -1,11 +1,10 @@
 import { appendFileSync, existsSync, writeFileSync } from "fs";
 
-import { parseTokens } from "../core";
-import {
-  convertToLowerCaseWithTokens,
-  convertToSnakeWithTokens,
-} from "../utils";
-import { generateStep, generateStepFiles } from "./step-generator";
+import { parseTags } from "../core";
+// import { parseTags2 } from "../core";
+import { convertToLowerCaseWithTags, convertToSnakeWithTags } from "../utils";
+
+import { generateStep } from "./step-generator";
 import { generateTokenFiles } from "./token-generator";
 
 export interface GenerateTestInfo {
@@ -14,8 +13,8 @@ export interface GenerateTestInfo {
 }
 
 export function generateTest({ title: testTitle, steps }: GenerateTestInfo) {
-  const testFnName = convertToSnakeWithTokens(testTitle);
-  const stepFnNames = steps.map(convertToSnakeWithTokens);
+  const testFnName = convertToSnakeWithTags(testTitle);
+  const stepFnNames = steps.map(convertToSnakeWithTags);
 
   const testFileNameBody = `${testFnName}.test`;
   const testFileName = `${testFileNameBody}.ts`;
@@ -23,7 +22,7 @@ export function generateTest({ title: testTitle, steps }: GenerateTestInfo) {
   const testsIndexFilePathAndName = `${testsPath}/index.ts`;
   const testFilePathAndName = `${testsPath}/${testFileName}`;
   const testFileContent = `
-import { createTest } from "../framework";
+import { createTest, runTest } from "../framework";
 import {
 ${stepFnNames.map((stepFnName) => `  ${stepFnName},`).join("\n")}
 } from "../steps";
@@ -35,7 +34,7 @@ ${stepFnNames.map((stepFnName) => `    ${stepFnName},`).join("\n")}
   ],
 });
 
-test("${convertToLowerCaseWithTokens(testFnName)}", ${testFnName}.run);
+test("${convertToLowerCaseWithTags(testFnName)}", () => runTest(${testFnName}));
 `.trim();
   const testFileExport = `export * from "./${testFileNameBody}";\n`;
 
@@ -50,15 +49,13 @@ test("${convertToLowerCaseWithTokens(testFnName)}", ${testFnName}.run);
 
   const stepsIndexFilePathAndName = `${__dirname}/../../steps/index.ts`;
 
-  const tokens = parseTokens(testFnName).map((token) =>
-    token.replaceAll("_", " ")
-  );
+  const tags = parseTags(testFnName);
 
   return {
     testFile,
     stepFiles,
     stepsIndexFilePathAndName,
-    tokens,
+    tags,
   };
 }
 
@@ -72,7 +69,7 @@ export function generateTestFile(info: GenerateTestInfo) {
     },
     stepFiles,
     stepsIndexFilePathAndName,
-    tokens: testTokens,
+    tags: testTags,
   } = generateTest(info);
 
   writeFileSync(testFilePathAndName, testFileContent);
@@ -82,19 +79,19 @@ export function generateTestFile(info: GenerateTestInfo) {
     stepFilePathAndName,
     stepFileContent,
     stepFileExport,
-    tokens: stepTokens,
+    tags: stepTags,
   } of stepFiles) {
     if (!existsSync(stepFilePathAndName)) {
       writeFileSync(stepFilePathAndName, stepFileContent);
       appendFileSync(stepsIndexFilePathAndName, stepFileExport);
     }
 
-    for (const token of stepTokens) {
-      generateTokenFiles({ token });
-    }
+    // for (const token of stepTags) {
+    //   generateTokenFiles({ token });
+    // }
   }
 
-  for (const token of testTokens) {
-    generateTokenFiles({ token });
-  }
+  // for (const token of testTags) {
+  //   generateTokenFiles({ token });
+  // }
 }

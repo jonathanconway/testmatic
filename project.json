@@ -1,0 +1,62 @@
+{
+  "steps": {
+    "step_one": {
+      "title": "step one",
+      "name": "step_one",
+      "links": {},
+      "tagNames": []
+    },
+    "step_two": {
+      "title": "step two",
+      "name": "step_two",
+      "links": {},
+      "tagNames": []
+    },
+    "step_three": {
+      "title": "step three",
+      "name": "step_three",
+      "links": {},
+      "tagNames": ["tag_two"]
+    }
+  },
+  "tests": {
+    "test_one": {
+      "title": "test one",
+      "name": "test_one",
+      "links": {},
+      "stepNames": ["step_one", "step_two"],
+      "tagNames": [],
+      "runs": {}
+    },
+    "test_two": {
+      "title": "test two",
+      "name": "test_two",
+      "links": {},
+      "stepNames": ["step_one", "step_two"],
+      "tagNames": ["tag_one"],
+      "runs": {}
+    },
+    "test_three": {
+      "title": "test three",
+      "name": "test_three",
+      "links": {},
+      "stepNames": ["step_one", "step_three"],
+      "tagNames": [],
+      "runs": {}
+    }
+  },
+  "tags": {
+    "tag_one": {
+      "name": "tag_one",
+      "links": {},
+      "type": "tag_type_one",
+      "description": "description"
+    },
+    "tag_two": {
+      "name": "tag_two",
+      "links": {},
+      "type": "tag_type_two",
+      "description": "description"
+    }
+  }
+}

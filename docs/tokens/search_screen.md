@@ -1,7 +1,0 @@
-## Screen: Search
-
-### Tests
-
-
-
-### Steps

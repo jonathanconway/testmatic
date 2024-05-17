@@ -1,10 +1,9 @@
 import { appendFileSync, existsSync, writeFileSync } from "fs";
 
-import { parseTokens } from "../core";
-import {
-  convertToLowerCaseWithTokens,
-  convertToSnakeWithTokens,
-} from "../utils";
+import { parseTags } from "../core";
+// import { parseTags2 } from "../core";
+import { convertToLowerCaseWithTags } from "../utils";
+
 import { generateTokenFiles } from "./token-generator";
 
 export interface GenerateStepInfo {
@@ -12,12 +11,12 @@ export interface GenerateStepInfo {
 }
 
 export function generateStep({ step }: GenerateStepInfo) {
-  const stepFnName = convertToSnakeWithTokens(step);
+  const stepFnName = step;
   const stepFileNameBody = `${stepFnName}.step`;
   const stepFileName = `${stepFileNameBody}.ts`;
   const stepFilePathAndName = `${__dirname}/../../steps/${stepFileName}`;
   const stepFileContent = `
-import { createStep } from "../framework";
+import { createStep, runTest } from "../framework";
 
 export const ${stepFnName} = createStep(
   "${stepFnName}",
@@ -26,21 +25,19 @@ export const ${stepFnName} = createStep(
   }
 );
 
-test("${convertToLowerCaseWithTokens(stepFnName)}", ${stepFnName}.run);
+test("${convertToLowerCaseWithTags(stepFnName)}", () => runTest(${stepFnName}));
   `.trim();
   const stepsIndexFilePathAndName = `${__dirname}/../../steps/index.ts`;
   const stepFileExport = `export * from "./${stepFileNameBody}";\n`;
 
-  const tokens = parseTokens(stepFnName).map((token) =>
-    token.replaceAll("_", " ")
-  );
+  const tags = parseTags(stepFnName);
 
   return {
     stepFilePathAndName,
     stepFileContent,
     stepFileExport,
     stepsIndexFilePathAndName,
-    tokens,
+    tags,
   };
 }
 
@@ -50,7 +47,7 @@ export function generateStepFiles({ step }: GenerateStepInfo) {
     stepFileContent,
     stepFileExport,
     stepsIndexFilePathAndName,
-    tokens,
+    tags,
   } = generateStep({ step });
 
   if (!existsSync(stepFilePathAndName)) {
@@ -58,5 +55,5 @@ export function generateStepFiles({ step }: GenerateStepInfo) {
     appendFileSync(stepsIndexFilePathAndName, stepFileExport);
   }
 
-  tokens.map((token) => ({ token })).forEach(generateTokenFiles);
+  // tags.map((token) => ({ token })).forEach(generateTokenFiles);
 }

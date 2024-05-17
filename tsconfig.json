@@ -1,10 +1,20 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "noImplicitAny": true,
-    "removeComments": true,
-    "preserveConstEnums": true,
+    "sourceRoot": "src",
+    "outDir": "dist",
+    "strict": true,
+    "target": "es2021",
     "sourceMap": true,
-    "lib": ["es2021"]
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "lib": ["es2021"],
+    "module": "esnext"
+  },
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node",
+    "compilerOptions": {
+      "noUnusedLocals": false
+    }
   }
 }

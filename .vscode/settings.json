@@ -1,3 +1,4 @@
 {
-  "jestrunner.codeLensSelector": "**/*.{test,spec,step}.{js,jsx,ts,tsx}"
+  "jestrunner.codeLensSelector": "**/*.{test,spec,step}.{js,jsx,ts,tsx}",
+  "jestrunner.jestCommand": "node --experimental-vm-modules 'node_modules/.bin/jest'"
 }

@@ -1,26 +1,35 @@
 import { appendFileSync, existsSync, writeFileSync } from "fs";
 
-import { convertTokenToSnakeParts } from "../utils";
+import { Maybe, convertTokenToSnakeParts } from "../utils";
+import { Tag } from "../core";
 
 export interface GenerateTokenInfo {
   readonly token: string;
 }
 
+export interface TokenFilesInfo {
+  readonly tokenFilePathAndName: string;
+  readonly tokenFileContent: string;
+  readonly tagsIndexFilePathAndName: string;
+  readonly tokenFileExport: string;
+}
+
 export function generateTokenFiles({ token }: GenerateTokenInfo) {
-  const tokenFile = generateToken({ token });
-  if (!tokenFile) {
+  const tokenFiles = generateToken({ token });
+  if (!tokenFiles) {
     return;
   }
+  generateTokenFilesFromInfo(tokenFiles);
+}
 
-  const {
-    tokenFilePathAndName,
-    tokenFileContent,
-    tokensIndexFilePathAndName,
-    tokenFileExport,
-  } = tokenFile;
-
+export function generateTokenFilesFromInfo({
+  tokenFilePathAndName,
+  tokenFileContent,
+  tagsIndexFilePathAndName,
+  tokenFileExport,
+}: TokenFilesInfo) {
   if (!existsSync(tokenFilePathAndName)) {
-    appendFileSync(tokensIndexFilePathAndName, tokenFileExport);
+    appendFileSync(tagsIndexFilePathAndName, tokenFileExport);
     writeFileSync(tokenFilePathAndName, tokenFileContent);
   }
 }
@@ -37,7 +46,7 @@ export function generateToken({ token }: GenerateTokenInfo) {
   const tokenFnName = `${name}_${type}`;
   const tokenFileNameBody = `${name}.${type}.token`.toLowerCase();
   const tokenFileName = `${tokenFileNameBody}.ts`;
-  const tokenFilePathAndName = `${__dirname}/../../tokens/${tokenFileName}`;
+  const tokenFilePathAndName = `${__dirname}/../../tags/${tokenFileName}`;
   const tokenFileContent = `
 import { createToken } from "../framework";
 
@@ -47,12 +56,58 @@ export const ${tokenFnName} = createToken(
 );
   `.trim();
   const tokenFileExport = `export * from "./${tokenFileNameBody}";\n`;
-  const tokensIndexFilePathAndName = `${__dirname}/../../tokens/index.ts`;
+  const tagsIndexFilePathAndName = `${__dirname}/../../tags/index.ts`;
 
   return {
     tokenFilePathAndName,
     tokenFileContent,
     tokenFileExport,
-    tokensIndexFilePathAndName,
+    tagsIndexFilePathAndName,
+  };
+}
+
+function convertStringDictionaryToJavascriptCode<T extends {}>(input: T) {
+  return (
+    "{ " +
+    Object.entries(input).map(([name, value]) => `${name}: "${value}"`) +
+    " }"
+  );
+}
+
+export function generateTokenFromObject({
+  token,
+}: {
+  token: Tag;
+}): Maybe<TokenFilesInfo> {
+  const tokenSnakeParts = convertTokenToSnakeParts(token.name);
+  if (!tokenSnakeParts) {
+    return undefined;
+  }
+
+  const { type, name, links } = token;
+
+  const tokenFnName = `${name}_${type}`;
+  const tokenFileNameBody = `${name}.${type}.token`.toLowerCase();
+  const tokenFileName = `${tokenFileNameBody}.ts`;
+  const tokenFilePathAndName = `${__dirname}/../../tags/${tokenFileName}`;
+  const tokenLinks = links.map(convertStringDictionaryToJavascriptCode);
+
+  const tokenFileContent = `
+import { createToken } from "../framework";
+
+export const ${tokenFnName} = createToken(
+  "${name}",
+  "${type}",
+  [${tokenLinks.join(", ")}]
+);
+  `.trim();
+  const tokenFileExport = `export * from "./${tokenFileNameBody}";\n`;
+  const tagsIndexFilePathAndName = `${__dirname}/../../tags/index.ts`;
+
+  return {
+    tokenFilePathAndName,
+    tokenFileContent,
+    tokenFileExport,
+    tagsIndexFilePathAndName,
   };
 }

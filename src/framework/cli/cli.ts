@@ -1,18 +1,23 @@
-import { getArgsAfter } from "./cli.utils";
-import { cliGen } from "./gen";
-import { cliImport } from "./import";
-import { cliTest } from "./test";
+import { cliHelp } from "./cli-help";
+import { cliGen } from "./gen/gen";
+import { cliTag } from "./tag/tag";
+import { cliTest } from "./test/test";
 
-const [cmd, ...args] = getArgsAfter("cli");
+export function cli([cmd, ...args]: string[]) {
+  switch (cmd) {
+    case "test":
+      cliTest(args);
+      break;
 
-switch (cmd) {
-  case "test":
-    cliTest(args);
-    break;
-  case "gen":
-    cliGen(args);
-    break;
-  case "import":
-    cliImport(args);
-    break;
+    case "tag":
+      cliTag(args);
+      break;
+
+    case "gen":
+      cliGen(args);
+      break;
+
+    default:
+      cliHelp();
+  }
 }

@@ -1,4 +1,7 @@
-export * from "./doc-generators";
+export * from "./cli";
+export * from "./code-generators";
 export * from "./core";
-
-(global as any).test = (global.test || function () {}) as any;
+export * from "./exporters";
+export * from "./files";
+export * from "./markdown";
+export * from "./utils";
