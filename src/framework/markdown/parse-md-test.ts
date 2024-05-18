@@ -1,9 +1,11 @@
 import { remark } from "remark";
 
 import { Tag, Test } from "../core";
+import { DirTree } from "../files";
 import { convertTitleToName } from "../utils";
 
 import { parseMdLinks } from "./parse-md-links";
+import { parseMdRuns } from "./parse-md-runs";
 import { parseMdTestSteps } from "./parse-md-test-steps";
 import { parseMdTestTags } from "./parse-md-test-tags";
 import { parseMdTitle } from "./parse-md-title";
@@ -11,7 +13,8 @@ import { parseDescription } from "./parse-md.utils";
 
 export function parseMdTest(
   source: string,
-  existingTagsByName: Record<string, Tag>
+  existingTagsByName: Record<string, Tag>,
+  runsDirTree: DirTree
 ): Test {
   const root = remark().parse(source);
 
@@ -27,6 +30,8 @@ export function parseMdTest(
 
   const tags = parseMdTestTags(root, existingTagsByName);
 
+  const runs = parseMdRuns(runsDirTree, name);
+
   return {
     name,
     title,
@@ -34,6 +39,6 @@ export function parseMdTest(
     links,
     description,
     tags,
-    runs: [],
+    runs,
   };
 }

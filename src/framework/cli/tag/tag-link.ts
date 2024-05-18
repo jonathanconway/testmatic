@@ -1,16 +1,13 @@
-import { ADD_COMMANDS } from "../add/add";
-import { LIST_COMMANDS } from "../list";
+import { createCommand } from "commander";
 
-import { cliTagLinkAdd } from "./tag-link-add";
-import { cliTagLinkList } from "./tag-link-list";
+import { cliTagLinkAddCommand } from "./tag-link-add";
+import { cliTagLinkDeleteCommand } from "./tag-link-delete";
+import { cliTagLinkListCommand } from "./tag-link-list";
+import { cliTagLinkOpenCommand } from "./tag-link-open";
 
-export function cliTagLink([command, ...restArgs]: readonly string[]) {
-  switch (true) {
-    case ADD_COMMANDS.includes(command):
-      cliTagLinkAdd(restArgs);
-      break;
-    case LIST_COMMANDS.includes(command):
-      cliTagLinkList(restArgs);
-      break;
-  }
-}
+export const cliTagLinkCommand = createCommand("link")
+  .description("Manage tag links")
+  .addCommand(cliTagLinkListCommand)
+  .addCommand(cliTagLinkAddCommand)
+  .addCommand(cliTagLinkOpenCommand)
+  .addCommand(cliTagLinkDeleteCommand);

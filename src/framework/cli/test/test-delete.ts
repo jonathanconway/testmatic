@@ -1,19 +1,21 @@
+import { createCommand } from "commander";
+
 import { deleteProjectTest, getTestByNameOrTitle } from "../../core";
-import { exportMdTest } from "../../markdown/export-md-test";
-import { readProject } from "../project.utils";
+import { readProject, writeProject } from "../project.utils";
 
-export function cliTestDelete([name]: readonly string[]) {
-  if (!name) {
-    throw new Error("Please provide name parameter.");
-  }
+type TestDeleteParameter = string;
 
+export const cliTestDeleteCommand = createCommand("delete")
+  .description("Delete a test")
+  .argument("<name>", "Name or title of test to delete")
+  .action(cliTestDelete);
+
+export function cliTestDelete(name: TestDeleteParameter) {
   const project = readProject();
 
-  const test = getTestByNameOrTitle(project, name);
+  const testToDelete = getTestByNameOrTitle({ project, nameOrTitle: name });
 
-  deleteProjectTest(project)(test);
+  const updatedProject = deleteProjectTest({ project, testToDelete });
 
-  const mdTest = exportMdTest(test);
-
-  console.log(`\n${mdTest}\n`);
+  writeProject(updatedProject);
 }

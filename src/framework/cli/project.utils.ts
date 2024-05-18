@@ -1,13 +1,5 @@
-import { existsSync } from "fs";
-
-import { Project, ProjectView, Test } from "../core";
-import {
-  convertProjectJSONToProject,
-  convertProjectToProjectJSON,
-  readProjectFile,
-  writeProjectFile,
-} from "../exporters";
-import { getFileTree, writeFileTree } from "../files";
+import { Project, ProjectView } from "../core";
+import { getDirTree, getFileTree, writeFileTree } from "../files";
 import { exportMd, parseMd } from "../markdown";
 
 export function convertProjectToProjectView(project: Project) {
@@ -34,10 +26,12 @@ export function readProject(): ProjectView {
 
   const testsFileTree = getFileTree(`${projectPath}/tests`, ["md"]);
   const tagsFileTree = getFileTree(`${projectPath}/tags`, ["md"]);
+  const runsDirTree = getDirTree(`${projectPath}/runs`);
 
   const projectView = parseMd({
     testsFileTree,
     tagsFileTree,
+    runsDirTree,
   });
 
   return projectView;
@@ -45,9 +39,9 @@ export function readProject(): ProjectView {
 
 export function writeProject(project: ProjectView) {
   const projectPath = getProjectPath();
+
   const newFileTree = exportMd(project);
 
-  console.log({ newFileTree });
-  // writeFileTree(`${projectPath}/tests`, newFileTree.tests);
-  // writeFileTree(`${projectPath}/tags`, newFileTree.tags);
+  writeFileTree(`${projectPath}/tests`, newFileTree.tests);
+  writeFileTree(`${projectPath}/tags`, newFileTree.tags);
 }

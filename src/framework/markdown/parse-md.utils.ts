@@ -1,4 +1,3 @@
-import get from "lodash/get";
 import memoize from "lodash/memoize";
 import { Root } from "mdast";
 
@@ -18,8 +17,8 @@ import {
   toFirstChild,
 } from "./markdown.utils";
 
-export const getHeadingNodes = memoize((root: Root) =>
-  root.children.filter(isMdHeadingLevel(2))
+export const getHeadingNodes = memoize(
+  (root: Root) => root?.children.filter(isMdHeadingLevel(2)) ?? []
 );
 
 export const getHeadingsNodesByText = memoize((root: Root) =>
@@ -32,7 +31,7 @@ export const getHeadingsNodesByText = memoize((root: Root) =>
 );
 
 export const getTitleNode = memoize((root: Root) => {
-  const titleNode = root.children.find(isMdHeadingLevel(1));
+  const titleNode = root?.children.find(isMdHeadingLevel(1));
   assertNotNil(titleNode, "title", { root });
   return titleNode;
 });
@@ -40,24 +39,16 @@ export const getTitleNode = memoize((root: Root) => {
 const PARSABLE_HEADINGS = ["Links"];
 
 export function parseDescriptionLines(root: Root, source: MarkdownSource) {
-  const headingNodes = getHeadingNodes(root).filter((headingNode) =>
+  const allHeadingNodes = getHeadingNodes(root);
+
+  const parsableHeadingNodes = allHeadingNodes.filter((headingNode) =>
     PARSABLE_HEADINGS.includes(getMdText(headingNode)?.trim() ?? "")
   );
 
   const titleNode = getTitleNode(root);
 
-  const titleNodeNextNodes = betweenElements(
-    root.children,
-    titleNode,
-    headingNodes[0]
-  ).filter(isNotNil);
-
-  const start =
-    titleNodeNextNodes[0].position?.start?.offset ??
-    titleNode.position?.end.offset ??
-    0;
-  const end =
-    titleNodeNextNodes[titleNodeNextNodes.length - 1].position?.end.offset;
+  const start = titleNode?.position?.end?.offset ?? 0;
+  const end = parsableHeadingNodes[0]?.position?.start?.offset;
 
   const descriptionLines = source.substring(start, end).split("\n");
 
@@ -69,7 +60,7 @@ export function parseDescription(root: Root) {
   const titleNode = getTitleNode(root);
 
   const titleNodeNextNodes = betweenElements(
-    root.children,
+    root?.children,
     titleNode,
     headingNodes[0]
   ).filter(isNotNil);

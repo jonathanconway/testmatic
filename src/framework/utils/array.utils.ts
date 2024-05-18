@@ -12,6 +12,10 @@ export function toPicked<T extends object, U extends keyof T>(
   return (item: T) => pick(item, ...props);
 }
 
+export function toGot<T extends object, U extends keyof T>(path: U | [U]) {
+  return (item: T) => get(item, path);
+}
+
 export function byEquals<T extends object, U extends keyof T>(
   field: PropertyPath,
   value: T[U]

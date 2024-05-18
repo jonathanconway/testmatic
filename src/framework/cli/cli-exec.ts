@@ -1,6 +1,19 @@
-import { cli } from "./cli";
-import { getArgsAfter } from "./utils";
+import { Command } from "commander";
 
-const args = getArgsAfter("cli/cli-exec");
+import { cliGenCommand } from "./gen";
+import { cliRunCommand } from "./run";
+import { cliTagCommand } from "./tag";
+import { cliTestCommand } from "./test";
 
-cli(args);
+const program = new Command();
+
+program
+  .name("testmatic")
+  .description("CLI to testmatic – a local rapid-entry manual test database.")
+  .version("0.0.1")
+  .addCommand(cliTestCommand)
+  .addCommand(cliTagCommand)
+  .addCommand(cliGenCommand)
+  .addCommand(cliRunCommand);
+
+program.parse();

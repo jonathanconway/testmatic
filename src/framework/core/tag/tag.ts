@@ -6,7 +6,7 @@ import {
   createValidationErrorFromZodError,
   sentenceCase,
 } from "../../utils";
-import { Link, createLinkFromHref } from "../link";
+import { Link, createLinkFromInput } from "../link";
 
 export interface Tag {
   readonly name: string;
@@ -42,10 +42,10 @@ export function createTag(
 
   return {
     name: snakeCase(title),
-    title,
+    title: sentenceCase(title),
     ...(type?.trim() ? { type } : {}),
     ...(description?.trim() ? { description } : {}),
-    links: links?.map(createLinkFromHref) ?? [],
+    links: links?.map(createLinkFromInput) ?? [],
   };
 }
 

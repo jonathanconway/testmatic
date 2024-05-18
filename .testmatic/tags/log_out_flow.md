@@ -1,7 +1,5 @@
 # Log out flow
 
-
-
 This flow covers an existing user who is logged in logging out of the website.
 
 ## Links

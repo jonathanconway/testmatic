@@ -1,7 +1,9 @@
 import max from "lodash/max";
 import toUpper from "lodash/toUpper";
 
-function getColWidths<T>(items: Array<T>) {
+import { isNotNil } from "../utils";
+
+function getColWidths<T>(items: readonly T[]) {
   return (col: string) =>
     max([
       ...items.map((item) => Object(item)?.[col]?.toString().length),
@@ -9,13 +11,19 @@ function getColWidths<T>(items: Array<T>) {
     ]);
 }
 
-export function toAsciiTable<T extends object>(items: Array<T>) {
+export function toAsciiTable<T extends object>(
+  items: T[] | readonly T[],
+  columns?: readonly string[]
+) {
   if (!items.length) {
-    return "(empty)";
+    const columnNames = columns
+      ? columns?.map(toUpper).join("  ") + "\n"
+      : undefined;
+    return [columnNames, "(No items)"].filter(isNotNil).join("\n");
   }
 
   const cols = Object.keys(items[0]);
-  const colNames = cols.map(toUpper);
+  const colNames = columns?.map(toUpper) ?? cols.map(toUpper);
 
   const colMaxWidths = cols.map(getColWidths(items));
 
@@ -33,5 +41,5 @@ export function toAsciiTable<T extends object>(items: Array<T>) {
     )
     .join("\n");
 
-  return `\n${header}\n${rows}\n`;
+  return `\n${header}\n\n${rows}\n`;
 }

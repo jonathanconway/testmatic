@@ -1,17 +1,18 @@
 import { ProjectView } from "./project-view";
 
-export function getTestByNameOrTitle(
-  projectView: ProjectView,
-  nameOrTitle: string
-) {
-  const testByName = projectView.testsByName[nameOrTitle];
+export function getTestByNameOrTitle({
+  project,
+  nameOrTitle,
+}: {
+  readonly project: ProjectView;
+  readonly nameOrTitle: string;
+}) {
+  const testByName = project.testsByName[nameOrTitle];
   if (testByName) {
     return testByName;
   }
 
-  const testByTitle = projectView.tests.find(
-    (test) => test.title === nameOrTitle
-  );
+  const testByTitle = project.tests.find((test) => test.title === nameOrTitle);
   if (testByTitle) {
     return testByTitle;
   }

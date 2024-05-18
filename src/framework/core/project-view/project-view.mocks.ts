@@ -10,4 +10,5 @@ export const MOCK_PROJECT_VIEW: ProjectView = {
   testsByName: fromPairs(MOCK_TESTS.map((test) => [test.name, test])),
   tags: MOCK_TAGS,
   tagsByName: fromPairs(MOCK_TAGS.map((tag) => [tag.name, tag])),
+  tagsByTitle: fromPairs(MOCK_TAGS.map((tag) => [tag.title, tag])),
 };

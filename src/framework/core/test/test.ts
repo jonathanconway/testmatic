@@ -4,8 +4,9 @@ import { array, object, string } from "zod";
 import {
   ValidationError,
   createValidationErrorFromZodError,
+  sentenceCase,
 } from "../../utils";
-import { Link, createLinkFromHref } from "../link";
+import { Link, createLinkFromInput } from "../link";
 import { MarkdownSource } from "../markdown";
 import { Run } from "../run";
 import { Step, createTestStepFromText } from "../step";
@@ -49,10 +50,10 @@ export function createTest(
 
   return {
     name: snakeCase(title),
-    title,
+    title: sentenceCase(title),
     description,
     steps: steps.map(createTestStepFromText),
-    links: links?.map(createLinkFromHref) ?? [],
+    links: links?.map(createLinkFromInput) ?? [],
     tags: tags?.map(createTagFromName) ?? [],
     runs: [],
   };

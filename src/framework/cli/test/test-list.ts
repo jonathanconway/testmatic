@@ -1,24 +1,26 @@
-import { ProjectView, Test } from "../../core";
+import { createCommand } from "commander";
+
 import { toAsciiTable } from "../ascii.utils";
 import { readProject } from "../project.utils";
 
 import { filterByArgsTag } from "./test-list-filter-tag";
 import { convertTestToTestOutputRow } from "./test-list-output-row";
 
-export function cliTestList(args: readonly string[]) {
-  const projectView = readProject();
+interface TestListParameters {
+  readonly tag?: string;
+}
 
-  const testsFiltered = filterByArgs(args, projectView.tests, projectView);
+export const cliTestListCommand = createCommand("list")
+  .description("List tests in the current project")
+  .option("-t, --tag <value>", "Filter by tag")
+  .action(cliTestList);
+
+export function cliTestList({ tag }: TestListParameters) {
+  const project = readProject();
+
+  const testsFiltered = filterByArgsTag(project.tests, tag);
 
   const testList = testsFiltered.map(convertTestToTestOutputRow);
 
-  console.log(toAsciiTable(testList));
-}
-
-function filterByArgs(
-  args: readonly string[],
-  tests: readonly Test[],
-  project: ProjectView
-): Array<Test> {
-  return filterByArgsTag(args, tests, project);
+  console.log(toAsciiTable(testList, ["Title", "Doc"]));
 }

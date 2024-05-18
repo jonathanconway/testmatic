@@ -1,5 +1,5 @@
-import { ProjectView } from "../core";
-import { FileTree } from "../files/file-tree";
+import { ProjectView, createProjectView } from "../core";
+import { DirTree, FileTree } from "../files/file-tree";
 
 import { parseMdTags } from "./parse-md-tags";
 import { parseMdTests } from "./parse-md-tests";
@@ -7,19 +7,23 @@ import { parseMdTests } from "./parse-md-tests";
 export function parseMd({
   testsFileTree,
   tagsFileTree,
+  runsDirTree,
 }: {
   readonly testsFileTree: FileTree;
   readonly tagsFileTree: FileTree;
+  readonly runsDirTree: DirTree;
 }): ProjectView {
   const { tags, tagsByName } = parseMdTags(tagsFileTree);
 
-  const { tests, testsByName } = parseMdTests(testsFileTree, tagsByName);
+  const { tests, testTags } = parseMdTests(
+    testsFileTree,
+    runsDirTree,
+    tagsByName
+  );
 
-  return {
+  return createProjectView({
     tests,
-    testsByName,
 
-    tags,
-    tagsByName,
-  };
+    tags: [...tags, ...testTags],
+  });
 }

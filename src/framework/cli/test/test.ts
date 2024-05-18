@@ -1,27 +1,13 @@
-import { ADD_COMMANDS } from "../add";
-import { LIST_COMMANDS } from "../list";
-import { SHOW_COMMANDS } from "../show";
+import { createCommand } from "commander";
 
-import { cliTestAdd } from "./test-add";
-import { cliTestHelp } from "./test-help";
-import { cliTestList } from "./test-list";
-import { cliTestShow } from "./test-show";
+import { cliTestAddCommand } from "./test-add";
+import { cliTestDeleteCommand } from "./test-delete";
+import { cliTestListCommand } from "./test-list";
+import { cliTestShowCommand } from "./test-show";
 
-export function cliTest([command, ...restArgs]: readonly string[]) {
-  switch (true) {
-    case ADD_COMMANDS.includes(command):
-      cliTestAdd(restArgs);
-      break;
-
-    case SHOW_COMMANDS.includes(command):
-      cliTestShow(restArgs);
-      break;
-
-    case LIST_COMMANDS.includes(command):
-      cliTestList(restArgs);
-      break;
-
-    default:
-      cliTestHelp();
-  }
-}
+export const cliTestCommand = createCommand("test")
+  .description("Manage project tests")
+  .addCommand(cliTestListCommand)
+  .addCommand(cliTestShowCommand)
+  .addCommand(cliTestAddCommand)
+  .addCommand(cliTestDeleteCommand);

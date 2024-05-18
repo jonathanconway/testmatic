@@ -5,7 +5,6 @@ import {
   MOCK_NEW_TAG_TWO,
   MOCK_TAG,
   MOCK_TAG_TWO,
-  Tag,
 } from "../../tag";
 import { MOCK_NEW_TEST, Test, createTest } from "../../test";
 import { addProjectTest } from "../project-add-test";
@@ -19,8 +18,10 @@ describe("project-add-test", () => {
         steps: ["mock new test step one", "mock new test step two"],
       }) as Test;
 
-      const updatedProjectView =
-        addProjectTest(MOCK_PROJECT_VIEW)(MOCK_NEW_TEST);
+      const updatedProjectView = addProjectTest({
+        project: MOCK_PROJECT_VIEW,
+        newTest: MOCK_NEW_TEST,
+      });
 
       expect(updatedProjectView.tests).toEqual([
         ...MOCK_PROJECT_VIEW.tests,
@@ -34,8 +35,10 @@ describe("project-add-test", () => {
     });
 
     it("adds the provided test's new tags to the provided project", () => {
-      const updatedProjectView =
-        addProjectTest(MOCK_PROJECT_VIEW)(MOCK_NEW_TEST);
+      const updatedProjectView = addProjectTest({
+        project: MOCK_PROJECT_VIEW,
+        newTest: MOCK_NEW_TEST,
+      });
 
       expect(updatedProjectView.tags).toEqual(
         expect.arrayContaining([...MOCK_PROJECT_VIEW.tags, ...MOCK_NEW_TAGS])
@@ -52,8 +55,10 @@ describe("project-add-test", () => {
     });
 
     it("matches the provided test's tags to existing tags in the provided project if possible", () => {
-      const updatedProjectView =
-        addProjectTest(MOCK_PROJECT_VIEW)(MOCK_NEW_TEST);
+      const updatedProjectView = addProjectTest({
+        project: MOCK_PROJECT_VIEW,
+        newTest: MOCK_NEW_TEST,
+      });
 
       const updatedProjectTestsNewTest = updatedProjectView.tests.find(
         (test) => test.name === MOCK_NEW_TEST.name

@@ -1,15 +1,20 @@
+import { createCommand } from "commander";
+
 import { getTestByNameOrTitle } from "../../core";
-import { exportMdTest } from "../../markdown/export-md-test";
+import { exportMdTest } from "../../markdown";
 import { readProject } from "../project.utils";
 
-export function cliTestShow([name]: readonly string[]) {
-  if (!name) {
-    throw new Error("Please provide name parameter.");
-  }
+type TestShowParameter = string;
 
+export const cliTestShowCommand = createCommand("show")
+  .description("Show the full details of a test")
+  .argument("<name>", "Name or title of test to show")
+  .action(cliTestShow);
+
+export function cliTestShow(name: TestShowParameter) {
   const project = readProject();
 
-  const test = getTestByNameOrTitle(project, name);
+  const test = getTestByNameOrTitle({ project, nameOrTitle: name });
 
   const mdTest = exportMdTest(test);
 

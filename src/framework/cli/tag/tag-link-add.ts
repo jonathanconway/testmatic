@@ -1,80 +1,110 @@
-import difference from "lodash/difference";
+import { createCommand } from "commander";
+import promptSync from "prompt-sync";
 
-import { addProjectTagLink, createLink } from "../../core";
-// import { validateLink } from "../../core/link/link.validator";
 import {
-  convertProjectJSONToProject,
-  readProjectFile,
-  writeProjectFile,
-} from "../../exporters/json";
-import { pickArgs } from "../args.utils";
+  CreateLinkParams,
+  Link,
+  addProjectTagLink,
+  createLink,
+} from "../../core";
+import { exportMdTag } from "../../markdown";
+import { isValidationError } from "../../utils";
 import { readProject, writeProject } from "../project.utils";
-import { promptFields } from "../prompt.utils";
 
-// import { generateTagDoc } from "../../doc-generators";
+type TagLinkAddParameters = [
+  string,
+  string,
+  {
+    readonly tagName: string;
+    readonly href: string;
+    readonly title?: string;
+  }
+];
 
-const fieldLabels = {
-  tagName: "Tag name",
-  title: "Link title",
-  href: "Link href",
-  type: "Link type",
-};
+export const cliTagLinkAddCommand = createCommand("add")
+  .description("Add a new link to a tag")
+  .argument("<tagName>", "Name of the tag")
+  .argument("<href>", "Href of the new link")
+  .option(
+    "-t, --title <value>",
+    `
+Title of the new link.
 
-const fields = Object.entries(fieldLabels).map(([name, title]) => ({
-  name,
-  title,
-}));
+Optional.
+`.trim()
+  )
+  .action(cliTagLinkAdd);
 
-type FieldName = keyof typeof fieldLabels;
+export function cliTagLinkAdd(...args: TagLinkAddParameters) {
+  const [tagName] = args;
 
-const fieldKeys = fields.map((field) => field.name);
+  const project = readProject();
 
-export async function cliTagLinkAdd(args: readonly string[]) {
-  const argParams = pickArgs(fieldKeys, args);
+  const tag = project.tagsByName[tagName];
 
-  const promptParams = promptFields(
-    difference(fieldKeys, Object.keys(argParams)),
-    fieldLabels
-  );
+  const newLink = createTagLinkFromArgsOrPrompts(args);
 
-  const params = { ...argParams, ...promptParams } as Record<FieldName, string>;
-
-  // validateLink(params);
-
-  const project = await readProject();
-
-  const { tagName } = params;
-
-  const newLink = createLink(params);
-
-  const updatedProject = addProjectTagLink({
-    project,
-    tagName,
-    newLink,
-  });
-
-  // const newProject = {
-  //   ...project,
-  //   tags: [
-  //     ...project.tags,
-
-  //       ...project.tags[params.tagName],
-  //       links: {
-  //         ...project.tags[params.tagName].links,
-  //         [newLink.name]: newLink,
-  //       },
-
-  //     ],
-  // };
-
-  // writeProjectFile(newProject);
+  const updatedProject = addProjectTagLink({ project, tag, newLink });
 
   writeProject(updatedProject);
 
-  // const newToken = {
-  //   ...tag,
-  //   links: [...(tag?.links ?? []), params],
-  // };
+  const mdTest = exportMdTag(tag);
 
-  // generateTokenFilesFromInfo(generateTokenFromObject({ token: newToken }));
+  console.log(`\n${mdTest}\n`);
+}
+
+function createTagLinkFromArgsOrPrompts(args: TagLinkAddParameters): Link {
+  const [, href, { title }] = args;
+
+  const paramsFromArgs = { href, title };
+
+  const paramsFromPrompts = getTagAddParamsFromPrompts({
+    href,
+    title,
+  });
+
+  const params = {
+    ...paramsFromArgs,
+    ...paramsFromPrompts,
+  };
+
+  const createLinkResult = createLink(params as CreateLinkParams);
+
+  if (isValidationError(createLinkResult)) {
+    throw createLinkResult.message;
+  }
+
+  return createLinkResult;
+}
+
+function getTagAddParamsFromPrompts(paramsSoFar: Partial<CreateLinkParams>) {
+  let params: Partial<CreateLinkParams> = {};
+
+  if (!paramsSoFar.href) {
+    const href = getTagAddHrefFromPrompt();
+    params = {
+      ...params,
+      href,
+    };
+  }
+
+  if (!paramsSoFar.href && !paramsSoFar.title) {
+    const title = getTagAddTitleFromPrompt();
+    params = {
+      ...params,
+      title,
+    };
+  }
+
+  return params;
+}
+
+const prompt = promptSync();
+
+function getTagAddHrefFromPrompt() {
+  return prompt("Please enter link href: ");
+}
+
+function getTagAddTitleFromPrompt() {
+  return prompt("Please enter link title:\n(Empty line to skip)\n");
 }

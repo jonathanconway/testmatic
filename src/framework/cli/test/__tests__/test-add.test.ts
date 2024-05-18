@@ -1,6 +1,6 @@
 import * as projectJsonFile from "../../../exporters/json/project-json-file";
 import { MOCK_PROJECT_JSON_FILE_EMPTY } from "../../../exporters/json/project-json-file.mocks";
-import { cliTest } from "../test";
+import { cliTestCommand } from "../test";
 
 jest.mock("../../../exporters/json/project-json-file", () => ({
   readProjectFile: jest.fn(),
@@ -15,7 +15,7 @@ const writeProjectFileSpy = jest.spyOn(projectJsonFile, "writeProjectFile");
 
 describe("cli test add", () => {
   it("adds a test", () => {
-    cliTest([
+    cliTestCommand([
       "add",
       '--title="one"',
       '--step0="first step"',
@@ -56,7 +56,7 @@ describe("cli test add", () => {
   it("parses step texts for tags and links them where they do already exist", () => {});
 
   it("parses step texts for tags and adds them where they do not yet exist", () => {
-    cliTest([
+    cliTestCommand([
       "add",
       '--title="user can log in"',
       '--step0="go to (login screen)"',

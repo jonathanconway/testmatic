@@ -1,7 +1,5 @@
 # Region support
 
-
-
 This topic covers region support.
 
 ## Links

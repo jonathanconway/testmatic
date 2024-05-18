@@ -1,24 +1,7 @@
-import { cliGenDocs } from "./gen-docs";
-import { cliGenHelp } from "./gen-help";
-import { cliGenStep } from "./gen-step";
-import { cliGenTest } from "./gen-test";
-import { cliGenToken } from "./gen-token";
+import { createCommand } from "commander";
 
-export function cliGen(args: readonly string[]) {
-  switch (true) {
-    case args[0] === "test":
-      cliGenTest(args.slice(1));
-      break;
-    case args[0] === "step":
-      cliGenStep(args.slice(1));
-      break;
-    case args[0] === "docs":
-      cliGenDocs(args.slice(1));
-      break;
-    case args[0] === "token":
-      cliGenToken(args.slice(1));
-      break;
-    default:
-      cliGenHelp();
-  }
-}
+import { cliGenDocsCommand } from "./gen-docs";
+
+export const cliGenCommand = createCommand("gen")
+  .description("Generate files")
+  .addCommand(cliGenDocsCommand);

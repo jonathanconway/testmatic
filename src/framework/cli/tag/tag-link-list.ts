@@ -1,29 +1,30 @@
-import {
-  convertProjectJSONToProject,
-  readProjectFile,
-} from "../../exporters/json";
-import { pickArgs } from "../args.utils";
+import { createCommand } from "commander";
 
-export function cliTagLinkList(args: readonly string[]) {
-  const { tagsByName } = convertProjectJSONToProject(readProjectFile());
+import { toAsciiTable } from "../ascii.utils";
+import { readProject } from "../project.utils";
 
-  const { tag: name } = pickArgs(["tag"], args);
+type TagLinkListParameters = string;
 
-  const tag = tagsByName[name];
+export const cliTagLinkListCommand = createCommand("list")
+  .description("List tag links")
+  .argument("<tagName>", "Name of the tag")
+  .action(cliTagList);
 
-  if (!tag) {
-    return;
-  }
+export function cliTagList(tagName: TagLinkListParameters) {
+  const { tagsByName } = readProject();
+  const tag = tagsByName[tagName];
 
-  console.log(`Tag ${tag.name} links:\n\n`);
+  console.log(`Tag: ${tag.title}
+  
+Links:`);
 
-  const tokenLinksString = tag.links
-    .map((link) =>
-      ["•", link.title ?? link.href, link.title ? link.href : ""]
-        .map((part) => part.trim())
-        .join(" ")
+  console.log(
+    toAsciiTable(
+      tag.links.map((link) => ({
+        Name: link.title,
+        URL: link.href,
+      })),
+      ["Name", "URL"]
     )
-    .join("\n");
-
-  console.log(tokenLinksString);
+  );
 }

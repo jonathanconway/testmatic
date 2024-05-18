@@ -5,8 +5,10 @@ import { MOCK_PROJECT_VIEW } from "../project-view.mocks";
 describe("project-add-tag", () => {
   describe("addProjectTag", () => {
     it("adds the provided tag to the provided project", () => {
-      const updatedProjectView =
-        addProjectTag(MOCK_PROJECT_VIEW)(MOCK_NEW_TAG_ONE);
+      const updatedProjectView = addProjectTag({
+        project: MOCK_PROJECT_VIEW,
+        newTag: MOCK_NEW_TAG_ONE,
+      });
 
       expect(updatedProjectView.tags).toEqual([
         ...MOCK_PROJECT_VIEW.tags,
@@ -21,9 +23,12 @@ describe("project-add-tag", () => {
 
     it("does not overwrite tag that already exists", () => {
       expect(() => {
-        addProjectTag(MOCK_PROJECT_VIEW)({
-          ...MOCK_TAG,
-          description: "desc",
+        addProjectTag({
+          project: MOCK_PROJECT_VIEW,
+          newTag: {
+            ...MOCK_TAG,
+            description: "desc",
+          },
         });
       }).toThrow();
     });

@@ -1,3 +1,4 @@
+import { getTagFilenameRelative } from "../../markdown";
 import { byEquals } from "../../utils";
 import { Step } from "../step";
 import { Test } from "../test";
@@ -14,4 +15,37 @@ export function getStepsHavingTag(steps: readonly Step[], tag: Tag) {
 
 export function getTagsHavingTest(test: Test, tags: readonly Tag[]) {
   return tags.filter((tag) => test.tags.includes(tag));
+}
+
+function matchesNameOrTitleLowerCased(tagFilterValue: string) {
+  return (tag: Tag) =>
+    tag.name === tagFilterValue ||
+    tag.title.toLowerCase() === tagFilterValue.toLowerCase();
+}
+
+export function testByTag(tagFilterValue: string) {
+  return (test: Test) =>
+    test.tags.some(matchesNameOrTitleLowerCased(tagFilterValue)) ||
+    test.steps.some((step) =>
+      step.tags.some(matchesNameOrTitleLowerCased(tagFilterValue))
+    );
+}
+
+export function getTestsReferencingTag(tests: readonly Test[], tag: Tag) {
+  return tests.filter(
+    (test) =>
+      test.tags.includes(tag) ||
+      test.steps.find((step) => step.tags.includes(tag))
+  );
+}
+
+export function getTagsReferencingTag(tags: readonly Tag[], tag: Tag) {
+  const tagFilename = getTagFilenameRelative(tag);
+  return tags.filter((tag) =>
+    tag.links.find(
+      (link) =>
+        link.href.includes(tagFilename) ||
+        tag.description?.includes(tagFilename)
+    )
+  );
 }

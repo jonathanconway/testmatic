@@ -1,29 +1,11 @@
-import { rmSync } from "fs";
+import { createCommand } from "commander";
 
-import * as steps from "../../../steps";
-// import {
-//   generateIndexDoc,
-//   generateTestDocs,
-//   generateStepDocs,
-//   generateTagDocs,
-// } from "../../doc-generators";
-import * as tests from "../../../tests";
+import { readProject, writeProject } from "../project.utils";
 
-// import * as tags from "../../tags";
+export const cliGenDocsCommand = createCommand("docs")
+  .description("Generate test docs")
+  .action(cliGenDocs);
 
-export function cliGenDocs(args: readonly string[]) {
-  const docsPath = `${__dirname}/../../../docs`;
-
-  if (args.includes("--clear") || args.includes("-c")) {
-    rmSync(docsPath, { recursive: true, force: true });
-  }
-
-  const testsArray = Object.values(tests);
-  const stepsArray = Object.values(steps);
-  // const tagsArray = Object.values(tags);
-
-  // generateIndexDoc(docsPath, testsArray, tagsArray);
-  // generateTestDocs(docsPath, testsArray);
-  // generateStepDocs(docsPath, stepsArray, tagsArray);
-  // generateTokenDocs(docsPath, tagsArray, testsArray, stepsArray);
+export function cliGenDocs() {
+  writeProject(readProject());
 }

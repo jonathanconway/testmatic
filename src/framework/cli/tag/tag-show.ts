@@ -1,34 +1,61 @@
-import { ProjectView } from "../../core";
-import { exportMdTag } from "../../markdown/export-md-tag";
-import { exportMdTest } from "../../markdown/export-md-test";
+import { createCommand } from "commander";
+
+import { getTagByNameOrTitle, getTestsHavingTag } from "../../core";
+import { getTagFilename, getTestFilename } from "../../markdown";
+import { sentenceCase, trimLines } from "../../utils";
+import { toAsciiTable } from "../ascii.utils";
 import { readProject } from "../project.utils";
 
-function getTagByNameOrTitle(projectView: ProjectView, nameOrTitle: string) {
-  const tagByName = projectView.tagsByName[nameOrTitle];
-  if (tagByName) {
-    return tagByName;
-  }
+type TagShowParameter = string;
 
-  const tagByTitle = projectView.tags.find((tag) => tag.title === nameOrTitle);
-  if (tagByTitle) {
-    return tagByTitle;
-  }
+export const cliTagShowCommand = createCommand("show")
+  .description("Show the full details of a tag")
+  .argument("<name>", "Name or title of tag to show")
+  .action(cliTagShow);
 
-  throw new Error(
-    `Cannot find tag with name or title matching "${nameOrTitle}"`
-  );
-}
-
-export function cliTagShow([name]: readonly string[]) {
-  if (!name) {
-    throw new Error("Please provide name parameter.");
-  }
-
+export function cliTagShow(tagNameOrTitle: TagShowParameter) {
   const project = readProject();
 
-  const tag = getTagByNameOrTitle(project, name);
+  const tag = getTagByNameOrTitle({ project, tagNameOrTitle });
 
-  const mdTag = exportMdTag(tag);
+  const tests = getTestsHavingTag(project.tests, tag);
 
-  console.log(`\n${mdTag}\n`);
+  console.log(
+    trimLines(`
+${tag.title}
+${"=".repeat(tag.title.length)}
+
+${tag.type ? `Type: ${sentenceCase(tag.type)}` : ``}
+
+Doc: ${getTagFilename(tag)}
+
+Description
+-----------
+
+${tag.description}
+
+Links
+-----
+
+${toAsciiTable(
+  tag.links.map((link) => ({
+    Name: link.title,
+    URL: link.href,
+  })),
+  ["Name", "URL"]
+)}
+
+Tests
+-----
+
+${toAsciiTable(
+  tests.map((test) => ({
+    Name: test.title,
+    Doc: getTestFilename(test),
+  })),
+  ["Name", "Doc"]
+)}
+
+`) + "\n\n"
+  );
 }
