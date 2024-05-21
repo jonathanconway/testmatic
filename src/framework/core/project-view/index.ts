@@ -12,6 +12,7 @@ export * from "./project-get-test-by-name-or-title";
 export * from "./project-get-test-run-by-datetime-or-latest";
 export * from "./project-get-test-run-by-datetime";
 export * from "./project-get-test-run-latest";
+export * from "./project-get-tests-by-tag";
 export * from "./project-update-test-run";
 export * from "./project-view.mocks";
 export * from "./project-view";

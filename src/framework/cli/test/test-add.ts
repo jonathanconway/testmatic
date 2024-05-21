@@ -1,10 +1,9 @@
 import { createCommand } from "commander";
-import promptSync from "prompt-sync";
 
 import { CreateTestParams, Test, createTest, projectAddTest } from "../../core";
-import { exportMdTest } from "../../markdown";
 import { isValidationError } from "../../utils";
 import { readProject, writeProject } from "../project.utils";
+import { promptValue, promptValues } from "../prompt.utils";
 
 interface TestAddParameters {
   readonly title: string;
@@ -74,10 +73,6 @@ export function cliTestAdd(args: TestAddParameters) {
   const updatedProject = projectAddTest({ project, newTest });
 
   writeProject(updatedProject);
-
-  const mdTest = exportMdTest(newTest);
-
-  console.log(`\n${mdTest}\n`);
 }
 
 function createTestFromArgsOrPrompts(args: TestAddParameters): Test {
@@ -104,6 +99,11 @@ function getTestAddParamsFromPrompts(paramsSoFar: Partial<CreateTestParams>) {
 
   if (!paramsSoFar.title) {
     const title = getTestAddTitleFromPrompt();
+
+    if (title === null) {
+      return null;
+    }
+
     params = {
       ...params,
       title,
@@ -112,34 +112,27 @@ function getTestAddParamsFromPrompts(paramsSoFar: Partial<CreateTestParams>) {
 
   if (!paramsSoFar.steps) {
     const steps = getTestAddStepsFromPrompt();
+
+    if (steps === null) {
+      return null;
+    }
+
     params = { ...params, steps };
   }
 
   return params;
 }
 
-const prompt = promptSync();
-
 function getTestAddTitleFromPrompt() {
-  return prompt("Please enter test title: ");
+  return promptValue({
+    message: "Please enter test title: ",
+    repeatIfEmpty: true,
+  });
 }
 
 function getTestAddStepsFromPrompt() {
-  console.log(
-    "\nThank you!\n\nNow, please enter your steps, one-by-one.\n(Empty line to finish)\n"
-  );
-
-  const steps = [];
-  let stepIndex = 1;
-  while (true) {
-    const step = prompt(`${stepIndex}. `);
-    if (step === "") {
-      break;
-    }
-
-    steps.push(step);
-    stepIndex++;
-  }
-
-  return steps;
+  return promptValues({
+    message:
+      "\nThank you!\n\nNow, please enter your steps, one-by-one.\n(Empty line to finish)\n",
+  });
 }

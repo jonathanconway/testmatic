@@ -24,6 +24,7 @@ Tag: ${tag.title}
   
 Links
 -----
+
 ${toAsciiTable(
   tag.links.map((link) => ({
     Name: link.title,

@@ -10,7 +10,10 @@ import { readProject } from "../project.utils";
 import { PARAM_TAG_LINK_HREF_OR_TITLE } from "./param-tag-link-href-or-title";
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 
-type TagLinkOpenParameter = [string, string];
+type TagLinkOpenParameter = [
+  string /* tagNameOrTitle */,
+  string /* tagLinkHrefOrTitle */
+];
 
 export const cliTagLinkOpenCommand = createCommand("open")
   .description("Open a tag link in the browser")

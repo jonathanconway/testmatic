@@ -4,10 +4,6 @@ import { sentenceCase } from "../utils";
 
 const prompt = promptSync();
 
-function getDidUserCancel(value: string | null) {
-  return value === null;
-}
-
 export function promptFields<T extends Record<string, string>>(
   fields: readonly (keyof T)[],
   fieldLabels: Partial<Record<keyof T, string>> = {}
@@ -19,11 +15,46 @@ export function promptFields<T extends Record<string, string>>(
 
     const value = prompt(`Please enter a value for ${fieldLabel}: `);
 
-    if (getDidUserCancel(value)) {
-      return values;
-    }
-
     values[field.toString()] = value;
   }
+  return values;
+}
+
+export function promptValue({
+  message,
+  repeatIfEmpty,
+}: {
+  readonly message: string;
+  repeatIfEmpty?: boolean;
+}) {
+  const result = prompt(message);
+
+  if (result === null) {
+    throw new Error("Cancelled.");
+  }
+
+  if (result === "" && repeatIfEmpty) {
+    return promptValue({ message, repeatIfEmpty });
+  }
+
+  return result;
+}
+
+export function promptValues({ message }: { readonly message: string }) {
+  console.log(message);
+
+  const values = [];
+  let index = 1;
+  while (true) {
+    const value = promptValue({ message: `${index}. ` });
+
+    if (value === "") {
+      break;
+    }
+
+    values.push(value);
+    index++;
+  }
+
   return values;
 }

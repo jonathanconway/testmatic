@@ -1,7 +1,7 @@
 import { createCommand } from "commander";
 
 import { projectGetTestByNameOrTitle } from "../../core";
-import { projectGetTestRunByDateTimeOrLatest } from "../../core/project-view/project-get-test-run-by-datetime-or-latest";
+import { projectGetTestRunByDateTimeOrLatest } from "../../core";
 import { getRunFiles } from "../../markdown";
 import { formatDateTimeString } from "../../utils";
 import { toAsciiTable } from "../ascii.utils";

@@ -1,7 +1,0 @@
-{
-  "testMatch": ["**/?(*.)+(spec|test|step).[tj]s?(x)"],
-  "roots": ["src"],
-  "transform": {
-    "^.+\\.[t|j]sx?$": "babel-jest"
-  }
-}

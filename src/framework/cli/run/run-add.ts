@@ -15,7 +15,7 @@ import { readProject, writeProject } from "../project.utils";
 import { PARAM_TEST_NAME_OR_TITLE } from "./param-test-name-or-title";
 
 type RunAddParameters = [
-  string /* testName */,
+  string /* testNameOrTitle */,
   {
     readonly dateTime?: string;
     readonly result?: RunResult;

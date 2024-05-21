@@ -27,7 +27,6 @@ function getGenTestInfoFromArgs(args: readonly string[]) {
 
 function getGenTestInfoFromPrompts() {
   const title = prompt("Please enter test title: ");
-
   if (!title) {
     return;
   }

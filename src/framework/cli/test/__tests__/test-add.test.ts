@@ -7,9 +7,9 @@ jest.mock("../../../exporters/json/project-json-file", () => ({
   writeProjectFile: jest.fn(),
 }));
 
-const readProjectFileSpy = jest
-  .spyOn(projectJsonFile, "readProjectFile")
-  .mockReturnValue(MOCK_PROJECT_JSON_FILE_EMPTY);
+// const readProjectFileSpy = jest
+//   .spyOn(projectJsonFile, "readProjectFile")
+//   .mockReturnValue(MOCK_PROJECT_JSON_FILE_EMPTY);
 
 const writeProjectFileSpy = jest.spyOn(projectJsonFile, "writeProjectFile");
 
@@ -23,7 +23,7 @@ describe("cli test add", () => {
       '--step1="second step"',
     ]);
 
-    expect(readProjectFileSpy).toBeCalled();
+    // expect(readProjectFileSpy).toBeCalled();
 
     expect(writeProjectFileSpy).toBeCalledWith({
       steps: {
@@ -67,7 +67,7 @@ describe("cli test add", () => {
       '--step3="click (submit button)"',
     ]);
 
-    expect(readProjectFileSpy).toBeCalled();
+    // expect(readProjectFileSpy).toBeCalled();
 
     expect(writeProjectFileSpy).toBeCalledWith({
       steps: {

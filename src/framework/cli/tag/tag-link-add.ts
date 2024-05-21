@@ -8,15 +8,14 @@ import {
   projectAddTagLink,
   projectGetTagByNameOrTitle,
 } from "../../core";
-import { exportMdTag } from "../../markdown";
 import { isValidationError } from "../../utils";
 import { readProject, writeProject } from "../project.utils";
 
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 
 type TagLinkAddParameters = [
-  string,
-  string,
+  string /* tagNameOrTitle */,
+  string /* tagLinkHref */,
   {
     readonly tagName: string;
     readonly href: string;
@@ -50,10 +49,6 @@ export function cliTagLinkAdd(...args: TagLinkAddParameters) {
   const updatedProject = projectAddTagLink({ project, tag, newLink });
 
   writeProject(updatedProject);
-
-  const mdTest = exportMdTag(tag);
-
-  console.log(`\n${mdTest}\n`);
 }
 
 function createTagLinkFromArgsOrPrompts(args: TagLinkAddParameters): Link {

@@ -28,17 +28,16 @@ ${test.title}
 ${"=".repeat(test.title.length)}
     
 Runs
-----`
-  );
+----
 
-  console.log(
-    toAsciiTable(
-      runs.map((run) => ({
-        dateTime: run.dateTime,
-        result: run.result ? sentenceCase(run.result) : "-",
-        folder: getRunFilepath(test, run),
-      })),
-      ["Date/time", "Result", "Folder"]
-    )
+${toAsciiTable(
+  runs.map((run) => ({
+    dateTime: run.dateTime,
+    result: run.result ? sentenceCase(run.result) : "-",
+    folder: getRunFilepath(test, run),
+  })),
+  ["Date/time", "Result", "Folder"]
+)}
+`
   );
 }

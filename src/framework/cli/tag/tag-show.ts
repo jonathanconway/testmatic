@@ -1,6 +1,6 @@
 import { createCommand } from "commander";
 
-import { getTestsHavingTag, projectGetTagByNameOrTitle } from "../../core";
+import { projectGetTagByNameOrTitle, projectGetTestsByTag } from "../../core";
 import { getTagFilename, getTestFilename } from "../../markdown";
 import { sentenceCase } from "../../utils";
 import { toAsciiTable } from "../ascii.utils";
@@ -20,7 +20,7 @@ export function cliTagShow(tagNameOrTitle: TagShowParameter) {
 
   const tag = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
 
-  const tests = getTestsHavingTag(project.tests, tag);
+  const tests = projectGetTestsByTag({ project, tag });
 
   console.log(
     `
