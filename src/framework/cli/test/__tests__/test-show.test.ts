@@ -1,6 +1,6 @@
 import * as projectJsonFile from "../../../exporters/json/project-json-file";
 import { MOCK_PROJECT_JSON_FILE } from "../../../exporters/json/project-json-file.mocks";
-import { cli } from "../../cli";
+import { program } from "../../cli";
 
 jest.mock("../../../exporters/json/project-json-file", () => ({
   readProjectFile: jest.fn(),
@@ -14,7 +14,7 @@ const consoleLogSpy = jest.spyOn(console, "log");
 
 describe("cli test show", () => {
   it("shows test looked up by name", () => {
-    cli(["test", "show", "test_one"]);
+    program.parse(["test", "show", "test_one"]);
 
     expect(readProjectFileSpy).toBeCalled();
 
@@ -29,7 +29,7 @@ describe("cli test show", () => {
   });
 
   it("shows test looked up by title", () => {
-    cli(["test", "show", "test one"]);
+    program.parse(["test", "show", "test one"]);
 
     expect(readProjectFileSpy).toBeCalled();
 
@@ -44,7 +44,7 @@ describe("cli test show", () => {
   });
 
   it("prints error if test name or title not provided", () => {
-    cli(["test", "show"]);
+    program.parse(["test", "show"]);
 
     expect(consoleLogSpy).toBeCalledWith(
       "Error: Please provide name parameter."
@@ -52,7 +52,7 @@ describe("cli test show", () => {
   });
 
   it("prints error if test name or title not found", () => {
-    cli(["test", "show", "test_eleven"]);
+    program.parse(["test", "show", "test_eleven"]);
 
     expect(consoleLogSpy).toBeCalledWith(
       'Error: Cannot find test with name or title matching "test_eleven"'

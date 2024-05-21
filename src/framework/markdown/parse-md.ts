@@ -1,5 +1,5 @@
 import { ProjectView, createProjectView } from "../core";
-import { DirTree, FileTree } from "../files/file-tree";
+import { DirTree, FileTree } from "../files";
 
 import { parseMdTags } from "./parse-md-tags";
 import { parseMdTests } from "./parse-md-tests";

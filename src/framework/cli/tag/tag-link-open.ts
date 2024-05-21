@@ -1,25 +1,34 @@
 import { exec } from "child_process";
 import { createCommand } from "commander";
 
-import { getTagByNameOrTitle, getTagLinkByHrefOrTitle } from "../../core";
+import {
+  projectGetTagByNameOrTitle,
+  projectGetTagLinkByHrefOrTitle,
+} from "../../core";
 import { readProject } from "../project.utils";
+
+import { PARAM_TAG_LINK_HREF_OR_TITLE } from "./param-tag-link-href-or-title";
+import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 
 type TagLinkOpenParameter = [string, string];
 
 export const cliTagLinkOpenCommand = createCommand("open")
   .description("Open a tag link in the browser")
-  .argument("<tagName>", "Name of the tag")
-  .argument("<name>", "Name or title of tag link to open")
+  .argument(PARAM_TAG_NAME_OR_TITLE.name, PARAM_TAG_NAME_OR_TITLE.description)
+  .argument(
+    PARAM_TAG_LINK_HREF_OR_TITLE.name,
+    PARAM_TAG_LINK_HREF_OR_TITLE.description
+  )
   .action(cliTagOpen);
 
 export function cliTagOpen(
-  ...[tagNameOrTitle, linkHrefOrTitle]: TagLinkOpenParameter
+  ...[tagNameOrTitle, tagLinkHrefOrTitle]: TagLinkOpenParameter
 ) {
   const project = readProject();
 
-  const tag = getTagByNameOrTitle({ project, tagNameOrTitle });
+  const tag = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
 
-  const link = getTagLinkByHrefOrTitle({ tag, linkHrefOrTitle });
+  const link = projectGetTagLinkByHrefOrTitle({ tag, tagLinkHrefOrTitle });
 
   exec(`open "${link.href}"`);
 }

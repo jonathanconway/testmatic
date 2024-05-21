@@ -2,7 +2,7 @@ import { createCommand } from "commander";
 import promptSync from "prompt-sync";
 
 import { CreateTestParams, Tag, createTag } from "../../core";
-import { addProjectTag } from "../../core/project-view/project-add-tag";
+import { projectAddTag } from "../../core/project-view/project-add-tag";
 import { exportMdTag } from "../../markdown/export-md-tag";
 import { isValidationError } from "../../utils";
 import { readProject, writeProject } from "../project.utils";
@@ -69,7 +69,7 @@ export function cliTagAdd(args: TagAddParameters) {
 
   const newTag = createTagFromArgsOrPrompts(args);
 
-  const updatedProject = addProjectTag({ project, newTag });
+  const updatedProject = projectAddTag({ project, newTag });
 
   writeProject(updatedProject);
 

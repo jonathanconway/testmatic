@@ -1,27 +1,29 @@
 import { createCommand } from "commander";
 
-import { getTagByNameOrTitle, getTestsHavingTag } from "../../core";
+import { getTestsHavingTag, projectGetTagByNameOrTitle } from "../../core";
 import { getTagFilename, getTestFilename } from "../../markdown";
-import { sentenceCase, trimLines } from "../../utils";
+import { sentenceCase } from "../../utils";
 import { toAsciiTable } from "../ascii.utils";
 import { readProject } from "../project.utils";
+
+import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 
 type TagShowParameter = string;
 
 export const cliTagShowCommand = createCommand("show")
   .description("Show the full details of a tag")
-  .argument("<name>", "Name or title of tag to show")
+  .argument(PARAM_TAG_NAME_OR_TITLE.name, PARAM_TAG_NAME_OR_TITLE.description)
   .action(cliTagShow);
 
 export function cliTagShow(tagNameOrTitle: TagShowParameter) {
   const project = readProject();
 
-  const tag = getTagByNameOrTitle({ project, tagNameOrTitle });
+  const tag = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
 
   const tests = getTestsHavingTag(project.tests, tag);
 
   console.log(
-    trimLines(`
+    `
 ${tag.title}
 ${"=".repeat(tag.title.length)}
 
@@ -56,6 +58,6 @@ ${toAsciiTable(
   ["Name", "Doc"]
 )}
 
-`) + "\n\n"
+`.trimLines()
   );
 }

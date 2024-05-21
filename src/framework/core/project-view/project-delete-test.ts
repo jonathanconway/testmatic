@@ -4,7 +4,7 @@ import { Test } from "../test";
 
 import { ProjectView } from "./project-view";
 
-export function deleteProjectTest({
+export function projectDeleteTest({
   project,
   testToDelete,
 }: {

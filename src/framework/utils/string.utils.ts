@@ -6,10 +6,36 @@ import trim from "lodash/trim";
 
 import { isNotNil } from "./array.utils";
 
-export function sentenceCase(input: string) {
+declare global {
+  interface String {
+    sentenceCase(this: string): string;
+    convertToLowerCaseWithTags(this: string): string;
+    convertTagsToBracketedStrings(this: string): string;
+    convertToSentenceCaseWithTags(this: string): string;
+    convertToWrappedInQuotes(this: string): string;
+    convertTitleToName(this: string): string;
+    convertToSnakeWithTags(this: string): string;
+    removeNonAlphaNumeric(this: string): string;
+    removeDoubleSpaces(this: string): string;
+    convertToLowerSnakeCase(this: string): string;
+    trimLines(this: string): string;
+    asciiUnderline(this: string): string;
+    asciiUnderlineDouble(this: string): string;
+  }
+}
+
+String.prototype.sentenceCase = function (this: string) {
+  return sentenceCase(this);
+};
+
+export function sentenceCase(input?: string) {
   const [a, ...b] = startCase(input);
   return `${a.toUpperCase()}${b.join("").toLowerCase()}`;
 }
+
+String.prototype.convertToLowerCaseWithTags = function (this: string) {
+  return convertToLowerCaseWithTags(this);
+};
 
 export function convertToLowerCaseWithTags(input: string) {
   return convertToSentenceCaseWithTags(input).toLowerCase().trim();
@@ -24,6 +50,10 @@ function convertTagsToBracketedStrings(input: string) {
   return input;
 }
 
+String.prototype.convertToSentenceCaseWithTags = function (this: string) {
+  return convertToSentenceCaseWithTags(this);
+};
+
 export function convertToSentenceCaseWithTags(input: string) {
   input = convertTagsToBracketedStrings(input);
   input = sentenceCase(input);
@@ -31,9 +61,17 @@ export function convertToSentenceCaseWithTags(input: string) {
   return input;
 }
 
+String.prototype.convertToWrappedInQuotes = function (this: string): string {
+  return convertToWrappedInQuotes(this);
+};
+
 export function convertToWrappedInQuotes(name: string): string {
   return `"${name}"`;
 }
+
+String.prototype.convertTitleToName = function (this: string): string {
+  return convertTitleToName(this);
+};
 
 export function convertTitleToName(title: string): string {
   return title.toLowerCase().split(" ").filter(isNotNil).join("_");
@@ -56,6 +94,10 @@ export function convertTokenToSnakeParts(input: string) {
   };
 }
 
+String.prototype.convertToSnakeWithTags = function (this: string) {
+  return convertToSnakeWithTags(this);
+};
+
 export function convertToSnakeWithTags(input: string) {
   return input
     .toLowerCase()
@@ -76,6 +118,10 @@ function removeDoubleSpaces(input: string) {
   return input.replace(/\s+/g, " ");
 }
 
+String.prototype.convertToLowerSnakeCase = function (this: string) {
+  return convertToLowerSnakeCase(this);
+};
+
 export function convertToLowerSnakeCase(input?: string) {
   if (!input) {
     return input;
@@ -90,6 +136,10 @@ export function convertToLowerSnakeCase(input?: string) {
   ])(input);
 }
 
+String.prototype.trimLines = function (this: string) {
+  return trimLines(this);
+};
+
 export function trimLines(input: string) {
   input = input.split("\n").map(trim).join("\n");
 
@@ -97,7 +147,21 @@ export function trimLines(input: string) {
     input = input.replaceAll("\n\n\n", "\n\n");
   }
 
-  input = input.trim();
-
   return input;
 }
+
+export function asciiUnderline(input: string) {
+  return "-".repeat(input.length);
+}
+
+String.prototype.asciiUnderline = function (this: string) {
+  return asciiUnderline(this);
+};
+
+export function asciiUnderlineDouble(input: string) {
+  return "=".repeat(input.length);
+}
+
+String.prototype.asciiUnderlineDouble = function (this: string) {
+  return asciiUnderlineDouble(this);
+};

@@ -7,7 +7,7 @@ import {
   MOCK_TAG_TWO,
 } from "../../tag";
 import { MOCK_NEW_TEST, Test, createTest } from "../../test";
-import { addProjectTest } from "../project-add-test";
+import { projectAddTest } from "../project-add-test";
 import { MOCK_PROJECT_VIEW } from "../project-view.mocks";
 
 describe("project-add-test", () => {
@@ -18,7 +18,7 @@ describe("project-add-test", () => {
         steps: ["mock new test step one", "mock new test step two"],
       }) as Test;
 
-      const updatedProjectView = addProjectTest({
+      const updatedProjectView = projectAddTest({
         project: MOCK_PROJECT_VIEW,
         newTest: MOCK_NEW_TEST,
       });
@@ -35,7 +35,7 @@ describe("project-add-test", () => {
     });
 
     it("adds the provided test's new tags to the provided project", () => {
-      const updatedProjectView = addProjectTest({
+      const updatedProjectView = projectAddTest({
         project: MOCK_PROJECT_VIEW,
         newTest: MOCK_NEW_TEST,
       });
@@ -55,7 +55,7 @@ describe("project-add-test", () => {
     });
 
     it("matches the provided test's tags to existing tags in the provided project if possible", () => {
-      const updatedProjectView = addProjectTest({
+      const updatedProjectView = projectAddTest({
         project: MOCK_PROJECT_VIEW,
         newTest: MOCK_NEW_TEST,
       });

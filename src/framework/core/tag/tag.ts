@@ -3,6 +3,8 @@ import { array, object, string } from "zod";
 
 import {
   ValidationError,
+  ZOD_REGEX_ALPHA_NUMBERS_UNDERSCORES,
+  ZOD_REGEX_START_WITH_ALPHA,
   createValidationErrorFromZodError,
   sentenceCase,
 } from "../../utils";
@@ -24,7 +26,15 @@ export interface CreateTagParams {
 }
 
 export const createTagValidator = object({
-  title: string(),
+  title: string()
+    .regex(
+      ZOD_REGEX_ALPHA_NUMBERS_UNDERSCORES.regex,
+      ZOD_REGEX_ALPHA_NUMBERS_UNDERSCORES.message
+    )
+    .regex(
+      ZOD_REGEX_START_WITH_ALPHA.regex,
+      ZOD_REGEX_START_WITH_ALPHA.message
+    ),
   type: string().optional(),
   description: string().optional(),
   links: array(string()).optional(),
@@ -50,6 +60,11 @@ export function createTag(
 }
 
 export function createTagFromName(name: string): Tag {
+  const validatorResult = createTagValidator.safeParse(name);
+  if (!validatorResult.success) {
+    return createValidationErrorFromZodError(validatorResult.error);
+  }
+
   return {
     name: snakeCase(name),
     title: sentenceCase(name),

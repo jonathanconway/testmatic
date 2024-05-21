@@ -1,21 +1,25 @@
 import { createCommand } from "commander";
 
-import { deleteProjectTest, getTestByNameOrTitle } from "../../core";
+import { projectDeleteTest, projectGetTestByNameOrTitle } from "../../core";
 import { readProject, writeProject } from "../project.utils";
+import { PARAM_TEST_NAME_OR_TITLE } from "../run/param-test-name-or-title";
 
 type TestDeleteParameter = string;
 
 export const cliTestDeleteCommand = createCommand("delete")
   .description("Delete a test")
-  .argument("<name>", "Name or title of test to delete")
+  .argument(PARAM_TEST_NAME_OR_TITLE.name, PARAM_TEST_NAME_OR_TITLE.description)
   .action(cliTestDelete);
 
-export function cliTestDelete(name: TestDeleteParameter) {
+export function cliTestDelete(testNameOrTitle: TestDeleteParameter) {
   const project = readProject();
 
-  const testToDelete = getTestByNameOrTitle({ project, nameOrTitle: name });
+  const testToDelete = projectGetTestByNameOrTitle({
+    project,
+    testNameOrTitle,
+  });
 
-  const updatedProject = deleteProjectTest({ project, testToDelete });
+  const updatedProject = projectDeleteTest({ project, testToDelete });
 
   writeProject(updatedProject);
 }

@@ -4,7 +4,7 @@ import { trimLines } from "../utils";
 import { exportMdLink } from "./export-md-link";
 
 export function exportMdTest(test: Test) {
-  return trimLines(`
+  return `
 # ${test.title}
 
 ${test.description ?? ""}
@@ -20,5 +20,5 @@ ${test.links.map((link) => `- ${exportMdLink(link)}`).join("\n")}
 ## Tags
 
 ${test.tags.map((tag) => `- ${tag.title}`).join("\n")}
-`);
+`.trimLines();
 }

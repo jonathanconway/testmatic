@@ -1,11 +1,11 @@
 import { MOCK_TEST } from "../../test";
-import { deleteProjectTest } from "../project-delete-test";
+import { projectDeleteTest } from "../project-delete-test";
 import { MOCK_PROJECT_VIEW } from "../project-view.mocks";
 
 describe("project-delete-test", () => {
   describe("deleteProjectTest", () => {
     it("deletes test from project", () => {
-      const updatedProject = deleteProjectTest({
+      const updatedProject = projectDeleteTest({
         project: MOCK_PROJECT_VIEW,
         testToDelete: MOCK_TEST,
       });

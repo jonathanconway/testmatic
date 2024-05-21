@@ -1,10 +1,10 @@
-import { cli } from "../../cli";
+import { program } from "../../cli";
 
 const consoleLogSpy = jest.spyOn(console, "log");
 
 describe("cli test help", () => {
   it("prints help text", () => {
-    cli(["test", "help"]);
+    program.parse(["test", "help"]);
 
     expect(consoleLogSpy).toBeCalledWith(
       `

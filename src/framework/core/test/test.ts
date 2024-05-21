@@ -3,6 +3,8 @@ import { array, object, string } from "zod";
 
 import {
   ValidationError,
+  ZOD_REGEX_ALPHA_NUMBERS_UNDERSCORES,
+  ZOD_REGEX_START_WITH_ALPHA,
   createValidationErrorFromZodError,
   sentenceCase,
 } from "../../utils";
@@ -31,7 +33,15 @@ export interface CreateTestParams {
 }
 
 export const createTestValidator = object({
-  title: string(),
+  title: string()
+    .regex(
+      ZOD_REGEX_ALPHA_NUMBERS_UNDERSCORES.regex,
+      ZOD_REGEX_ALPHA_NUMBERS_UNDERSCORES.message
+    )
+    .regex(
+      ZOD_REGEX_START_WITH_ALPHA.regex,
+      ZOD_REGEX_START_WITH_ALPHA.message
+    ),
   description: string().optional(),
   steps: array(string()).nonempty(),
   links: array(string()).optional(),

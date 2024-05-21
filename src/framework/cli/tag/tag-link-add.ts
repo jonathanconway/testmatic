@@ -4,12 +4,15 @@ import promptSync from "prompt-sync";
 import {
   CreateLinkParams,
   Link,
-  addProjectTagLink,
   createLink,
+  projectAddTagLink,
+  projectGetTagByNameOrTitle,
 } from "../../core";
 import { exportMdTag } from "../../markdown";
 import { isValidationError } from "../../utils";
 import { readProject, writeProject } from "../project.utils";
+
+import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 
 type TagLinkAddParameters = [
   string,
@@ -23,8 +26,8 @@ type TagLinkAddParameters = [
 
 export const cliTagLinkAddCommand = createCommand("add")
   .description("Add a new link to a tag")
-  .argument("<tagName>", "Name of the tag")
-  .argument("<href>", "Href of the new link")
+  .argument(PARAM_TAG_NAME_OR_TITLE.name, PARAM_TAG_NAME_OR_TITLE.description)
+  .argument("<tagLinkHref>", "Href of the tag link to add")
   .option(
     "-t, --title <value>",
     `
@@ -36,15 +39,15 @@ Optional.
   .action(cliTagLinkAdd);
 
 export function cliTagLinkAdd(...args: TagLinkAddParameters) {
-  const [tagName] = args;
+  const [tagNameOrTitle] = args;
 
   const project = readProject();
 
-  const tag = project.tagsByName[tagName];
+  const tag = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
 
   const newLink = createTagLinkFromArgsOrPrompts(args);
 
-  const updatedProject = addProjectTagLink({ project, tag, newLink });
+  const updatedProject = projectAddTagLink({ project, tag, newLink });
 
   writeProject(updatedProject);
 

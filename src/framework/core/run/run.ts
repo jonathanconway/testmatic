@@ -1,5 +1,4 @@
 import { Link } from "../link";
-import { Timestamp } from "../timestamp";
 
 export type RunResult = "passed" | "mixed" | "failed";
 
@@ -10,12 +9,16 @@ export interface Run {
 }
 
 export interface CreateRunParams {
-  readonly dateTime: Timestamp;
-  readonly result: RunResult;
-  readonly links: ReadonlyArray<Link>;
+  readonly dateTime: string;
+  readonly result?: RunResult;
+  readonly links?: ReadonlyArray<Link>;
 }
 
-export function createRun({ dateTime, result, links }: CreateRunParams) {
+export function createRun({
+  dateTime,
+  result,
+  links = [],
+}: CreateRunParams): Run {
   return {
     dateTime,
     result,

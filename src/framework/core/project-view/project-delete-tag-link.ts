@@ -3,7 +3,7 @@ import { Tag } from "../tag";
 
 import { ProjectView, createProjectView } from "./project-view";
 
-export function deleteProjectTagLink({
+export function projectDeleteTagLink({
   project,
   tag,
   linkToDelete,

@@ -1,27 +1,36 @@
 import { createCommand } from "commander";
 
-import { deleteProjectTagLink, getTagByNameOrTitle } from "../../core";
-import { getTagLinkByHrefOrTitle } from "../../core";
+import { projectDeleteTagLink, projectGetTagByNameOrTitle } from "../../core";
+import { projectGetTagLinkByHrefOrTitle } from "../../core";
 import { readProject, writeProject } from "../project.utils";
+
+import { PARAM_TAG_LINK_HREF_OR_TITLE } from "./param-tag-link-href-or-title";
+import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 
 type TagDeleteParameter = [string, string];
 
 export const cliTagLinkDeleteCommand = createCommand("delete")
   .description("Delete a link from a tag")
-  .argument("<tagName>", "Name of the tag")
-  .argument("<href>", "Href or title of the link to delete")
+  .argument(PARAM_TAG_NAME_OR_TITLE.name, PARAM_TAG_NAME_OR_TITLE.description)
+  .argument(
+    PARAM_TAG_LINK_HREF_OR_TITLE.name,
+    PARAM_TAG_LINK_HREF_OR_TITLE.description
+  )
   .action(cliTagDelete);
 
 export function cliTagDelete(
-  ...[tagNameOrTitle, linkHrefOrTitle]: TagDeleteParameter
+  ...[tagNameOrTitle, tagLinkHrefOrTitle]: TagDeleteParameter
 ) {
   const project = readProject();
 
-  const tag = getTagByNameOrTitle({ project, tagNameOrTitle });
+  const tag = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
 
-  const linkToDelete = getTagLinkByHrefOrTitle({ tag, linkHrefOrTitle });
+  const linkToDelete = projectGetTagLinkByHrefOrTitle({
+    tag,
+    tagLinkHrefOrTitle,
+  });
 
-  const updatedProject = deleteProjectTagLink({ project, tag, linkToDelete });
+  const updatedProject = projectDeleteTagLink({ project, tag, linkToDelete });
 
   writeProject(updatedProject);
 }

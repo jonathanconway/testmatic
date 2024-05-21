@@ -1,37 +1,41 @@
 import { createCommand } from "commander";
 
 import {
-  getTagByNameOrTitle,
   getTagsReferencingTag,
   getTestsReferencingTag,
+  projectGetTagByNameOrTitle,
 } from "../../core";
 import { getTagFilename, getTestFilename } from "../../markdown";
-import { trimLines } from "../../utils";
 import { toAsciiTable } from "../ascii.utils";
 import { readProject } from "../project.utils";
+
+import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 
 type TagImpactsParameter = string;
 
 export const cliTagImpactsCommand = createCommand("impacts")
   .description("List the tests and tags that are related to a tag")
-  .argument("<name>", "Name or title of tag to list impacts of")
+  .argument(PARAM_TAG_NAME_OR_TITLE.name, PARAM_TAG_NAME_OR_TITLE.description)
   .action(cliTagImpacts);
 
 export function cliTagImpacts(tagNameOrTitle: TagImpactsParameter) {
   const project = readProject();
 
-  const tag = getTagByNameOrTitle({ project, tagNameOrTitle });
+  const tag = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
 
   const tests = getTestsReferencingTag(project.tests, tag);
+
   const tags = getTagsReferencingTag(project.tags, tag);
 
-  console.log(
-    trimLines(`
-${tag.title}
-${"=".repeat(tag.title.length)}
+  const title = `${tag.title} - Impacts`;
 
-Impacted tests
---------------
+  console.log(
+    `
+${title}
+${"=".repeat(title.length)}
+
+Tests
+-----
 
 ${toAsciiTable(
   tests.map((test) => ({
@@ -41,8 +45,8 @@ ${toAsciiTable(
   ["Name", "Doc"]
 )}
 
-Impacted tags
--------------
+Tags
+----
 
 ${toAsciiTable(
   tags.map((tag) => ({
@@ -52,6 +56,6 @@ ${toAsciiTable(
   ["Name", "Doc"]
 )}
 
-`) + "\n\n"
+`.trimLines()
   );
 }

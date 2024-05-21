@@ -1,21 +1,25 @@
 import { createCommand } from "commander";
 
+import { projectGetTestByNameOrTitle } from "../../core";
 import { getRunFilepath } from "../../markdown";
 import { sentenceCase } from "../../utils";
 import { toAsciiTable } from "../ascii.utils";
 import { readProject } from "../project.utils";
 
+import { PARAM_TEST_NAME_OR_TITLE } from "./param-test-name-or-title";
+
 type RunListParameters = string;
 
 export const cliRunListCommand = createCommand("list")
   .description("List runs for the specified test")
-  .argument("<name>", "Name or title of test for which to show runs")
+  .argument(PARAM_TEST_NAME_OR_TITLE.name, PARAM_TEST_NAME_OR_TITLE.description)
   .action(cliRunList);
 
-export function cliRunList(testName: RunListParameters) {
+export function cliRunList(testNameOrTitle: RunListParameters) {
   const project = readProject();
 
-  const test = project.testsByName[testName];
+  const test = projectGetTestByNameOrTitle({ project, testNameOrTitle });
+
   const runs = test.runs;
 
   console.log(

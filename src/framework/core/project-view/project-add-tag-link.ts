@@ -4,7 +4,7 @@ import { toGot } from "../../utils";
 import { Link } from "../link";
 import { Tag } from "../tag";
 
-export function addProjectTagLink({
+export function projectAddTagLink({
   project,
   tag,
   newLink,

@@ -1,6 +1,6 @@
 import { ProjectView } from "./project-view";
 
-export function getTagByNameOrTitle({
+export function projectGetTagByNameOrTitle({
   project,
   tagNameOrTitle,
 }: {

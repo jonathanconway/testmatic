@@ -2,7 +2,7 @@ import { ProjectView, createProjectView } from ".";
 
 import { Tag } from "../tag";
 
-export function addProjectTag({
+export function projectAddTag({
   project,
   newTag,
 }: {

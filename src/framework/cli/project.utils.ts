@@ -1,5 +1,11 @@
 import { Project, ProjectView } from "../core";
-import { getDirTree, getFileTree, writeFileTree } from "../files";
+import {
+  DirOrFileTree,
+  cleanupFileTree,
+  getDirTree,
+  getFileTree,
+  writeFileTree,
+} from "../files";
 import { exportMd, parseMd } from "../markdown";
 
 export function convertProjectToProjectView(project: Project) {
@@ -43,5 +49,10 @@ export function writeProject(project: ProjectView) {
   const newFileTree = exportMd(project);
 
   writeFileTree(`${projectPath}/tests`, newFileTree.tests);
-  writeFileTree(`${projectPath}/tags`, newFileTree.tags);
+  cleanupFileTree(`${projectPath}/tests`, newFileTree.tests);
+
+  writeFileTree(`${projectPath}/tags`, newFileTree.tags as DirOrFileTree);
+  cleanupFileTree(`${projectPath}/tags`, newFileTree.tags);
+
+  writeFileTree(`${projectPath}/runs`, newFileTree.runs as DirOrFileTree);
 }

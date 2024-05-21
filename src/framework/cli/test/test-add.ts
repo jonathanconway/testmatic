@@ -1,7 +1,7 @@
 import { createCommand } from "commander";
 import promptSync from "prompt-sync";
 
-import { CreateTestParams, Test, addProjectTest, createTest } from "../../core";
+import { CreateTestParams, Test, createTest, projectAddTest } from "../../core";
 import { exportMdTest } from "../../markdown";
 import { isValidationError } from "../../utils";
 import { readProject, writeProject } from "../project.utils";
@@ -71,7 +71,7 @@ export function cliTestAdd(args: TestAddParameters) {
 
   const newTest = createTestFromArgsOrPrompts(args);
 
-  const updatedProject = addProjectTest({ project, newTest });
+  const updatedProject = projectAddTest({ project, newTest });
 
   writeProject(updatedProject);
 

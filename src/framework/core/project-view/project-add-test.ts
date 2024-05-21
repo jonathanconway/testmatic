@@ -2,7 +2,7 @@ import { ProjectView, createProjectView } from ".";
 
 import { Test } from "../test";
 
-export function addProjectTest({
+export function projectAddTest({
   project,
   newTest,
 }: {

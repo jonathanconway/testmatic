@@ -85,18 +85,14 @@ function convertTagToProjectJSONTag(tag: Tag): ProjectJSONTag {
 }
 
 export interface ProjectJSONRun {
-  readonly id: string;
-  readonly dateTime: Timestamp;
-  readonly testName: string;
-  readonly result: RunResult;
+  readonly dateTime: string;
+  readonly result?: RunResult;
   readonly links: readonly ProjectJSONLink[];
 }
 
 function convertRunToProjectRunJSON(run: Run): ProjectJSONRun {
   return {
-    id: run.id,
     dateTime: run.dateTime,
-    testName: test.name,
     result: run.result,
     links: run.links.map(convertLinkToProjectJSONLink),
   };
@@ -179,7 +175,6 @@ export function convertProjectJSONRunToRun(
   projectJSONRun: ProjectJSONRun
 ): Run {
   return {
-    id: projectJSONRun.id,
     dateTime: projectJSONRun.dateTime,
     result: projectJSONRun.result,
     links: Object.values(projectJSONRun.links),

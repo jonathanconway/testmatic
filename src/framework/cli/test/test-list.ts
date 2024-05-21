@@ -16,9 +16,9 @@ export const cliTestListCommand = createCommand("list")
   .action(cliTestList);
 
 export function cliTestList({ tag }: TestListParameters) {
-  const project = readProject();
+  const { tests } = readProject();
 
-  const testsFiltered = filterByArgsTag(project.tests, tag);
+  const testsFiltered = filterByArgsTag({ tests, tagFilterValue: tag });
 
   const testList = testsFiltered.map(convertTestToTestOutputRow);
 

@@ -1,6 +1,6 @@
 import * as projectJsonFile from "../../../exporters/json/project-json-file";
 import { MOCK_PROJECT_JSON_FILE } from "../../../exporters/json/project-json-file.mocks";
-import { cli } from "../../cli";
+import { program } from "../../cli";
 
 jest.mock("../../../exporters/json/project-json-file", () => ({
   readProjectFile: jest.fn(),
@@ -14,7 +14,7 @@ const consoleLogSpy = jest.spyOn(console, "log");
 
 describe("cli test list", () => {
   it("lists all tests", () => {
-    cli(["test", "list"]);
+    program.parse(["test", "list"]);
 
     expect(readProjectFileSpy).toBeCalled();
 
@@ -29,7 +29,7 @@ test three  ./docs/tests/test_three.md
   });
 
   it("lists tests having filtered tag", () => {
-    cli(["test", "list", "--filter-tag=tag_one"]);
+    program.parse(["test", "list", "--filter-tag=tag_one"]);
 
     expect(readProjectFileSpy).toBeCalled();
 
@@ -42,7 +42,7 @@ test two  ./docs/tests/test_two.md
   });
 
   it("lists tests having steps having filtered tag", () => {
-    cli(["test", "list", "--filter-tag=tag_two"]);
+    program.parse(["test", "list", "--filter-tag=tag_two"]);
 
     expect(readProjectFileSpy).toBeCalled();
 

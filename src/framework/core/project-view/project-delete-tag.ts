@@ -2,7 +2,7 @@ import { Tag } from "../tag";
 
 import { ProjectView, createProjectView } from "./project-view";
 
-export function deleteProjectTag({
+export function projectDeleteTag({
   project,
   tagToDelete,
 }: {

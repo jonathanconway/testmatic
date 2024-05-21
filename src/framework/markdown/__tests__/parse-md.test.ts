@@ -6,7 +6,7 @@ import { parseMdTest } from "../parse-md-test";
 describe("parse-md", () => {
   describe("parseMdTag", () => {
     it("correctly converts markdown", async () => {
-      const tag = await parseMdTag(
+      const tag = parseMdTag(
         `
 # Log in flow
 
@@ -31,7 +31,7 @@ This flow covers an existing user logging into the website.
 
   describe("parseMdTest", () => {
     it("converts markdown to test object", async () => {
-      const test = await parseMdTest(
+      const test = parseMdTest(
         `
   # User can log in with username and email validation
 
@@ -55,6 +55,7 @@ This flow covers an existing user logging into the website.
   
   - Log in flow        
     `.trim(),
+        {},
         {}
       );
 
@@ -62,7 +63,7 @@ This flow covers an existing user logging into the website.
     });
 
     it("maps existing tags where available", async () => {
-      const test = await parseMdTest(
+      const test = parseMdTest(
         `
   # User can log in with username and email validation
 
@@ -89,7 +90,8 @@ This flow covers an existing user logging into the website.
         {
           log_in_flow: MOCK_TAG_LOGIN_FLOW,
           login_screen: MOCK_TAG_LOGIN_SCREEN,
-        }
+        },
+        {}
       );
 
       expect(test).toEqual(MOCK_TEST_WITH_MAPPED_TAGS);

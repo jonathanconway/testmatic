@@ -1,21 +1,23 @@
 import { createCommand } from "commander";
 
-import { deleteProjectTag, getTagByNameOrTitle } from "../../core";
+import { projectDeleteTag, projectGetTagByNameOrTitle } from "../../core";
 import { readProject, writeProject } from "../project.utils";
+
+import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 
 type TagDeleteParameter = string;
 
 export const cliTagDeleteCommand = createCommand("delete")
   .description("Delete a tag")
-  .argument("<name>", "Name or title of tag to delete")
+  .argument(PARAM_TAG_NAME_OR_TITLE.name, PARAM_TAG_NAME_OR_TITLE.description)
   .action(cliTagDelete);
 
 export function cliTagDelete(tagNameOrTitle: TagDeleteParameter) {
   const project = readProject();
 
-  const tagToDelete = getTagByNameOrTitle({ project, tagNameOrTitle });
+  const tagToDelete = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
 
-  const updatedProject = deleteProjectTag({ project, tagToDelete });
+  const updatedProject = projectDeleteTag({ project, tagToDelete });
 
   writeProject(updatedProject);
 }
