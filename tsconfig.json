@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "sourceRoot": "src",
+    "rootDir": ".",
     "outDir": "dist",
     "strict": true,
     "target": "es2021",
@@ -10,6 +11,7 @@
     "lib": ["es2021"],
     "module": "esnext"
   },
+  "include": ["src/**/*"],
   "ts-node": {
     "esm": true,
     "experimentalSpecifierResolution": "node",

@@ -1,4 +1,4 @@
-export * from "./cli";
+export * from "../cli";
 export * from "./code-generators";
 export * from "./core";
 export * from "./exporters";
