@@ -4,10 +4,11 @@ import {
   CreateTestParams,
   Test,
   createTest,
+  isValidationError,
   projectAddTest,
-} from "../../framework/core";
-import { isValidationError } from "../../framework/utils";
-import { readProject, writeProject } from "../project.utils";
+  projectMdRead,
+  projectMdWrite,
+} from "../../framework";
 import { promptValue, promptValues } from "../prompt.utils";
 
 interface TestAddParameters {
@@ -71,13 +72,17 @@ Optional.
   .action(cliTestAdd);
 
 export function cliTestAdd(args: TestAddParameters) {
-  const project = readProject();
+  const project = projectMdRead();
+
+  if (!project) {
+    return;
+  }
 
   const newTest = createTestFromArgsOrPrompts(args);
 
   const updatedProject = projectAddTest({ project, newTest });
 
-  writeProject(updatedProject);
+  projectMdWrite(updatedProject);
 }
 
 function createTestFromArgsOrPrompts(args: TestAddParameters): Test {

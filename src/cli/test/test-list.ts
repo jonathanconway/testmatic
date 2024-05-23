@@ -1,7 +1,8 @@
 import { createCommand } from "commander";
+import prompts from "prompts";
 
+import { projectMdCreateFolders, projectMdRead } from "../../framework";
 import { toAsciiTable } from "../ascii.utils";
-import { readProject } from "../project.utils";
 
 import { filterByArgsTag } from "./test-list-filter-tag";
 import { convertTestToTestOutputRow } from "./test-list-output-row";
@@ -15,8 +16,27 @@ export const cliTestListCommand = createCommand("list")
   .option("-t, --tag <value>", "Filter by tag")
   .action(cliTestList);
 
-export function cliTestList({ tag }: TestListParameters) {
-  const { tests } = readProject();
+export async function cliTestList(args: TestListParameters) {
+  const project = projectMdRead();
+
+  if (!project) {
+    const { createProjectFolder } = await prompts({
+      type: "confirm",
+      name: "createProjectFolder",
+      message:
+        'Cannot find ".testmatic" folder in current working directory. Create?',
+    });
+
+    if (createProjectFolder) {
+      projectMdCreateFolders();
+      cliTestList(args);
+    }
+
+    return;
+  }
+
+  const { tag } = args;
+  const { tests } = project;
 
   const testsFiltered = filterByArgsTag({ tests, tagFilterValue: tag });
 

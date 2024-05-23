@@ -1,10 +1,13 @@
 import { exec } from "child_process";
 import { createCommand } from "commander";
 
-import { projectGetTestByNameOrTitle } from "../../framework/core";
-import { projectGetTestRunByDateTimeOrLatest } from "../../framework/core/project-view/project-get-test-run-by-datetime-or-latest";
-import { getRunFilepath, getRunsFilepath } from "../../framework/markdown";
-import { readProject } from "../project.utils";
+import {
+  getRunFilepath,
+  getRunsFilepath,
+  projectGetTestByNameOrTitle,
+  projectGetTestRunByDateTimeOrLatest,
+  projectMdRead,
+} from "../../framework";
 
 import { PARAM_RUN_DATETIME } from "./param-run-datetime";
 import { PARAM_TEST_NAME_OR_TITLE } from "./param-test-name-or-title";
@@ -20,7 +23,11 @@ export const cliRunOpenCommand = createCommand("open")
 export function cliRunOpen(
   ...[testNameOrTitle, runDateTime]: RunOpenParameter
 ) {
-  const project = readProject();
+  const project = projectMdRead();
+
+  if (!project) {
+    return;
+  }
 
   const test = projectGetTestByNameOrTitle({ project, testNameOrTitle });
 

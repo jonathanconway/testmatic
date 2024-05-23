@@ -1,22 +1,12 @@
 {
   "compilerOptions": {
-    "sourceRoot": "src",
-    "rootDir": ".",
     "outDir": "dist",
     "strict": true,
     "target": "es2021",
+    "module": "commonjs",
     "sourceMap": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
-    "lib": ["es2021"],
-    "module": "esnext"
-  },
-  "include": ["src/**/*"],
-  "ts-node": {
-    "esm": true,
-    "experimentalSpecifierResolution": "node",
-    "compilerOptions": {
-      "noUnusedLocals": false
-    }
+    "resolveJsonModule": true
   }
 }

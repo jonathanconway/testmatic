@@ -1,8 +1,12 @@
 import { createCommand } from "commander";
 
-import { RunResult, projectUpdateTestRun } from "../../framework/core";
-import { projectGetTestRunByDateTimeOrLatest } from "../../framework/core/project-view/project-get-test-run-by-datetime-or-latest";
-import { readProject, writeProject } from "../project.utils";
+import {
+  RunResult,
+  projectGetTestRunByDateTimeOrLatest,
+  projectMdRead,
+  projectMdWrite,
+  projectUpdateTestRun,
+} from "../../framework";
 
 import { PARAM_RUN_DATETIME } from "./param-run-datetime";
 import { PARAM_TEST_NAME_OR_TITLE } from "./param-test-name-or-title";
@@ -19,7 +23,11 @@ export const cliRunResultCommand = createCommand("result")
 export function cliRunResult(
   ...[testName, runResult, runDateTime]: RunOpenParameter
 ) {
-  const project = readProject();
+  const project = projectMdRead();
+
+  if (!project) {
+    return;
+  }
 
   const test = project.testsByName[testName];
 
@@ -32,5 +40,5 @@ export function cliRunResult(
 
   const updatedProject = projectUpdateTestRun({ project, test, updatedRun });
 
-  writeProject(updatedProject);
+  projectMdWrite(updatedProject);
 }

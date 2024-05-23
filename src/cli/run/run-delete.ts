@@ -3,9 +3,10 @@ import { createCommand } from "commander";
 import {
   projectDeleteRun,
   projectGetTestByNameOrTitle,
-} from "../../framework/core";
-import { projectGetTestRunByDateTimeOrLatest } from "../../framework/core/project-view/project-get-test-run-by-datetime-or-latest";
-import { readProject, writeProject } from "../project.utils";
+  projectGetTestRunByDateTimeOrLatest,
+  projectMdRead,
+  projectMdWrite,
+} from "../../framework";
 
 import { PARAM_RUN_DATETIME } from "./param-run-datetime";
 import { PARAM_TEST_NAME_OR_TITLE } from "./param-test-name-or-title";
@@ -21,7 +22,11 @@ export const cliRunDeleteCommand = createCommand("delete")
 export function cliRunDelete(
   ...[testNameOrTitle, runDateTime]: RunDeleteParameter
 ) {
-  const project = readProject();
+  const project = projectMdRead();
+
+  if (!project) {
+    return;
+  }
 
   const test = projectGetTestByNameOrTitle({ project, testNameOrTitle });
 
@@ -32,5 +37,5 @@ export function cliRunDelete(
 
   const updatedProject = projectDeleteRun({ project, test, runToDelete });
 
-  writeProject(updatedProject);
+  projectMdWrite(updatedProject);
 }

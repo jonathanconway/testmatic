@@ -1,4 +1,4 @@
-#! /usr/bin/env NODE_OPTIONS='--import=../ts-node-esm.js' node
+#! /usr/bin/env node
 import { program } from "./cli";
 
 program.parse();

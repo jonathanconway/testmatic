@@ -2,6 +2,7 @@ import { List, Many, PropertyPath } from "lodash";
 import fromPairs from "lodash/fromPairs";
 import get from "lodash/get";
 import pick from "lodash/pick";
+import { Token } from "marked";
 
 export function isNotNil<T>(item?: T | undefined | null | false): item is T {
   return Boolean(item);
@@ -41,6 +42,10 @@ export function betweenElements<T>(
 
 export function getNextElement<T>(array: T[] | readonly T[], element: T) {
   return array[array.indexOf(element) + 1];
+}
+
+export function getNextElements<T>(array: T[] | readonly T[], element: T) {
+  return array.slice(array.indexOf(element) + 1);
 }
 
 declare global {

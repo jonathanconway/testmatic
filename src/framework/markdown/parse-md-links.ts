@@ -1,31 +1,34 @@
-import { List, Root } from "mdast";
+import { Tokens, TokensList } from "marked";
 
 import { Link } from "../core";
-import { getNextElement } from "../utils";
+import { getNextElement, getNextElements, isNotNil } from "../utils";
 
 import {
   isMdLink,
+  isMdList,
   isMdListItem,
-  isMdParagraph,
   isMdText,
   toFirstChild,
 } from "./markdown.utils";
 import { getHeadingsNodesByText } from "./parse-md.utils";
 
-export function parseMdLinks(root: Root) {
+export function parseMdLinks(root: TokensList) {
   const headingsByText = getHeadingsNodesByText(root);
   const linksHeading = headingsByText["Links"];
-  const linksList = getNextElement(root?.children, linksHeading) as List;
+  const linksList = getNextElements(root, linksHeading).find(isMdList);
+
   const links: readonly Link[] =
-    linksList?.children
+    linksList?.items
       .filter(isMdListItem)
       .map(toFirstChild)
-      .filter(isMdParagraph)
+      .filter(isNotNil)
+      .filter(isMdText)
       .map(toFirstChild)
+      .filter(isNotNil)
       .filter(isMdLink)
       .map((link) => ({
-        title: link.children.find(isMdText)?.value,
-        href: link.url,
+        title: link.text,
+        href: link.href,
       })) ?? [];
   return links;
 }

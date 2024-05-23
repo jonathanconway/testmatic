@@ -3,8 +3,9 @@ import { createCommand } from "commander";
 import {
   projectDeleteTest,
   projectGetTestByNameOrTitle,
-} from "../../framework/core";
-import { readProject, writeProject } from "../project.utils";
+  projectMdRead,
+  projectMdWrite,
+} from "../../framework";
 import { PARAM_TEST_NAME_OR_TITLE } from "../run/param-test-name-or-title";
 
 type TestDeleteParameter = string;
@@ -15,7 +16,11 @@ export const cliTestDeleteCommand = createCommand("delete")
   .action(cliTestDelete);
 
 export function cliTestDelete(testNameOrTitle: TestDeleteParameter) {
-  const project = readProject();
+  const project = projectMdRead();
+
+  if (!project) {
+    return;
+  }
 
   const testToDelete = projectGetTestByNameOrTitle({
     project,
@@ -24,5 +29,5 @@ export function cliTestDelete(testNameOrTitle: TestDeleteParameter) {
 
   const updatedProject = projectDeleteTest({ project, testToDelete });
 
-  writeProject(updatedProject);
+  projectMdWrite(updatedProject);
 }

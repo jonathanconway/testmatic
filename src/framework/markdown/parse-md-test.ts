@@ -1,4 +1,4 @@
-import { remark } from "remark";
+import { marked } from "marked";
 
 import { Tag, Test } from "../core";
 import { DirTree } from "../files";
@@ -16,7 +16,7 @@ export function parseMdTest(
   existingTagsByName: Record<string, Tag>,
   runsDirTree: DirTree
 ): Test {
-  const root = remark().parse(source);
+  const root = marked.lexer(source);
 
   const title = parseMdTitle(root);
 

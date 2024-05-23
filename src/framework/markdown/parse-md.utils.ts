@@ -1,5 +1,5 @@
 import memoize from "lodash/memoize";
-import { Root } from "mdast";
+import { TokensList } from "marked";
 
 import { MarkdownSource, Tag } from "../core";
 import {
@@ -9,64 +9,57 @@ import {
   sentenceCase,
 } from "../utils";
 
-import {
-  getMdText,
-  getMdTextContent,
-  isMdHeadingLevel,
-  isMdParagraph,
-  toFirstChild,
-} from "./markdown.utils";
+import { isMdHeadingLevel, isMdParagraph } from "./markdown.utils";
 
 export const getHeadingNodes = memoize(
-  (root: Root) => root?.children.filter(isMdHeadingLevel(2)) ?? []
+  (root: TokensList) => root.filter(isMdHeadingLevel(2)) ?? []
 );
 
-export const getHeadingsNodesByText = memoize((root: Root) =>
+export const getHeadingsNodesByText = memoize((root: TokensList) =>
   Object.fromEntries(
-    getHeadingNodes(root).map((heading) => [
-      getMdTextContent(toFirstChild(heading)).trim(),
-      heading,
-    ])
+    getHeadingNodes(root).map((heading) => [heading.text, heading])
   )
 );
 
-export const getTitleNode = memoize((root: Root) => {
-  const titleNode = root?.children.find(isMdHeadingLevel(1));
+export const getTitleNode = memoize((root: TokensList) => {
+  const titleNode = root.find(isMdHeadingLevel(1));
   assertNotNil(titleNode, "title", { root });
   return titleNode;
 });
 
 const PARSABLE_HEADINGS = ["Links"];
 
-export function parseDescriptionLines(root: Root, source: MarkdownSource) {
+export function parseDescriptionLines(root: TokensList) {
   const allHeadingNodes = getHeadingNodes(root);
 
   const parsableHeadingNodes = allHeadingNodes.filter((headingNode) =>
-    PARSABLE_HEADINGS.includes(getMdText(headingNode)?.trim() ?? "")
+    PARSABLE_HEADINGS.includes(headingNode?.text?.trim() ?? "")
   );
 
   const titleNode = getTitleNode(root);
 
-  const start = titleNode?.position?.end?.offset ?? 0;
-  const end = parsableHeadingNodes[0]?.position?.start?.offset;
-
-  const descriptionLines = source.substring(start, end).split("\n");
+  const descriptionElements = betweenElements(
+    root,
+    titleNode,
+    parsableHeadingNodes[0]
+  );
+  const descriptionLines = descriptionElements.map((element) => element.raw);
 
   return descriptionLines;
 }
 
-export function parseDescription(root: Root) {
+export function parseDescription(root: TokensList) {
   const headingNodes = getHeadingNodes(root);
   const titleNode = getTitleNode(root);
 
   const titleNodeNextNodes = betweenElements(
-    root?.children,
+    root,
     titleNode,
     headingNodes[0]
   ).filter(isNotNil);
 
   const descriptionNode = titleNodeNextNodes.find(isMdParagraph);
-  const description = getMdText(descriptionNode);
+  const description = descriptionNode?.text.trim();
 
   return description;
 }

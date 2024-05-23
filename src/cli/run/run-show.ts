@@ -1,11 +1,13 @@
 import { createCommand } from "commander";
 
-import { projectGetTestByNameOrTitle } from "../../framework/core";
-import { projectGetTestRunByDateTimeOrLatest } from "../../framework/core";
-import { getRunFiles } from "../../framework/markdown";
-import { formatDateTimeString } from "../../framework/utils";
+import {
+  formatDateTimeString,
+  getRunFiles,
+  projectGetTestByNameOrTitle,
+  projectGetTestRunByDateTimeOrLatest,
+  projectMdRead,
+} from "../../framework";
 import { toAsciiTable } from "../ascii.utils";
-import { readProject } from "../project.utils";
 
 import { PARAM_RUN_DATETIME } from "./param-run-datetime";
 import { PARAM_TEST_NAME_OR_TITLE } from "./param-test-name-or-title";
@@ -21,7 +23,11 @@ export const cliRunShowCommand = createCommand("show")
 export function cliRunShow(
   ...[testNameOrTitle, runDateTime]: RunShowParameter
 ) {
-  const project = readProject();
+  const project = projectMdRead();
+
+  if (!project) {
+    return;
+  }
 
   const test = projectGetTestByNameOrTitle({ project, testNameOrTitle });
 

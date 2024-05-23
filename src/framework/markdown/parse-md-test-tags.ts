@@ -1,11 +1,12 @@
 import snakeCase from "lodash/snakeCase";
-import { List, Root } from "mdast";
+import { Tokens, TokensList } from "marked";
 
 import { Tag } from "../core";
-import { getNextElement, isNotNil } from "../utils";
+import { getNextElement, getNextElements, isNotNil } from "../utils";
 
 import {
   getMdTextContent,
+  isMdList,
   isMdListItem,
   isMdParagraph,
   toFirstChild,
@@ -16,20 +17,17 @@ import {
 } from "./parse-md.utils";
 
 export function parseMdTestTags(
-  root: Root,
+  root: TokensList,
   existingTagsByName: Record<string, Tag>
 ) {
   const headingsByText = getHeadingsNodesByText(root);
   const tagsHeading = headingsByText["Tags"];
-  const tagsList = getNextElement(root.children, tagsHeading) as List;
+  const tagsList = getNextElements(root, tagsHeading).find(isMdList);
 
   const tags: readonly Tag[] =
-    tagsList?.children
+    tagsList?.items
       ?.filter(isMdListItem)
-      .map(toFirstChild)
       .filter(isNotNil)
-      .filter(isMdParagraph)
-      .map(toFirstChild)
       .map(getMdTextContent)
       .map(snakeCase)
       .map(matchExistingOrCreateTag(existingTagsByName)) ?? [];

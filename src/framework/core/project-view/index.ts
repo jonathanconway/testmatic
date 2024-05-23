@@ -1,3 +1,4 @@
+export * from "./project-add-tag";
 export * from "./project-add-tag-link";
 export * from "./project-add-test-run";
 export * from "./project-add-test";

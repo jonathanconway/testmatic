@@ -1,13 +1,14 @@
 import { createCommand } from "commander";
 
 import {
+  getTagFilename,
+  getTestFilename,
   projectGetTagByNameOrTitle,
   projectGetTestsByTag,
-} from "../../framework/core";
-import { getTagFilename, getTestFilename } from "../../framework/markdown";
-import { sentenceCase } from "../../framework/utils";
+  projectMdRead,
+  sentenceCase,
+} from "../../framework";
 import { toAsciiTable } from "../ascii.utils";
-import { readProject } from "../project.utils";
 
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 
@@ -19,7 +20,11 @@ export const cliTagShowCommand = createCommand("show")
   .action(cliTagShow);
 
 export function cliTagShow(tagNameOrTitle: TagShowParameter) {
-  const project = readProject();
+  const project = projectMdRead();
+
+  if (!project) {
+    return;
+  }
 
   const tag = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
 

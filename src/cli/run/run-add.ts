@@ -5,12 +5,14 @@ import {
   Run,
   RunResult,
   createRun,
+  getRunFilepath,
+  isValidationError,
+  nowDateTimeString,
   projectAddTestRun,
   projectGetTestByNameOrTitle,
-} from "../../framework/core";
-import { getRunFilepath } from "../../framework/markdown";
-import { isValidationError, nowDateTimeString } from "../../framework/utils";
-import { readProject, writeProject } from "../project.utils";
+  projectMdRead,
+  projectMdWrite,
+} from "../../framework";
 
 import { PARAM_TEST_NAME_OR_TITLE } from "./param-test-name-or-title";
 
@@ -45,7 +47,11 @@ Optional.
   .action(cliTagAdd);
 
 export function cliTagAdd(...args: RunAddParameters) {
-  const project = readProject();
+  const project = projectMdRead();
+
+  if (!project) {
+    return;
+  }
 
   const [testNameOrTitle] = args;
 
@@ -58,7 +64,7 @@ export function cliTagAdd(...args: RunAddParameters) {
 
   const updatedProject = projectAddTestRun({ project, test, newRun });
 
-  writeProject(updatedProject);
+  projectMdWrite(updatedProject);
 
   exec(`open "${getRunFilepath(test, newRun)}"`);
 }

@@ -1,13 +1,14 @@
 import { createCommand } from "commander";
 
 import {
+  getTagFilename,
   getTagsReferencingTag,
+  getTestFilename,
   getTestsReferencingTag,
   projectGetTagByNameOrTitle,
-} from "../../framework/core";
-import { getTagFilename, getTestFilename } from "../../framework/markdown";
+  projectMdRead,
+} from "../../framework";
 import { toAsciiTable } from "../ascii.utils";
-import { readProject } from "../project.utils";
 
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 
@@ -19,7 +20,11 @@ export const cliTagImpactsCommand = createCommand("impacts")
   .action(cliTagImpacts);
 
 export function cliTagImpacts(tagNameOrTitle: TagImpactsParameter) {
-  const project = readProject();
+  const project = projectMdRead();
+
+  if (!project) {
+    return;
+  }
 
   const tag = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
 

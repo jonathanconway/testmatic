@@ -1,3 +1,4 @@
+import { log } from "node:console";
 import promptSync from "prompt-sync";
 
 import { generateTestFile } from "../../framework/code-generators";
@@ -26,12 +27,12 @@ function getGenTestInfoFromArgs(args: readonly string[]) {
 }
 
 function getGenTestInfoFromPrompts() {
-  const title = prompt("Please enter test title: ");
+  const title = prompt("Please enter test title: ", {});
   if (!title) {
     return;
   }
 
-  console.log(
+  log(
     "\nThank you!\n\nNow, please enter your steps, one-by-one.\n(Empty line to finish)\n"
   );
 

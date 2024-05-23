@@ -1,4 +1,4 @@
-import { Test, testByTag } from "../../framework/core";
+import { Test, testByTag } from "../../framework";
 
 export function filterByArgsTag({
   tests,

@@ -1,11 +1,16 @@
 import { createCommand } from "commander";
 import promptSync from "prompt-sync";
 
-import { CreateTestParams, Tag, createTag } from "../../framework/core";
-import { projectAddTag } from "../../framework/core/project-view/project-add-tag";
-import { exportMdTag } from "../../framework/markdown/export-md-tag";
-import { isValidationError } from "../../framework/utils";
-import { readProject, writeProject } from "../project.utils";
+import {
+  CreateTestParams,
+  Tag,
+  createTag,
+  exportMdTag,
+  isValidationError,
+  projectAddTag,
+  projectMdRead,
+  projectMdWrite,
+} from "../../framework";
 
 interface TagAddParameters {
   readonly title: string;
@@ -65,13 +70,17 @@ Optional.
   .action(cliTagAdd);
 
 export function cliTagAdd(args: TagAddParameters) {
-  const project = readProject();
+  const project = projectMdRead();
+
+  if (!project) {
+    return;
+  }
 
   const newTag = createTagFromArgsOrPrompts(args);
 
   const updatedProject = projectAddTag({ project, newTag });
 
-  writeProject(updatedProject);
+  projectMdWrite(updatedProject);
 
   const mdTest = exportMdTag(newTag);
 

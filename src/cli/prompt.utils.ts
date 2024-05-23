@@ -41,8 +41,6 @@ export function promptValue({
 }
 
 export function promptValues({ message }: { readonly message: string }) {
-  console.log(message);
-
   const values = [];
   let index = 1;
   while (true) {

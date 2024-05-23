@@ -1,8 +1,7 @@
 import { createCommand } from "commander";
 
-import { projectGetTagByNameOrTitle } from "../../framework/core";
+import { projectGetTagByNameOrTitle, projectMdRead } from "../../framework";
 import { toAsciiTable } from "../ascii.utils";
-import { readProject } from "../project.utils";
 
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 
@@ -14,7 +13,11 @@ export const cliTagLinkListCommand = createCommand("list")
   .action(cliTagList);
 
 export function cliTagList(tagNameOrTitle: TagLinkListParameters) {
-  const project = readProject();
+  const project = projectMdRead();
+
+  if (!project) {
+    return;
+  }
 
   const tag = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
 

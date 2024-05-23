@@ -4,8 +4,8 @@ import { createCommand } from "commander";
 import {
   projectGetTagByNameOrTitle,
   projectGetTagLinkByHrefOrTitle,
-} from "../../framework/core";
-import { readProject } from "../project.utils";
+  projectMdRead,
+} from "../../framework";
 
 import { PARAM_TAG_LINK_HREF_OR_TITLE } from "./param-tag-link-href-or-title";
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
@@ -27,7 +27,11 @@ export const cliTagLinkOpenCommand = createCommand("open")
 export function cliTagOpen(
   ...[tagNameOrTitle, tagLinkHrefOrTitle]: TagLinkOpenParameter
 ) {
-  const project = readProject();
+  const project = projectMdRead();
+
+  if (!project) {
+    return;
+  }
 
   const tag = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
 

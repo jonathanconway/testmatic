@@ -11,8 +11,6 @@ export const getErrorFields = <T extends object, Z extends ZodRawShape>(
 ): readonly (keyof T)[] => {
   const validationResult = validator.safeParse(input);
 
-  console.log("getErrorFields", { validationResult });
-
   if ("error" in validationResult) {
     return (validationResult.error?.errors ?? [])
       .flatMap((error) => error.path)

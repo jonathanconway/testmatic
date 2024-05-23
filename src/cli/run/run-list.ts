@@ -1,10 +1,12 @@
 import { createCommand } from "commander";
 
-import { projectGetTestByNameOrTitle } from "../../framework/core";
-import { getRunFilepath } from "../../framework/markdown";
-import { sentenceCase } from "../../framework/utils";
+import {
+  getRunFilepath,
+  projectGetTestByNameOrTitle,
+  projectMdRead,
+  sentenceCase,
+} from "../../framework";
 import { toAsciiTable } from "../ascii.utils";
-import { readProject } from "../project.utils";
 
 import { PARAM_TEST_NAME_OR_TITLE } from "./param-test-name-or-title";
 
@@ -16,7 +18,11 @@ export const cliRunListCommand = createCommand("list")
   .action(cliRunList);
 
 export function cliRunList(testNameOrTitle: RunListParameters) {
-  const project = readProject();
+  const project = projectMdRead();
+
+  if (!project) {
+    return;
+  }
 
   const test = projectGetTestByNameOrTitle({ project, testNameOrTitle });
 

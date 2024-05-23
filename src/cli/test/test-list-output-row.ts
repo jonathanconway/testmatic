@@ -1,4 +1,4 @@
-import { Test } from "../../framework/core";
+import { Test } from "../../framework";
 
 export function convertTestToTestOutputRow(test: Test) {
   return {

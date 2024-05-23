@@ -1,14 +1,14 @@
 import { createCommand } from "commander";
 
-import { projectGetTestByNameOrTitle } from "../../framework/core";
 import {
   getRunFilepath,
   getTagFilename,
   getTestFilename,
-} from "../../framework/markdown";
-import { sentenceCase } from "../../framework/utils";
+  projectGetTestByNameOrTitle,
+  projectMdRead,
+  sentenceCase,
+} from "../../framework";
 import { toAsciiTable } from "../ascii.utils";
-import { readProject } from "../project.utils";
 import { PARAM_TEST_NAME_OR_TITLE } from "../run/param-test-name-or-title";
 
 type TestShowParameter = string;
@@ -19,7 +19,11 @@ export const cliTestShowCommand = createCommand("show")
   .action(cliTestShow);
 
 export function cliTestShow(name: TestShowParameter) {
-  const project = readProject();
+  const project = projectMdRead();
+
+  if (!project) {
+    return;
+  }
 
   const test = projectGetTestByNameOrTitle({ project, testNameOrTitle: name });
 

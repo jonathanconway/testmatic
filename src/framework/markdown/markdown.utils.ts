@@ -1,80 +1,72 @@
-import {
-  Heading,
-  Link,
-  List,
-  ListItem,
-  Literal,
-  Node,
-  Paragraph,
-  Parent,
-  PhrasingContent,
-  RootContent,
-  Text,
-} from "mdast";
+import { Token, Tokens } from "marked";
 
-export async function getRemarkParser() {
-  const { unified } = await import("unified");
-  const remarkParse = (await import("remark-parse")).default;
+import { TypeOfConst, isNotNil } from "../utils";
 
-  const remarkParser = unified().use(remarkParse);
-  return remarkParser;
+const NodeTypes = {
+  Heading: "heading",
+  Link: "link",
+  List: "list",
+  ListItem: "list_item",
+  Paragraph: "paragraph",
+  Text: "text",
+} as const;
+
+type NodeType = TypeOfConst<typeof NodeTypes>;
+
+export function isMdText(node: Token): node is Tokens.Text {
+  return node.type === NodeTypes.Text;
 }
 
-export function isMdText(node: Node): node is Text {
-  return node.type === "text";
+export function isMdLink(node: Token): node is Tokens.Link {
+  return node.type === NodeTypes.Link;
 }
 
-export function isMdLink(node: Node): node is Link {
-  return node.type === "link";
+export function isMdParagraph(node: Token): node is Tokens.Paragraph {
+  return node.type === NodeTypes.Paragraph;
 }
 
-export function isMdParagraph(node: Node): node is Paragraph {
-  return node.type === "paragraph";
+export function isMdHeading(node: Token): node is Tokens.Heading {
+  return node.type === NodeTypes.Heading;
 }
 
-export function isMdHeading(node: Node): node is Heading {
-  return node.type === "heading";
+export function isMdList(node: Token): node is Tokens.List {
+  return node.type === NodeTypes.List;
 }
 
-export function isMdListItem(node: Node): node is ListItem {
-  return node.type === "listItem";
+export function isMdListItem(node: Token): node is Tokens.ListItem {
+  return node.type === NodeTypes.ListItem;
 }
 
-export function isMdHavingText(node: Node): node is Literal {
-  return "value" in node;
+export function isMdHavingText(node: Token): node is TokenWithText {
+  return "text" in node;
 }
 
-export function toFirstChild(node: Parent) {
-  return node.children[0];
+type TokenWithChildren = Tokens.ListItem | Tokens.Paragraph | Tokens.Text;
+
+export function toFirstChild(node: TokenWithChildren) {
+  return node.tokens?.[0];
 }
 
 export function isMdHeadingLevel(depth: number) {
-  return (node: Node): node is Heading => {
+  return (node: Token): node is Tokens.Heading => {
     return isMdHeading(node) && node.depth === depth;
   };
 }
 
-export function getMdTextContent(rootContent?: RootContent) {
-  if (!rootContent) {
+type TokenWithText = Token & {
+  text: string;
+};
+
+export function getMdTextContent(token?: Token) {
+  if (!token) {
     return "";
   }
-  return (rootContent as Text).value;
-}
-
-export function getMdListItemTexts(stepsList: List) {
-  return stepsList.children
-    .filter(isMdListItem)
-    .map(toFirstChild)
-    .filter(isMdParagraph)
-    .map(toFirstChild)
-    .map(getMdTextContent);
-}
-
-export function getMdText<T extends { readonly children: PhrasingContent[] }>(
-  node?: T
-) {
-  if (!node) {
-    return undefined;
+  if (!("text" in token)) {
+    return "";
   }
-  return node.children.filter(isMdHavingText).map(getMdTextContent).join(" ");
+  return token.text;
+}
+
+export function getMdListItemTexts(stepsList: Tokens.List) {
+  return stepsList.items.filter(isMdListItem).map(getMdTextContent);
 }

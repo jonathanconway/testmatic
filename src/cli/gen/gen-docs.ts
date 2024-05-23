@@ -1,11 +1,17 @@
 import { createCommand } from "commander";
 
-import { readProject, writeProject } from "../project.utils";
+import { projectMdRead, projectMdWrite } from "../../framework";
 
 export const cliGenDocsCommand = createCommand("docs")
   .description("Generate test docs")
   .action(cliGenDocs);
 
 export function cliGenDocs() {
-  writeProject(readProject());
+  const project = projectMdRead();
+
+  if (!project) {
+    return;
+  }
+
+  projectMdWrite(project);
 }

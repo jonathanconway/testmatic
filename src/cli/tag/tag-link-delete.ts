@@ -3,9 +3,10 @@ import { createCommand } from "commander";
 import {
   projectDeleteTagLink,
   projectGetTagByNameOrTitle,
-} from "../../framework/core";
-import { projectGetTagLinkByHrefOrTitle } from "../../framework/core";
-import { readProject, writeProject } from "../project.utils";
+  projectGetTagLinkByHrefOrTitle,
+  projectMdRead,
+  projectMdWrite,
+} from "../../framework";
 
 import { PARAM_TAG_LINK_HREF_OR_TITLE } from "./param-tag-link-href-or-title";
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
@@ -24,7 +25,11 @@ export const cliTagLinkDeleteCommand = createCommand("delete")
 export function cliTagDelete(
   ...[tagNameOrTitle, tagLinkHrefOrTitle]: TagDeleteParameter
 ) {
-  const project = readProject();
+  const project = projectMdRead();
+
+  if (!project) {
+    return;
+  }
 
   const tag = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
 
@@ -35,5 +40,5 @@ export function cliTagDelete(
 
   const updatedProject = projectDeleteTagLink({ project, tag, linkToDelete });
 
-  writeProject(updatedProject);
+  projectMdWrite(updatedProject);
 }

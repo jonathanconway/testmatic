@@ -1,5 +1,6 @@
 import snakeCase from "lodash/snakeCase";
-import { remark } from "remark";
+import trim from "lodash/trim";
+import { marked } from "marked";
 
 import { MarkdownSource, Tag } from "../core";
 import { byNot, byStartsWith } from "../utils";
@@ -11,15 +12,17 @@ import { parseDescriptionLines } from "./parse-md.utils";
 const TYPE_LINE_PREFIX = "Type:";
 
 export function parseMdTag(source: MarkdownSource): Tag {
-  const root = remark().parse(source);
+  const root = marked.lexer(source);
 
   const title = parseMdTitle(root);
   const name = snakeCase(title);
 
-  const descriptions = parseDescriptionLines(root, source);
+  const descriptions = parseDescriptionLines(root);
   const description = descriptions
     .filter(byNot(byStartsWith(TYPE_LINE_PREFIX)))
-    .join("\n");
+    .join("\n")
+    .trim()
+    .trimLines();
 
   const type = parseMdTagType(descriptions);
 

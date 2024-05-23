@@ -5,11 +5,12 @@ import {
   CreateLinkParams,
   Link,
   createLink,
+  isValidationError,
   projectAddTagLink,
   projectGetTagByNameOrTitle,
-} from "../../framework/core";
-import { isValidationError } from "../../framework/utils";
-import { readProject, writeProject } from "../project.utils";
+  projectMdRead,
+  projectMdWrite,
+} from "../../framework";
 
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 
@@ -40,7 +41,11 @@ Optional.
 export function cliTagLinkAdd(...args: TagLinkAddParameters) {
   const [tagNameOrTitle] = args;
 
-  const project = readProject();
+  const project = projectMdRead();
+
+  if (!project) {
+    return;
+  }
 
   const tag = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
 
@@ -48,7 +53,7 @@ export function cliTagLinkAdd(...args: TagLinkAddParameters) {
 
   const updatedProject = projectAddTagLink({ project, tag, newLink });
 
-  writeProject(updatedProject);
+  projectMdWrite(updatedProject);
 }
 
 function createTagLinkFromArgsOrPrompts(args: TagLinkAddParameters): Link {
