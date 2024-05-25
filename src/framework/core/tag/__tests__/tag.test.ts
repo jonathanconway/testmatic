@@ -1,4 +1,5 @@
-import { createTagFromName, parseTagNames, parseTags } from "../tag";
+import { createTagFromName } from "../tag-create";
+import { parseTagNames, parseTags } from "../tag-parse";
 
 describe("tag", () => {
   describe("createTagFromName", () => {

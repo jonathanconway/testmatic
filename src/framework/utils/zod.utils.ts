@@ -31,11 +31,19 @@ export function throwIfFieldsError<T extends object, Z extends ZodRawShape>(
 }
 
 export const ZOD_REGEX_ALPHA_NUMBERS_UNDERSCORES = {
-  regex: /^[a-zA-Z0-9_]*$/,
-  message: "Should contain only letters, numbers and underscores (_).",
+  regex: /^[a-zA-Z0-9_\s()]*$/,
+  message:
+    "Should contain only letters ('a' to 'z'), numbers ('0' to '9'), brackets ('(', ')'), underscores ('_') and spaces.",
 };
 
 export const ZOD_REGEX_START_WITH_ALPHA = {
   regex: /^[a-zA-Z]/,
   message: "Should start with a letter.",
+};
+
+// todo: move to separate files, e.g. date ones to date files
+
+export const ZOD_REGEX_DATE_TIME_STRING = {
+  regex: /[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}/,
+  message: "Should be a date/time string in the format: yyyy-MM-dd_hh-mm.",
 };

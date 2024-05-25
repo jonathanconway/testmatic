@@ -1,6 +1,8 @@
 import { createCommand } from "commander";
 
 import {
+  isError,
+  logError,
   projectDeleteTagLink,
   projectGetTagByNameOrTitle,
   projectGetTagLinkByHrefOrTitle,
@@ -31,7 +33,13 @@ export function cliTagDelete(
     return;
   }
 
-  const tag = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
+  const getTagResult = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
+  if (isError(getTagResult)) {
+    logError(getTagResult.message);
+    return;
+  }
+
+  const tag = getTagResult;
 
   const linkToDelete = projectGetTagLinkByHrefOrTitle({
     tag,

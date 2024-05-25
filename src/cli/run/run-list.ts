@@ -1,12 +1,16 @@
 import { createCommand } from "commander";
 
 import {
+  Test,
+  formatRunResult,
   getRunFilepath,
+  isError,
+  logError,
+  logHeading,
+  logTable,
   projectGetTestByNameOrTitle,
   projectMdRead,
-  sentenceCase,
 } from "../../framework";
-import { toAsciiTable } from "../ascii.utils";
 
 import { PARAM_TEST_NAME_OR_TITLE } from "./param-test-name-or-title";
 
@@ -19,31 +23,41 @@ export const cliRunListCommand = createCommand("list")
 
 export function cliRunList(testNameOrTitle: RunListParameters) {
   const project = projectMdRead();
-
   if (!project) {
     return;
   }
 
-  const test = projectGetTestByNameOrTitle({ project, testNameOrTitle });
+  const getTestResult = projectGetTestByNameOrTitle({
+    project,
+    testNameOrTitle,
+  });
+  if (isError(getTestResult)) {
+    logError(getTestResult.message);
+    return;
+  }
+  const test = getTestResult;
 
-  const runs = test.runs;
+  logTitle(test);
 
-  console.log(
-    `
-${test.title}
-${"=".repeat(test.title.length)}
-    
-Runs
-----
+  logRuns(test);
+}
 
-${toAsciiTable(
-  runs.map((run) => ({
+function logTitle(test: Test) {
+  logHeading(test.title, 1);
+
+  console.log();
+}
+
+function logRuns(test: Test) {
+  logHeading("Runs", 2);
+
+  const runsTable = test.runs.map((run) => ({
     dateTime: run.dateTime,
-    result: run.result ? sentenceCase(run.result) : "-",
+    result: formatRunResult(run.result),
     folder: getRunFilepath(test, run),
-  })),
-  ["Date/time", "Result", "Folder"]
-)}
-`
-  );
+  }));
+
+  logTable(runsTable);
+
+  console.log();
 }

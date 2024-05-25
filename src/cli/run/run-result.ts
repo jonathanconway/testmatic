@@ -1,7 +1,10 @@
 import { createCommand } from "commander";
 
 import {
-  RunResult,
+  isError,
+  logError,
+  parseRunResult,
+  projectGetTestByNameOrTitle,
   projectGetTestRunByDateTimeOrLatest,
   projectMdRead,
   projectMdWrite,
@@ -21,21 +24,37 @@ export const cliRunResultCommand = createCommand("result")
   .action(cliRunResult);
 
 export function cliRunResult(
-  ...[testName, runResult, runDateTime]: RunOpenParameter
+  ...[testNameOrTitle, runResult, runDateTime]: RunOpenParameter
 ) {
   const project = projectMdRead();
-
   if (!project) {
     return;
   }
 
-  const test = project.testsByName[testName];
+  const getTestResult = projectGetTestByNameOrTitle({
+    project,
+    testNameOrTitle,
+  });
+  if (isError(getTestResult)) {
+    logError(getTestResult.message);
+    return;
+  }
+  const test = getTestResult;
 
-  const run = projectGetTestRunByDateTimeOrLatest({ test, runDateTime });
+  const getRunResult = projectGetTestRunByDateTimeOrLatest({
+    test,
+    runDateTime,
+  });
+  if (isError(getRunResult)) {
+    logError(getRunResult.message);
+    return;
+  }
+  const run = getRunResult;
 
+  const result = parseRunResult(runResult);
   const updatedRun = {
     ...run,
-    result: runResult as RunResult,
+    result,
   };
 
   const updatedProject = projectUpdateTestRun({ project, test, updatedRun });

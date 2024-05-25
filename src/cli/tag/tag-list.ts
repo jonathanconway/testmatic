@@ -1,7 +1,6 @@
 import { createCommand } from "commander";
 
-import { getTagFilename, projectMdRead } from "../../framework";
-import { toAsciiTable } from "../ascii.utils";
+import { getTagFilename, logTable, projectMdRead } from "../../framework";
 
 export const cliTagListCommand = createCommand("list")
   .description("List tags in the current project")
@@ -9,19 +8,18 @@ export const cliTagListCommand = createCommand("list")
 
 export function cliTagList() {
   const project = projectMdRead();
-
   if (!project) {
     return;
   }
 
   const { tags } = project;
+  const tagsTable = Object.values(tags).map((tag) => ({
+    title: tag.title,
+    name: tag.name,
+    doc: getTagFilename(tag),
+  }));
 
-  console.log(
-    toAsciiTable(
-      Object.values(tags).map((tag) => ({
-        Name: tag.title,
-        Doc: getTagFilename(tag),
-      }))
-    )
-  );
+  logTable(tagsTable);
+
+  console.log();
 }

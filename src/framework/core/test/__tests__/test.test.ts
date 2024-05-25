@@ -1,7 +1,7 @@
 import { omit } from "lodash";
 
 import { ValidationError, isValidationError } from "../../../utils";
-import { createTest } from "../test";
+import { createTest } from "../test-create";
 import { MOCK_CREATE_TEST_PARAMS } from "../test.mocks";
 
 describe("test", () => {
@@ -44,7 +44,7 @@ describe("test", () => {
     it("returns an error if steps are not provided", () => {
       const result = createTest({
         ...MOCK_CREATE_TEST_PARAMS,
-        steps: [],
+        stepTexts: [],
       });
 
       expect(isValidationError(result)).toBeTruthy();

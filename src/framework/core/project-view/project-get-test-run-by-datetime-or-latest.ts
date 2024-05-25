@@ -1,3 +1,4 @@
+import { NotFoundError } from "../../utils";
 import { Run } from "../run";
 import { Test } from "../test";
 
@@ -10,18 +11,18 @@ export function projectGetTestRunByDateTimeOrLatest({
 }: {
   readonly test: Test;
   readonly runDateTime?: string;
-}): Run {
+}) {
   const run = runDateTime
     ? projectGetTestRunByDateTime(test, runDateTime)
     : projectGetTestRunLatest(test);
 
   if (!run) {
     if (runDateTime) {
-      throw new Error(
+      return new NotFoundError(
         `Run with date/time stamp "${runDateTime}" in test "${test.title}" cannot be found.`
       );
     } else {
-      throw new Error(`No runs can be found in test "${test.title}".`);
+      return new NotFoundError(`No runs can be found in test "${test.title}".`);
     }
   }
 

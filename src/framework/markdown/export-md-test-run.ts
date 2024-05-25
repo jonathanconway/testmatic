@@ -12,5 +12,7 @@ Result: ${run.result ? sentenceCase(run.result) : "-"}
 ## Links
 
 ${run.links.map((link) => `- ${exportMdLink(link)}`).join("\n")}
-`.trimLines();
+`
+    .trimLines()
+    .trim();
 }

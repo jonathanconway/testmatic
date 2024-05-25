@@ -5,10 +5,13 @@ import {
   getTagsReferencingTag,
   getTestFilename,
   getTestsReferencingTag,
+  isError,
+  logError,
+  logTable,
   projectGetTagByNameOrTitle,
   projectMdRead,
 } from "../../framework";
-import { toAsciiTable } from "../ascii.utils";
+import { toAsciiTable } from "../utils/ascii/ascii.utils";
 
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 
@@ -21,46 +24,69 @@ export const cliTagImpactsCommand = createCommand("impacts")
 
 export function cliTagImpacts(tagNameOrTitle: TagImpactsParameter) {
   const project = projectMdRead();
-
   if (!project) {
     return;
   }
 
-  const tag = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
+  const getTagResult = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
+  if (isError(getTagResult)) {
+    logError(getTagResult.message);
+    return;
+  }
+
+  const tag = getTagResult;
 
   const tests = getTestsReferencingTag(project.tests, tag);
+  const testsTable = tests.map((test) => ({
+    name: test.title,
+    doc: getTestFilename(test),
+  }));
 
   const tags = getTagsReferencingTag(project.tags, tag);
+  const tagsTable = tags.map((tag) => ({
+    Name: tag.title,
+    Doc: getTagFilename(tag),
+  }));
 
   const title = `${tag.title} - Impacts`;
 
   console.log(
     `
 ${title}
-${"=".repeat(title.length)}
+${title.asciiUnderlineDouble()}
+`
+  );
 
+  console.log(`
 Tests
 -----
+`);
 
-${toAsciiTable(
-  tests.map((test) => ({
-    Name: test.title,
-    Doc: getTestFilename(test),
-  })),
-  ["Name", "Doc"]
-)}
+  logTable(testsTable);
 
+  // ${toAsciiTable(
+  //   tests.map((test) => ({
+  //     Name: test.title,
+  //     Doc: getTestFilename(test),
+  //   })),
+  //   ["Name", "Doc"]
+  // )}
+
+  console.log(`
 Tags
 ----
+`);
 
-${toAsciiTable(
-  tags.map((tag) => ({
-    Name: tag.title,
-    Doc: getTagFilename(tag),
-  })),
-  ["Name", "Doc"]
-)}
+  logTable(tagsTable);
 
-`.trimLines()
-  );
+  // ${toAsciiTable(
+  //   tags.map((tag) => ({
+  //     Name: tag.title,
+  //     Doc: getTagFilename(tag),
+  //   })),
+  //   ["Name", "Doc"]
+  // )}
+
+  // `.trimLines()
+  // );
 }

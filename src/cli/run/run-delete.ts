@@ -1,6 +1,8 @@
 import { createCommand } from "commander";
 
 import {
+  isError,
+  logError,
   projectDeleteRun,
   projectGetTestByNameOrTitle,
   projectGetTestRunByDateTimeOrLatest,
@@ -23,17 +25,29 @@ export function cliRunDelete(
   ...[testNameOrTitle, runDateTime]: RunDeleteParameter
 ) {
   const project = projectMdRead();
-
   if (!project) {
     return;
   }
 
-  const test = projectGetTestByNameOrTitle({ project, testNameOrTitle });
+  const getTestResult = projectGetTestByNameOrTitle({
+    project,
+    testNameOrTitle,
+  });
+  if (isError(getTestResult)) {
+    logError(getTestResult.message);
+    return;
+  }
+  const test = getTestResult;
 
-  const runToDelete = projectGetTestRunByDateTimeOrLatest({
+  const getRunResult = projectGetTestRunByDateTimeOrLatest({
     test,
     runDateTime,
   });
+  if (isError(getRunResult)) {
+    logError(getRunResult.message);
+    return;
+  }
+  const runToDelete = getRunResult;
 
   const updatedProject = projectDeleteRun({ project, test, runToDelete });
 

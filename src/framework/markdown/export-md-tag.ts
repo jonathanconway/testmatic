@@ -14,5 +14,7 @@ ${tag.description ?? ""}
 ## Links
 
 ${tag.links.map((link) => `- ${exportMdLink(link)}`).join("\n")}
-`.trimLines();
+`
+    .trimLines()
+    .trim();
 }

@@ -2,8 +2,11 @@ import { exec } from "child_process";
 import { createCommand } from "commander";
 
 import {
+  NotFoundError,
   getRunFilepath,
   getRunsFilepath,
+  isError,
+  logError,
   projectGetTestByNameOrTitle,
   projectGetTestRunByDateTimeOrLatest,
   projectMdRead,
@@ -24,19 +27,34 @@ export function cliRunOpen(
   ...[testNameOrTitle, runDateTime]: RunOpenParameter
 ) {
   const project = projectMdRead();
-
   if (!project) {
     return;
   }
 
-  const test = projectGetTestByNameOrTitle({ project, testNameOrTitle });
+  const getTestResult = projectGetTestByNameOrTitle({
+    project,
+    testNameOrTitle,
+  });
+  if (isError(getTestResult)) {
+    logError(getTestResult.message);
+    return;
+  }
+  const test = getTestResult;
 
-  const run = projectGetTestRunByDateTimeOrLatest({ test, runDateTime });
-
-  if (!run) {
+  const getRunResult = projectGetTestRunByDateTimeOrLatest({
+    test,
+    runDateTime,
+  });
+  if (isError(getRunResult)) {
+    logError(getRunResult.message);
+    return;
+  }
+  if (isError(getRunResult) && getRunResult instanceof NotFoundError) {
     exec(`open "${getRunsFilepath(test)}"`);
     return;
   }
+
+  const run = getRunResult;
 
   exec(`open "${getRunFilepath(test, run)}"`);
 }

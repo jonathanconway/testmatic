@@ -20,5 +20,7 @@ ${test.links.map((link) => `- ${exportMdLink(link)}`).join("\n")}
 ## Tags
 
 ${test.tags.map((tag) => `- ${tag.title}`).join("\n")}
-`.trimLines();
+`
+    .trimLines()
+    .trim();
 }

@@ -1,6 +1,8 @@
 import { createCommand } from "commander";
 
 import {
+  isError,
+  logError,
   projectDeleteTest,
   projectGetTestByNameOrTitle,
   projectMdRead,
@@ -17,15 +19,20 @@ export const cliTestDeleteCommand = createCommand("delete")
 
 export function cliTestDelete(testNameOrTitle: TestDeleteParameter) {
   const project = projectMdRead();
-
   if (!project) {
     return;
   }
 
-  const testToDelete = projectGetTestByNameOrTitle({
+  const getTestResult = projectGetTestByNameOrTitle({
     project,
     testNameOrTitle,
   });
+  if (isError(getTestResult)) {
+    logError(getTestResult.message);
+    return;
+  }
+
+  const testToDelete = getTestResult;
 
   const updatedProject = projectDeleteTest({ project, testToDelete });
 

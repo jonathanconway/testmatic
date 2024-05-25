@@ -19,7 +19,7 @@ export function projectGetTestByNameOrTitle({
     return testByTitle;
   }
 
-  throw new Error(
+  return new Error(
     `Cannot find test with name or title matching "${testNameOrTitle}"`
   );
 }

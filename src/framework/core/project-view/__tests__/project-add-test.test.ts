@@ -15,7 +15,7 @@ describe("project-add-test", () => {
     it("adds the provided test to the provided project", () => {
       const MOCK_NEW_TEST = createTest({
         title: "mock new test",
-        steps: ["mock new test step one", "mock new test step two"],
+        stepTexts: ["mock new test step one", "mock new test step two"],
       }) as Test;
 
       const updatedProjectView = projectAddTest({

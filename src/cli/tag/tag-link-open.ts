@@ -2,6 +2,8 @@ import { exec } from "child_process";
 import { createCommand } from "commander";
 
 import {
+  isError,
+  logError,
   projectGetTagByNameOrTitle,
   projectGetTagLinkByHrefOrTitle,
   projectMdRead,
@@ -33,7 +35,13 @@ export function cliTagOpen(
     return;
   }
 
-  const tag = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
+  const getTagResult = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
+  if (isError(getTagResult)) {
+    logError(getTagResult.message);
+    return;
+  }
+
+  const tag = getTagResult;
 
   const link = projectGetTagLinkByHrefOrTitle({ tag, tagLinkHrefOrTitle });
 

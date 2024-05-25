@@ -5,7 +5,9 @@ import {
   CreateLinkParams,
   Link,
   createLink,
+  isError,
   isValidationError,
+  logError,
   projectAddTagLink,
   projectGetTagByNameOrTitle,
   projectMdRead,
@@ -47,7 +49,13 @@ export function cliTagLinkAdd(...args: TagLinkAddParameters) {
     return;
   }
 
-  const tag = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
+  const getTagResult = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
+  if (isError(getTagResult)) {
+    logError(getTagResult.message);
+    return;
+  }
+
+  const tag = getTagResult;
 
   const newLink = createTagLinkFromArgsOrPrompts(args);
 

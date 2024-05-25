@@ -1,11 +1,13 @@
 import { createCommand } from "commander";
 
 import {
+  isError,
   projectDeleteTag,
   projectGetTagByNameOrTitle,
   projectMdRead,
   projectMdWrite,
 } from "../../framework";
+import { logError } from "../utils";
 
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 
@@ -18,12 +20,17 @@ export const cliTagDeleteCommand = createCommand("delete")
 
 export function cliTagDelete(tagNameOrTitle: TagDeleteParameter) {
   const project = projectMdRead();
-
   if (!project) {
     return;
   }
 
-  const tagToDelete = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
+  const getTagResult = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
+  if (isError(getTagResult)) {
+    logError(getTagResult.message);
+    return;
+  }
+
+  const tagToDelete = getTagResult;
 
   const updatedProject = projectDeleteTag({ project, tagToDelete });
 

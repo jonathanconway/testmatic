@@ -7,6 +7,7 @@ import {
   createTag,
   exportMdTag,
   isValidationError,
+  logError,
   projectAddTag,
   projectMdRead,
   projectMdWrite,
@@ -76,7 +77,14 @@ export function cliTagAdd(args: TagAddParameters) {
     return;
   }
 
-  const newTag = createTagFromArgsOrPrompts(args);
+  const createTagResult = createTagFromArgsOrPrompts(args);
+
+  if (isValidationError(createTagResult)) {
+    logError(createTagResult.message);
+    return;
+  }
+
+  const newTag = createTagResult;
 
   const updatedProject = projectAddTag({ project, newTag });
 
@@ -87,7 +95,7 @@ export function cliTagAdd(args: TagAddParameters) {
   console.log(`\n${mdTest}\n`);
 }
 
-function createTagFromArgsOrPrompts(args: TagAddParameters): Tag {
+function createTagFromArgsOrPrompts(args: TagAddParameters) {
   const paramsFromArgs = args;
 
   const paramsFromPrompts = getTagAddParamsFromPrompts(paramsFromArgs);
@@ -98,10 +106,6 @@ function createTagFromArgsOrPrompts(args: TagAddParameters): Tag {
   };
 
   const createTagResult = createTag(params);
-
-  if (isValidationError(createTagResult)) {
-    throw createTagResult.message;
-  }
 
   return createTagResult;
 }

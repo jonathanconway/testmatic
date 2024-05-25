@@ -1,20 +1,11 @@
 import snakeCase from "lodash/snakeCase";
-import { Tokens, TokensList } from "marked";
+import { TokensList } from "marked";
 
-import { Tag } from "../core";
-import { getNextElement, getNextElements, isNotNil } from "../utils";
+import { Tag, projectGetOrCreateTagByName } from "../core";
+import { getNextElements, isNotNil } from "../utils";
 
-import {
-  getMdTextContent,
-  isMdList,
-  isMdListItem,
-  isMdParagraph,
-  toFirstChild,
-} from "./markdown.utils";
-import {
-  getHeadingsNodesByText,
-  matchExistingOrCreateTag,
-} from "./parse-md.utils";
+import { getMdTextContent, isMdList, isMdListItem } from "./markdown.utils";
+import { getHeadingsNodesByText } from "./parse-md.utils";
 
 export function parseMdTestTags(
   root: TokensList,
@@ -30,7 +21,7 @@ export function parseMdTestTags(
       .filter(isNotNil)
       .map(getMdTextContent)
       .map(snakeCase)
-      .map(matchExistingOrCreateTag(existingTagsByName)) ?? [];
+      .map(projectGetOrCreateTagByName(existingTagsByName)) ?? [];
 
   return tags;
 }

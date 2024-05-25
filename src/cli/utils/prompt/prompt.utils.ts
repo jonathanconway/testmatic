@@ -1,6 +1,6 @@
 import promptSync from "prompt-sync";
 
-import { sentenceCase } from "../framework/utils";
+import { CancelledError, isError, sentenceCase } from "../../../framework";
 
 const prompt = promptSync();
 
@@ -17,6 +17,7 @@ export function promptFields<T extends Record<string, string>>(
 
     values[field.toString()] = value;
   }
+
   return values;
 }
 
@@ -25,12 +26,12 @@ export function promptValue({
   repeatIfEmpty,
 }: {
   readonly message: string;
-  repeatIfEmpty?: boolean;
+  readonly repeatIfEmpty?: boolean;
 }) {
   const result = prompt(message);
 
   if (result === null) {
-    throw new Error("Cancelled.");
+    return new CancelledError();
   }
 
   if (result === "" && repeatIfEmpty) {
@@ -40,11 +41,21 @@ export function promptValue({
   return result;
 }
 
-export function promptValues({ message }: { readonly message: string }) {
+export function promptValues({
+  message,
+}: {
+  readonly message: string;
+}): readonly string[] | Error {
+  console.log(message);
+
   const values = [];
   let index = 1;
   while (true) {
     const value = promptValue({ message: `${index}. ` });
+
+    if (isError(value)) {
+      return value;
+    }
 
     if (value === "") {
       break;

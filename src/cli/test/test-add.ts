@@ -2,14 +2,14 @@ import { createCommand } from "commander";
 
 import {
   CreateTestParams,
-  Test,
   createTest,
-  isValidationError,
+  isCancelledError,
+  isError,
   projectAddTest,
   projectMdRead,
   projectMdWrite,
 } from "../../framework";
-import { promptValue, promptValues } from "../prompt.utils";
+import { logError, promptValue, promptValues } from "../utils";
 
 interface TestAddParameters {
   readonly title: string;
@@ -73,22 +73,31 @@ Optional.
 
 export function cliTestAdd(args: TestAddParameters) {
   const project = projectMdRead();
-
   if (!project) {
     return;
   }
 
-  const newTest = createTestFromArgsOrPrompts(args);
+  const createTestResult = createTestFromArgsOrPrompts(args);
+  if (isError(createTestResult)) {
+    logError(createTestResult.message);
+    return;
+  }
+
+  const newTest = createTestResult;
 
   const updatedProject = projectAddTest({ project, newTest });
 
   projectMdWrite(updatedProject);
 }
 
-function createTestFromArgsOrPrompts(args: TestAddParameters): Test {
+function createTestFromArgsOrPrompts(args: TestAddParameters) {
   const paramsFromArgs = args;
 
   const paramsFromPrompts = getTestAddParamsFromPrompts(paramsFromArgs);
+
+  if (isCancelledError(paramsFromPrompts)) {
+    return paramsFromPrompts;
+  }
 
   const params = {
     ...paramsFromArgs,
@@ -97,10 +106,6 @@ function createTestFromArgsOrPrompts(args: TestAddParameters): Test {
 
   const createTestResult = createTest(params);
 
-  if (isValidationError(createTestResult)) {
-    throw createTestResult.message;
-  }
-
   return createTestResult;
 }
 
@@ -108,11 +113,12 @@ function getTestAddParamsFromPrompts(paramsSoFar: Partial<CreateTestParams>) {
   let params: Partial<CreateTestParams> = {};
 
   if (!paramsSoFar.title) {
-    const title = getTestAddTitleFromPrompt();
-
-    if (title === null) {
-      return null;
+    const getTestAddTitleFromPromptResult = getTestAddTitleFromPrompt();
+    if (isError(getTestAddTitleFromPromptResult)) {
+      return getTestAddTitleFromPromptResult;
     }
+
+    const title = getTestAddTitleFromPromptResult;
 
     params = {
       ...params,
@@ -120,20 +126,25 @@ function getTestAddParamsFromPrompts(paramsSoFar: Partial<CreateTestParams>) {
     };
   }
 
-  if (!paramsSoFar.steps) {
-    const steps = getTestAddStepsFromPrompt();
-
-    if (steps === null) {
-      return null;
+  if (!paramsSoFar.stepTexts) {
+    const getTestAddStepsFromPromptResult = getTestAddStepsFromPrompt();
+    if (isError(getTestAddStepsFromPromptResult)) {
+      return getTestAddStepsFromPromptResult;
     }
 
-    params = { ...params, steps };
+    const stepTexts = getTestAddStepsFromPromptResult;
+
+    params = { ...params, stepTexts };
   }
+
+  console.log();
 
   return params;
 }
 
 function getTestAddTitleFromPrompt() {
+  console.log();
+
   return promptValue({
     message: "Please enter test title: ",
     repeatIfEmpty: true,
@@ -141,6 +152,8 @@ function getTestAddTitleFromPrompt() {
 }
 
 function getTestAddStepsFromPrompt() {
+  console.log();
+
   return promptValues({
     message:
       "\nThank you!\n\nNow, please enter your steps, one-by-one.\n(Empty line to finish)\n",

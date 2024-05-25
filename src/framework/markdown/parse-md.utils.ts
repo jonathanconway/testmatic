@@ -1,13 +1,7 @@
 import memoize from "lodash/memoize";
 import { TokensList } from "marked";
 
-import { MarkdownSource, Tag } from "../core";
-import {
-  assertNotNil,
-  betweenElements,
-  isNotNil,
-  sentenceCase,
-} from "../utils";
+import { assertNotNil, betweenElements, isNotNil } from "../utils";
 
 import { isMdHeadingLevel, isMdParagraph } from "./markdown.utils";
 
@@ -62,18 +56,4 @@ export function parseDescription(root: TokensList) {
   const description = descriptionNode?.text.trim();
 
   return description;
-}
-
-export function matchExistingOrCreateTag(
-  existingTagsByName: Record<string, Tag>
-) {
-  return (tagName: string) => {
-    return (
-      existingTagsByName[tagName] ?? {
-        name: tagName,
-        links: [],
-        title: sentenceCase(tagName),
-      }
-    );
-  };
 }

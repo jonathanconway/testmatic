@@ -1,14 +1,19 @@
 import { createCommand } from "commander";
 
 import {
+  Tag,
+  Test,
   getTagFilename,
   getTestFilename,
+  isError,
+  logError,
+  logHeading,
+  logTable,
   projectGetTagByNameOrTitle,
   projectGetTestsByTag,
   projectMdRead,
   sentenceCase,
 } from "../../framework";
-import { toAsciiTable } from "../ascii.utils";
 
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 
@@ -21,51 +26,79 @@ export const cliTagShowCommand = createCommand("show")
 
 export function cliTagShow(tagNameOrTitle: TagShowParameter) {
   const project = projectMdRead();
-
   if (!project) {
     return;
   }
 
-  const tag = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
+  const getTagResult = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
+  if (isError(getTagResult)) {
+    logError(getTagResult.message);
+    return;
+  }
+
+  const tag = getTagResult;
 
   const tests = projectGetTestsByTag({ project, tag });
 
-  console.log(
-    `
-${tag.title}
-${"=".repeat(tag.title.length)}
+  logHeading(tag.title, 1);
 
-${tag.type ? `Type: ${sentenceCase(tag.type)}` : ``}
+  console.log();
 
-Doc: ${getTagFilename(tag)}
+  logType(tag.type);
 
-Description
------------
+  logDoc(tag);
 
-${tag.description}
+  logDescription(tag);
 
-Links
------
+  logLinks(tag);
 
-${toAsciiTable(
-  tag.links.map((link) => ({
-    Name: link.title,
-    URL: link.href,
-  })),
-  ["Name", "URL"]
-)}
+  logTests(tests);
+}
 
-Tests
------
+function logType(type?: string) {
+  if (type) {
+    console.log(`Type: ${sentenceCase(type)}`);
+    console.log();
+  }
+}
 
-${toAsciiTable(
-  tests.map((test) => ({
-    Name: test.title,
-    Doc: getTestFilename(test),
-  })),
-  ["Name", "Doc"]
-)}
+function logDoc(tag: Tag) {
+  console.log(`Doc: ${getTagFilename(tag)}`);
+  console.log();
+}
 
-`.trimLines()
-  );
+function logDescription(tag: Tag) {
+  if (tag.description) {
+    logHeading("Description", 2);
+
+    console.log(tag.description);
+    console.log();
+  }
+}
+
+function logLinks(tag: Tag) {
+  logHeading("Links", 2);
+
+  const linksTable = tag.links.map((link) => ({
+    name: link.title,
+    url: link.href,
+  }));
+
+  logTable(linksTable);
+
+  console.log();
+}
+
+function logTests(tests: readonly Test[]) {
+  logHeading("Tests", 2);
+
+  const testsTable = tests.map((test) => ({
+    title: test.title,
+    name: test.name,
+    doc: getTestFilename(test),
+  }));
+
+  logTable(testsTable);
+
+  console.log();
 }

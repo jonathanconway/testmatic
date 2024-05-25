@@ -1,14 +1,19 @@
 import { createCommand } from "commander";
 
 import {
+  Test,
+  formatDateTimeString,
   getRunFilepath,
   getTagFilename,
   getTestFilename,
+  isError,
+  logError,
+  logHeading,
+  logTable,
   projectGetTestByNameOrTitle,
   projectMdRead,
   sentenceCase,
 } from "../../framework";
-import { toAsciiTable } from "../ascii.utils";
 import { PARAM_TEST_NAME_OR_TITLE } from "../run/param-test-name-or-title";
 
 type TestShowParameter = string;
@@ -20,59 +25,90 @@ export const cliTestShowCommand = createCommand("show")
 
 export function cliTestShow(name: TestShowParameter) {
   const project = projectMdRead();
-
   if (!project) {
     return;
   }
 
-  const test = projectGetTestByNameOrTitle({ project, testNameOrTitle: name });
+  const getTestResult = projectGetTestByNameOrTitle({
+    project,
+    testNameOrTitle: name,
+  });
+  if (isError(getTestResult)) {
+    logError(getTestResult.message);
+    return;
+  }
 
-  console.log(
-    `
-${test.title}
-${test.title.asciiUnderlineDouble()}
+  const test = getTestResult;
 
-Doc: ${getTestFilename(test)}
+  logTitle(test);
 
-Description
------------
+  logDocFile(test);
 
-${test.description}
+  logDescription(test);
 
-Links
------
+  logLinks(test);
 
-${toAsciiTable(
-  test.links.map((link) => ({
+  logTags(test);
+
+  logRuns(test);
+}
+
+function logTitle({ title }: Test) {
+  logHeading(title, 1);
+
+  console.log();
+}
+
+function logDocFile(test: Test) {
+  console.log(`Doc: ${getTestFilename(test)}`);
+  console.log();
+}
+
+function logDescription({ description }: Test) {
+  if (description) {
+    logHeading("Description", 2);
+
+    console.log(description);
+    console.log();
+  }
+}
+
+function logLinks({ links }: Test) {
+  logHeading("Links", 2);
+
+  const testLinksTable = links.map((link) => ({
     Name: link.title,
     URL: link.href,
-  })),
-  ["Name", "URL"]
-)}
+  }));
 
-Tags
-----
+  logTable(testLinksTable);
 
-${toAsciiTable(
-  test.tags.map((tag) => ({
+  console.log();
+}
+
+function logTags({ tags }: Test) {
+  logHeading("Tags", 2);
+
+  const testTagsTable = tags.map((tag) => ({
     Name: tag.title,
     Doc: getTagFilename(tag),
-  })),
-  ["Name", "Doc"]
-)}
+  }));
 
-Runs
-----
+  logTable(testTagsTable);
 
-${toAsciiTable(
-  test.runs.map((run) => ({
-    dateTime: run.dateTime,
+  console.log();
+}
+
+function logRuns(test: Test) {
+  logHeading("Runs", 2);
+
+  const testRunsTable = test.runs.map((run) => ({
+    dateTime: formatDateTimeString(run.dateTime),
     result: run.result ? sentenceCase(run.result) : "-",
     folder: getRunFilepath(test, run),
-  })),
-  ["Date/time", "Result", "Folder"]
-)}
+  }));
 
-`.trimLines()
-  );
+  logTable(testRunsTable);
+
+  console.log();
 }

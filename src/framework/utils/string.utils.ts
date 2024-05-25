@@ -28,7 +28,7 @@ String.prototype.sentenceCase = function (this: string) {
   return sentenceCase(this);
 };
 
-export function sentenceCase(input?: string) {
+export function sentenceCase(input: string) {
   const [a, ...b] = startCase(input);
   return `${a.toUpperCase()}${b.join("").toLowerCase()}`;
 }

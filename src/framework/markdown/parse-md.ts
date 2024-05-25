@@ -1,3 +1,5 @@
+import { uniq } from "lodash";
+
 import { ProjectView, createProjectView } from "../core";
 import { DirTree, FileTree } from "../files";
 
@@ -24,6 +26,6 @@ export function parseMd({
   return createProjectView({
     tests,
 
-    tags: [...tags, ...testTags],
+    tags: uniq([...tags, ...testTags]),
   });
 }

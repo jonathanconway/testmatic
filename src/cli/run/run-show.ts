@@ -1,13 +1,18 @@
 import { createCommand } from "commander";
 
 import {
+  Run,
+  Test,
   formatDateTimeString,
   getRunFiles,
+  isError,
+  logError,
+  logHeading,
+  logTable,
   projectGetTestByNameOrTitle,
   projectGetTestRunByDateTimeOrLatest,
   projectMdRead,
 } from "../../framework";
-import { toAsciiTable } from "../ascii.utils";
 
 import { PARAM_RUN_DATETIME } from "./param-run-datetime";
 import { PARAM_TEST_NAME_OR_TITLE } from "./param-test-name-or-title";
@@ -24,34 +29,52 @@ export function cliRunShow(
   ...[testNameOrTitle, runDateTime]: RunShowParameter
 ) {
   const project = projectMdRead();
-
   if (!project) {
     return;
   }
 
-  const test = projectGetTestByNameOrTitle({ project, testNameOrTitle });
+  const getTestResult = projectGetTestByNameOrTitle({
+    project,
+    testNameOrTitle,
+  });
+  if (isError(getTestResult)) {
+    logError(getTestResult.message);
+    return;
+  }
+  const test = getTestResult;
 
-  const run = projectGetTestRunByDateTimeOrLatest({ test, runDateTime });
+  const getRunResult = projectGetTestRunByDateTimeOrLatest({
+    test,
+    runDateTime,
+  });
+  if (isError(getRunResult)) {
+    logError(getRunResult.message);
+    return;
+  }
+  const run = getRunResult;
 
   const files = getRunFiles({ test, run });
 
-  const dateTimeFormatted = formatDateTimeString(run.dateTime);
+  logTitle({ test, run });
 
+  logFiles(files);
+}
+
+function logTitle({ test, run }: { test: Test; run: Run }) {
+  const dateTimeFormatted = formatDateTimeString(run.dateTime);
   const title = `${test.title} – ${dateTimeFormatted}`;
 
-  console.log(
-    `
-${title}
-${"=".repeat(title.length)}
+  logHeading(title, 1);
 
-Files
------
+  console.log();
+}
 
-${toAsciiTable(
-  files.map((file) => ({
-    Filename: `${file}`,
-  }))
-)}
-`.trimLines()
-  );
+function logFiles(files: string[]) {
+  logHeading("Files", 2);
+
+  const filesTable = files.map((file) => ({ file }));
+
+  logTable(filesTable);
+
+  console.log();
 }

@@ -2,11 +2,12 @@ import { exec } from "child_process";
 import { createCommand } from "commander";
 
 import {
-  Run,
   RunResult,
   createRun,
   getRunFilepath,
+  isError,
   isValidationError,
+  logError,
   nowDateTimeString,
   projectAddTestRun,
   projectGetTestByNameOrTitle,
@@ -48,19 +49,28 @@ Optional.
 
 export function cliTagAdd(...args: RunAddParameters) {
   const project = projectMdRead();
-
   if (!project) {
     return;
   }
 
   const [testNameOrTitle] = args;
 
-  const test = projectGetTestByNameOrTitle({
+  const getTestResult = projectGetTestByNameOrTitle({
     project,
     testNameOrTitle,
   });
+  if (isError(getTestResult)) {
+    logError(getTestResult.message);
+    return;
+  }
+  const test = getTestResult;
 
-  const newRun = createRunFromArgs(args);
+  const createRunResult = createRunFromArgs(args);
+  if (isValidationError(createRunResult)) {
+    logError(createRunResult.message);
+    return;
+  }
+  const newRun = createRunResult;
 
   const updatedProject = projectAddTestRun({ project, test, newRun });
 
@@ -72,15 +82,11 @@ export function cliTagAdd(...args: RunAddParameters) {
 function createRunFromArgs([
   ,
   { dateTime = nowDateTimeString(), result },
-]: RunAddParameters): Run {
+]: RunAddParameters) {
   const createTagResult = createRun({
     dateTime,
     result,
   });
-
-  if (isValidationError(createTagResult)) {
-    throw createTagResult.message;
-  }
 
   return createTagResult;
 }

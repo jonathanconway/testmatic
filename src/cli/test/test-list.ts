@@ -1,8 +1,11 @@
 import { createCommand } from "commander";
 import prompts from "prompts";
 
-import { projectMdCreateFolders, projectMdRead } from "../../framework";
-import { toAsciiTable } from "../ascii.utils";
+import {
+  logTable,
+  projectMdCreateFolders,
+  projectMdRead,
+} from "../../framework";
 
 import { filterByArgsTag } from "./test-list-filter-tag";
 import { convertTestToTestOutputRow } from "./test-list-output-row";
@@ -42,5 +45,7 @@ export async function cliTestList(args: TestListParameters) {
 
   const testList = testsFiltered.map(convertTestToTestOutputRow);
 
-  console.log(toAsciiTable(testList, ["Title", "Doc"]));
+  logTable(testList);
+
+  console.log();
 }

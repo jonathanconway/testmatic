@@ -1,5 +1,7 @@
 import {
   existsSync,
+  mkdir,
+  mkdirSync,
   readFileSync,
   readdirSync,
   statSync,
@@ -20,6 +22,10 @@ export interface DirOrFileTree {
 export function writeFileTree(path: string, fileTree: DirOrFileTree) {
   for (const [file, contents] of Object.entries(fileTree)) {
     if (isObject(contents)) {
+      if (!existsSync(`${path}/${file}`)) {
+        mkdirSync(`${path}/${file}`);
+      }
+
       writeFileTree(`${path}/${file}`, contents);
     }
     if (isString(contents)) {

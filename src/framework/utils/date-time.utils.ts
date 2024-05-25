@@ -1,3 +1,5 @@
+import { ZOD_REGEX_DATE_TIME_STRING } from "./zod.utils";
+
 export function parseDateTimeString(dateTimeString: string) {
   const [date, time] = dateTimeString.split("_");
   const dateTime = new Date(`${date} ${time.replaceAll("-", ":")}`);
@@ -14,7 +16,17 @@ export function formatDateTime(dateTime: Date) {
 }
 
 export function stringifyDateTime(dateTime: Date) {
-  return `${dateTime.getDate()}-${dateTime.getMonth()}-${dateTime.getFullYear()}_${dateTime.getHours()}:${dateTime.getMinutes()}`;
+  return [
+    [
+      dateTime.getFullYear(),
+      dateTime.getMonth().toString().padStart(2, "0"),
+      dateTime.getDate().toString().padStart(2, "0"),
+    ].join("-"),
+    [
+      dateTime.getHours().toString().padStart(2, "0"),
+      dateTime.getMinutes().toString().padStart(2, "0"),
+    ].join("-"),
+  ].join("_");
 }
 
 export function nowDateTimeString() {
@@ -22,5 +34,5 @@ export function nowDateTimeString() {
 }
 
 export function isDateTimeString(input: string) {
-  return /[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}/.test(input);
+  return ZOD_REGEX_DATE_TIME_STRING.regex.test(input);
 }

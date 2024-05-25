@@ -7,7 +7,6 @@ import { projectPathGet } from "./project-path-get";
 
 export function projectMdRead() {
   const projectPath = projectPathGet();
-
   if (!existsSync(projectPath)) {
     return undefined;
   }
