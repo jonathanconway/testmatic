@@ -143,19 +143,17 @@ function getTestAddParamsFromPrompts(paramsSoFar: Partial<CreateTestParams>) {
 }
 
 function getTestAddTitleFromPrompt() {
-  console.log();
-
   return promptValue({
     message: "Please enter test title: ",
     repeatIfEmpty: true,
   });
+  console.log();
 }
 
 function getTestAddStepsFromPrompt() {
-  console.log();
-
   return promptValues({
     message:
       "\nThank you!\n\nNow, please enter your steps, one-by-one.\n(Empty line to finish)\n",
   });
+  console.log();
 }

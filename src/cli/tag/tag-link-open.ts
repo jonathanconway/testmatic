@@ -8,26 +8,23 @@ import {
   projectGetTagLinkByHrefOrTitle,
   projectMdRead,
 } from "../../framework";
+import { PARAM_LINK_HREF_OR_TITLE } from "../link";
 
-import { PARAM_TAG_LINK_HREF_OR_TITLE } from "./param-tag-link-href-or-title";
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 
 type TagLinkOpenParameter = [
   string /* tagNameOrTitle */,
-  string /* tagLinkHrefOrTitle */
+  string /* linkHrefOrTitle */
 ];
 
 export const cliTagLinkOpenCommand = createCommand("open")
   .description("Open a tag link in the browser")
   .argument(PARAM_TAG_NAME_OR_TITLE.name, PARAM_TAG_NAME_OR_TITLE.description)
-  .argument(
-    PARAM_TAG_LINK_HREF_OR_TITLE.name,
-    PARAM_TAG_LINK_HREF_OR_TITLE.description
-  )
+  .argument(PARAM_LINK_HREF_OR_TITLE.name, PARAM_LINK_HREF_OR_TITLE.description)
   .action(cliTagOpen);
 
 export function cliTagOpen(
-  ...[tagNameOrTitle, tagLinkHrefOrTitle]: TagLinkOpenParameter
+  ...[tagNameOrTitle, linkHrefOrTitle]: TagLinkOpenParameter
 ) {
   const project = projectMdRead();
 
@@ -43,7 +40,7 @@ export function cliTagOpen(
 
   const tag = getTagResult;
 
-  const link = projectGetTagLinkByHrefOrTitle({ tag, tagLinkHrefOrTitle });
+  const link = projectGetTagLinkByHrefOrTitle({ tag, linkHrefOrTitle });
 
   exec(`open "${link.href}"`);
 }

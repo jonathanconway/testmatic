@@ -46,6 +46,8 @@ export function cliTestShow(name: TestShowParameter) {
 
   logDescription(test);
 
+  logSteps(test);
+
   logLinks(test);
 
   logTags(test);
@@ -73,6 +75,19 @@ function logDescription({ description }: Test) {
   }
 }
 
+function logSteps({ steps }: Test) {
+  logHeading("Steps", 2);
+
+  const testStepsTable = steps.map((step, index) => ({
+    "": (index + 1).toString(),
+    step: step.text,
+  }));
+
+  logTable(testStepsTable);
+
+  console.log();
+}
+
 function logLinks({ links }: Test) {
   logHeading("Links", 2);
 
@@ -90,8 +105,9 @@ function logTags({ tags }: Test) {
   logHeading("Tags", 2);
 
   const testTagsTable = tags.map((tag) => ({
-    Name: tag.title,
-    Doc: getTagFilename(tag),
+    name: tag.name,
+    title: tag.title,
+    doc: getTagFilename(tag),
   }));
 
   logTable(testTagsTable);

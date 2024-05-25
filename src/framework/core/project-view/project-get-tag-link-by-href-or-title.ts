@@ -1,18 +1,17 @@
+import { NotFoundError } from "../../utils";
 import { Tag } from "../tag";
 
 export function projectGetTagLinkByHrefOrTitle({
   tag,
-  tagLinkHrefOrTitle,
+  linkHrefOrTitle,
 }: {
   readonly tag: Tag;
-  readonly tagLinkHrefOrTitle: string;
+  readonly linkHrefOrTitle: string;
 }) {
-  const tagLinkByHref = tag.links.find(
-    (tag) => tag.href === tagLinkHrefOrTitle
-  );
+  const tagLinkByHref = tag.links.find((tag) => tag.href === linkHrefOrTitle);
 
   const tagLinkByHrefOrName =
-    tagLinkByHref ?? tag.links.find((tag) => tag.title === tagLinkHrefOrTitle);
+    tagLinkByHref ?? tag.links.find((tag) => tag.title === linkHrefOrTitle);
 
   const tagLink = tagLinkByHrefOrName;
 
@@ -20,7 +19,7 @@ export function projectGetTagLinkByHrefOrTitle({
     return tagLink;
   }
 
-  throw new Error(
-    `Cannot find link in tag ${tag.name} with title or href matching "${tagLinkHrefOrTitle}"`
+  throw new NotFoundError(
+    `Cannot find link in tag "${tag.title}" with title or href matching "${linkHrefOrTitle}"`
   );
 }

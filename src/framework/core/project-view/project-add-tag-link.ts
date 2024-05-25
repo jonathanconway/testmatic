@@ -39,10 +39,6 @@ export function projectAddTagLink({
 }
 
 function tagLinkAlreadyExists(project: ProjectView, tag: Tag, link: Link) {
-  console.log(
-    "tagLinkAlreadyExists",
-    project.tagsByName[tag.name].links.map(toGot("href"))
-  );
   return Boolean(
     project.tagsByName[tag.name].links.map(toGot("href")).includes(link.href)
   );

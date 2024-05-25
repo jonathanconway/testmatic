@@ -1,3 +1,4 @@
+import { NotFoundError } from "../../utils";
 import { Tag } from "../tag";
 
 import { ProjectView } from "./project-view";
@@ -23,7 +24,7 @@ export function projectGetTagByNameOrTitle({
     return tagByTitle;
   }
 
-  return new Error(
+  return new NotFoundError(
     `Cannot find tag with name or title matching "${tagNameOrTitle}"`
   );
 }

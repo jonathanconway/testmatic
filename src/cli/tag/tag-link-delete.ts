@@ -9,8 +9,8 @@ import {
   projectMdRead,
   projectMdWrite,
 } from "../../framework";
+import { PARAM_LINK_HREF_OR_TITLE } from "../link";
 
-import { PARAM_TAG_LINK_HREF_OR_TITLE } from "./param-tag-link-href-or-title";
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 
 type TagDeleteParameter = [string, string];
@@ -18,10 +18,7 @@ type TagDeleteParameter = [string, string];
 export const cliTagLinkDeleteCommand = createCommand("delete")
   .description("Delete a link from a tag")
   .argument(PARAM_TAG_NAME_OR_TITLE.name, PARAM_TAG_NAME_OR_TITLE.description)
-  .argument(
-    PARAM_TAG_LINK_HREF_OR_TITLE.name,
-    PARAM_TAG_LINK_HREF_OR_TITLE.description
-  )
+  .argument(PARAM_LINK_HREF_OR_TITLE.name, PARAM_LINK_HREF_OR_TITLE.description)
   .action(cliTagDelete);
 
 export function cliTagDelete(
@@ -43,7 +40,7 @@ export function cliTagDelete(
 
   const linkToDelete = projectGetTagLinkByHrefOrTitle({
     tag,
-    tagLinkHrefOrTitle,
+    linkHrefOrTitle: tagLinkHrefOrTitle,
   });
 
   const updatedProject = projectDeleteTagLink({ project, tag, linkToDelete });

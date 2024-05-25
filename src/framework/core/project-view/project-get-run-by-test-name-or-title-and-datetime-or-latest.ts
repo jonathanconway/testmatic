@@ -1,3 +1,5 @@
+import { NotFoundError } from "../../utils";
+
 import { projectGetTestRunLatest } from "./project-get-test-run-latest";
 import { ProjectView } from "./project-view";
 
@@ -13,7 +15,9 @@ export function getRunByTestNameOrTitleAndDatetimeOrLatest({
   const test = project.testsByName[testNameOrTitle];
 
   if (!test) {
-    throw new Error(`Cannot find test with name or title matching "${test}"`);
+    return new NotFoundError(
+      `Cannot find test with name or title matching "${test}"`
+    );
   }
 
   const run = runDateTime
@@ -21,7 +25,7 @@ export function getRunByTestNameOrTitleAndDatetimeOrLatest({
     : projectGetTestRunLatest(test);
 
   if (!run) {
-    throw new Error(
+    return new NotFoundError(
       `Cannot find run with date/time stamp matching "${runDateTime}"`
     );
   }

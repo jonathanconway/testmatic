@@ -1,3 +1,5 @@
+import { NotFoundError } from "../../utils";
+
 import { ProjectView } from "./project-view";
 
 export function projectGetTestByNameOrTitle({
@@ -19,7 +21,7 @@ export function projectGetTestByNameOrTitle({
     return testByTitle;
   }
 
-  return new Error(
+  return new NotFoundError(
     `Cannot find test with name or title matching "${testNameOrTitle}"`
   );
 }
