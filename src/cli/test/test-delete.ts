@@ -8,7 +8,8 @@ import {
   projectMdRead,
   projectMdWrite,
 } from "../../framework";
-import { PARAM_TEST_NAME_OR_TITLE } from "../run/param-test-name-or-title";
+
+import { PARAM_TEST_NAME_OR_TITLE } from "./param-test-name-or-title";
 
 type TestDeleteParameter = string;
 

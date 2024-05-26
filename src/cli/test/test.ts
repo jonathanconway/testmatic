@@ -2,6 +2,7 @@ import { createCommand } from "commander";
 
 import { cliTestAddCommand } from "./test-add";
 import { cliTestDeleteCommand } from "./test-delete";
+import { cliTestImpactsCommand } from "./test-impacts";
 import { cliTestLinkCommand } from "./test-link";
 import { cliTestListCommand } from "./test-list";
 import { cliTestShowCommand } from "./test-show";
@@ -14,4 +15,5 @@ export const cliTestCommand = createCommand("test")
   .addCommand(cliTestAddCommand)
   .addCommand(cliTestDeleteCommand)
   .addCommand(cliTestTagCommand)
-  .addCommand(cliTestLinkCommand);
+  .addCommand(cliTestLinkCommand)
+  .addCommand(cliTestImpactsCommand);

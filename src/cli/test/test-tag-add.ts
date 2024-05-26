@@ -13,9 +13,10 @@ import {
   projectMdRead,
   projectMdWrite,
 } from "../../framework";
-import { PARAM_TEST_NAME_OR_TITLE } from "../run/param-test-name-or-title";
-import { PARAM_TAG_NAME_OR_TITLE } from "../tag/param-tag-name-or-title";
+import { PARAM_TAG_NAME_OR_TITLE } from "../tag";
 import { logError } from "../utils";
+
+import { PARAM_TEST_NAME_OR_TITLE } from "./param-test-name-or-title";
 
 type TestTagAddParameters = [
   string /* testNameOrTitle */,

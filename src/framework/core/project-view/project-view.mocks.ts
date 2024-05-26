@@ -1,7 +1,7 @@
 import fromPairs from "lodash/fromPairs";
 
-import { MOCK_TAGS } from "../tag";
-import { MOCK_TESTS } from "../test";
+import { MOCK_TAGS } from "../tag/tag.mocks";
+import { MOCK_TESTS } from "../test/test.mocks";
 
 import { ProjectView } from "./project-view";
 

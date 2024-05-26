@@ -114,7 +114,11 @@ function removeNonAlphaNumeric(input: string) {
   return input.replace(/[^\s\p{L}\d]/gu, "");
 }
 
-function removeDoubleSpaces(input: string) {
+String.prototype.removeDoubleSpaces = function (this: string) {
+  return removeDoubleSpaces(this);
+};
+
+export function removeDoubleSpaces(input: string) {
   return input.replace(/\s+/g, " ");
 }
 

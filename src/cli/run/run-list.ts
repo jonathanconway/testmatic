@@ -11,8 +11,7 @@ import {
   projectGetTestByNameOrTitle,
   projectMdRead,
 } from "../../framework";
-
-import { PARAM_TEST_NAME_OR_TITLE } from "./param-test-name-or-title";
+import { PARAM_TEST_NAME_OR_TITLE } from "../test";
 
 type RunListParameters = string;
 

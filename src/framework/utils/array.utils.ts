@@ -1,4 +1,4 @@
-import { List, Many, PropertyPath } from "lodash";
+import { List, Many, PropertyPath, uniq, without } from "lodash";
 import fromPairs from "lodash/fromPairs";
 import get from "lodash/get";
 import pick from "lodash/pick";
@@ -51,9 +51,19 @@ export function getNextElements<T>(array: T[] | readonly T[], element: T) {
 declare global {
   interface Array<T> {
     toObject(this: Array<T>): object;
+    without(this: Array<T>, item: T): Array<T>;
+    uniq(this: Array<T>): Array<T>;
   }
 }
 
 Array.prototype.toObject = function <T>(this: Array<T>) {
   return fromPairs(this as List<[]>);
+};
+
+Array.prototype.without = function <T>(this: Array<T>, item: T) {
+  return without(this, item);
+};
+
+Array.prototype.uniq = function <T>(this: Array<T>) {
+  return uniq(this);
 };

@@ -4,6 +4,7 @@ export * from "./builder.utils";
 export * from "./date-time.utils";
 export * from "./errors";
 export * from "./filter.utils";
+export * from "./interpolate.utils";
 export * from "./object.utils";
 export * from "./string.utils";
 export * from "./type.utils";

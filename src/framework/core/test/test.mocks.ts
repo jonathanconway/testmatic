@@ -5,7 +5,7 @@ import {
   MOCK_TAG,
   MOCK_TAG_LOGIN_FLOW,
   MOCK_TAG_TWO,
-} from "../tag";
+} from "../tag/tag.mocks";
 
 export const MOCK_TEST = {
   name: "user_can_log_in_with_username_and_email_validation",
@@ -210,7 +210,7 @@ export const MOCK_NEW_TEST = {
       tags: [MOCK_NEW_TAG_TWO],
     },
     {
-      text: `mock new test (${MOCK_TAG.name.toLowerCase()}) step three`,
+      text: `mock new test (log_in_flow) step three`,
       tags: [MOCK_TAG],
     },
   ],

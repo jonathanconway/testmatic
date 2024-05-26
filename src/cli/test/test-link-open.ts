@@ -9,7 +9,8 @@ import {
   projectMdRead,
 } from "../../framework";
 import { PARAM_LINK_HREF_OR_TITLE } from "../link";
-import { PARAM_TEST_NAME_OR_TITLE } from "../run/param-test-name-or-title";
+
+import { PARAM_TEST_NAME_OR_TITLE } from "./param-test-name-or-title";
 
 type TestLinkOpenParameter = [
   string /* testNameOrTitle */,

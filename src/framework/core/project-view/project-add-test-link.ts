@@ -13,7 +13,7 @@ export function projectAddTestLink({
   readonly test: Test;
   readonly newLink: Link;
 }) {
-  if (testLinkAlreadyExists(project, test, newLink)) {
+  if (testLinkAlreadyExists(test, newLink)) {
     return new AlreadyExistsError(
       `Link to "${newLink.href}" already exists in test "${test.title}".`
     );
@@ -38,8 +38,6 @@ export function projectAddTestLink({
   return updatedProject;
 }
 
-function testLinkAlreadyExists(project: ProjectView, test: Test, link: Link) {
-  return Boolean(
-    project.tagsByName[test.name].links.map(toGot("href")).includes(link.href)
-  );
+function testLinkAlreadyExists(test: Test, link: Link) {
+  return Boolean(test.links.map(toGot("href")).includes(link.href));
 }

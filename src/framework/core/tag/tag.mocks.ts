@@ -58,6 +58,12 @@ export const MOCK_NEW_TAG_THREE = {
   links: [],
 };
 
+export const MOCK_NEW_TAG_FOUR = {
+  name: "tag_new_four",
+  title: "Tag new four",
+  links: [],
+};
+
 export const MOCK_NEW_TAGS = [
   MOCK_NEW_TAG_ONE,
   MOCK_NEW_TAG_TWO,

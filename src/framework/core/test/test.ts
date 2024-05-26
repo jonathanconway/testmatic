@@ -13,3 +13,7 @@ export interface Test {
   readonly tags: readonly Tag[];
   readonly runs: readonly Run[];
 }
+
+export function isTest(input: object): input is Test {
+  return "steps" in input;
+}

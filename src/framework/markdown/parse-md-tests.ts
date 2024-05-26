@@ -1,6 +1,6 @@
 import fromPairs from "lodash/fromPairs";
 
-import { Tag } from "../core";
+import { Tag, testGetTags } from "../core";
 import { DirTree, FileTree } from "../files";
 
 import { parseMdTest } from "./parse-md-test";
@@ -18,10 +18,7 @@ export function parseMdTests(
 
   const testsByName = fromPairs(tests.map((test) => [test.name, test]));
 
-  const testTags = tests.flatMap((test) => [
-    ...test.tags,
-    ...test.steps.flatMap((step) => step.tags),
-  ]);
+  const testTags = tests.flatMap(testGetTags);
 
   return { tests, testsByName, testTags };
 }

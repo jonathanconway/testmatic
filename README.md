@@ -18,8 +18,7 @@ Get started by installing Testmatic via the CLI.
 
 #### What you'll need
 
-- [Node.js](https://nodejs.org/en/download/) version 16.14 or above:
-  When installing Node.js, you are recommended to check all checkboxes related to dependencies.
+- [Node.js](https://nodejs.org/en/download/) version 16.14 or above.
 
 #### Install Testmatic
 
@@ -33,7 +32,7 @@ npm install -g testmatic
 
 A Testmatic project consists of a `.testmatic` folder in your current working directory, containing sub-folders for `tests`, `tags` and `runs`.
 
-You can generate the folders by this command:
+You can generate the folders using the `init` command:
 
 ```bash
 testmatic init
@@ -87,7 +86,7 @@ $ testmatic test tag add "should_load_homepage" "guest user"
 $
 ```
 
-(Note: We're using the test name `should_load_homepage` here. It's just the title condensed into one word using underlines: `_`. This makes it easier to copy/paste when needed.)
+> **Note:** We're using the test name `should_load_homepage` here. It's just the title condensed into one word using underlines: `_`. This makes it easier to copy/paste when needed.
 
 Your new tag "Guest user" should now have been created and adeed to the "Homepage loads" test.
 
@@ -129,9 +128,9 @@ If you explore your local `.testmatic` folder you'll see that the test and tag f
 
 - .testmatic
   - tests
-    - should_load_homepage.md
+    - should_load_homepage.md ⚡️
   - tags
-    - guest_user.md
+    - guest_user.md ⚡️
   - runs
 
 ### Finding tests by tag
@@ -149,7 +148,12 @@ Should load homepage   should_load_homepage   ./.testmatic/tests/should_load_hom
 
 ### Runs
 
-When you perform a test, you might want to record the fact that you performed it at that date and time. You might also want to attach relevant material such as text, links and video files of screen recordings or outputs such as JSON or CSV files.
+When you perform a test, you might want to record certain details:
+
+- Date/time you performed the test
+- Text and links
+- Screen recordings (videos, images, etc.)
+- Outputs (JSON or CSV files, etc.)
 
 Testmatic has a Runs feature to help you with this.
 
@@ -157,8 +161,8 @@ Each test can have one or more runs.
 
 Each run has:
 
+- **One dated folder** containing a Markdown file and any other files you wish to include (screen recordings, outputs, etc.)
 - **One dated Markdown file** containing the date/time, text and links (if any)
-- **One dated folder** containing the above Markdown file and any other files you wish to include (screen recordings, outputs, etc.)
 
 To create a run, simply run the `run add` command, providing the test name (or title) as the first parameter:
 
@@ -166,14 +170,14 @@ To create a run, simply run the `run add` command, providing the test name (or t
 testmatic run add should_load_homepage
 ```
 
-(Note: You can optionally provide a date-time stamp in the format: `YYYY-MM-DD_HH-MM`. For example: `2024-10-01_11:30` for October 1, 2024 at 11:30 AM.)
+> **Note:** You can optionally provide a date-time stamp in the format: `YYYY-MM-DD_HH-MM`. For example: `2024-10-01_11:30` for October 1, 2024 at 11:30 AM.
 
 The new run folder and Markdown file should now have been created.
 
 You can verify this using the `run show` command:
 
 ```bash
-testmatic run show should_load_homepage
+$ testmatic run show should_load_homepage
 
 Should load homepage – 24/3/2024 2:44
 =====================================
@@ -189,8 +193,8 @@ A new folder and Markdown file will have been added:
 - .testmatic
   - runs
     - should_load_homepage
-      - 2024-04-24_02-44
-        - 2024-04-24_02-44.md
+      - 2024-04-24_02-44 ⚡️
+        - 2024-04-24_02-44.md ⚡️
 
 You can open that folder in Finder (on Mac) using the `run open` command:
 
@@ -198,41 +202,456 @@ You can open that folder in Finder (on Mac) using the `run open` command:
 testmatic run open should_load_homepage
 ```
 
-Note: How does Testmatic know which run to show / open? It uses the latest by default. But if you prefer to target an older run, can provide an additional argument of the date/time stamp of the run to the `run show` or `run open` command.
+> **Note:** How does Testmatic know which run to show / open? It uses the latest by default. But if you prefer to target an older run, can provide an additional argument of the date/time stamp of the run to the `run show` or `run open` command. See [run show](#run-show), [run open](#run-open) for details.
 
 ### Links
 
+You might want to attach links to tests or tags.
+
+For example:
+
+- Links to documentation
+- Links to web pages under test
+- Links to screenshots or screen recordings
+- Links to mock accounts
+
 You can add/remove links manually by editing the test, tag or run Markdown files.
 
-But Testmatic includes `link` commands for quickly adding tags without leaving the command line.
+Testmatic also includes `test link add` and `tag link add` commands, allowing you to quickly add links to tests or tags respectively without leaving the command line.
 
 ```bash
-testmatic test link add should_load_homepage http://website.com/
+$ testmatic test link add should_load_homepage http://website.com/
+
+$ testmatic test show should_load_homepage
+
+Should load homepage
+====================
+
+Doc: ./.testmatic/tests/should_load_homepage.md
+
+Steps
+-----
+    STEP
+1   Navigate to homepage
+2   Observe homepage has loaded
+
+Links
+-----
+NAME                  URL
+http://website.com/   http://website.com/
 ```
 
 ```bash
-testmatic tag link add guest_user http://test-accounts.com/guests
+$ testmatic tag link add guest_user http://test-accounts.com/guests
+
+$ testmatic tag show guest_user
+
+Guest user
+==========
+
+Doc: ./.testmatic/tags/guest_user.md
+
+Links
+-----
+NAME                              URL
+http://test-accounts.com/guests   http://test-accounts.com/guests
+
+Tests
+-----
+TITLE                  NAME                   DOC
+Should load homepage   should_load_homepage   ./.testmatic/tests/should_load_homepage.md
 ```
 
 ### Impacts
 
-Any test or tag might be related to other tests.
+You might want to quickly find out, for a specific test or tag, which other tests or tags are related.
 
-For example, some tests involving guest users might also involve other kinds of users or other systems, e.g. email notifications.
+For example, some tests involving guest users might also involve other kinds of users or other systems, e.g. email notifications. So an error that causes failure of one test might cause failures of other related tests.
 
-Testmatic has an Impacts feature to show you the graph of impacts of a test or tag.
-
-You can use the `test impacts` or `tag impacts` command to view the impact graph for a specific test or tag.
+Testmatic has an Impacts feature which shows you a graph of impacts of a given test or tag. You can use the `test impacts` command to view a test's impacts or the `tag impacts` command for a tag's impacts.
 
 ```bash
-testmatic test impacts should_load_homepage
+$ testmatic test impact should_load_homepage
+
+Test: Should load homepage - Impacts
+====================================
+
+--> Homepage screen (homepage_screen) [tag]
+  --> Footer (footer) [tag]
+    --> Should show copyright info (should_show_copyright_info) [test]
+  --> Header (header) [tag]
+    --> Should show log out button (should_show_log_out_button) [test]
+--> Homepage url (homepage_url) [tag]
+  --> Should indicate logged in status after log in (should_indicate_logged_in_status_after_log_in) [test]
+    --> Header login link (header_login_link) [tag]
+    --> Login form (login_form) [tag]
+    --> Valid existing user login credentials (valid_existing_user_login_credentials) [tag]
+    --> Header logged in status (header_logged_in_status) [tag]
 ```
 
 ```bash
-testmatic tag impacts guest_user
+$ testmatic tag impacts homepage_url
+
+Tag: Homepage url - Impacts
+===========================
+
+--> Should indicate logged in status after log in (should_indicate_logged_in_status_after_log_in) [test]
+--> Should load homepage (should_load_homepage) [test]
+  --> Homepage screen (homepage_screen) [tag]
+    --> Footer (footer) [tag]
+      --> Should show copyright info (should_show_copyright_info) [test]
+    --> Header (header) [tag]
+      --> Should show log out button (should_show_log_out_button) [test]
 ```
 
-## Background
+## CLI reference
+
+<!-- insert cli-reference start -->
+
+## project create
+
+Usage: project create
+
+Create a new project in the current working directory (same as `testmatic init`)
+
+## test list
+
+Usage: test list [options]
+
+List tests in the current project
+
+Options:
+
+<table>
+<thead>
+  <tr>
+    <th>Syntax</th>
+    <th>Description</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+          <td>
+            -t,<br /> --tag <value><br />
+          </td>
+          <td>
+            Filter by tag
+          </td>
+        </tr>
+</tbody>
+</table>
+
+## test add
+
+Usage: test add [options]
+
+Add a new test to the project
+
+Options:
+
+<table>
+<thead>
+  <tr>
+    <th>Syntax</th>
+    <th>Description</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+          <td>
+            -t,<br /> --title <value><br />
+          </td>
+          <td>
+            Title of the test.
+Also used to generate an underscored filename used to refer to the test in short-hand.
+Titles must be unique.
+Titles should briefly summarise the test steps.
+
+Required - must be provided, either via prompt or command line.
+
+</td>
+</tr>
+
+<tr>
+          <td>
+            -d,<br /> --description <value><br />
+          </td>
+          <td>
+            Description of the test.
+Longer than the title, provides a more detailed summary of the test.
+
+Tests can also include tags, enclosed in round brackets: (, ).
+For further information, see 'testmatic tag help'.
+
+Optional.
+
+</td>
+</tr>
+
+<tr>
+          <td>
+            -s,<br /> --steps [steps...]<br />
+          </td>
+          <td>
+            List of steps of the test.
+
+Add each step in quotes separated by a space, e.g.: "step one" "step two"
+Steps will be in the order that they are provided.
+
+Required - at least one step must be provided, either via prompt or command line.
+
+</td>
+</tr>
+
+<tr>
+          <td>
+            -l,<br /> --links [links...]<br />
+          </td>
+          <td>
+            List of links to associate with the test.
+For example, a deep link to the web page being tested or relevant documentation.
+
+Add each link href in quotes separated by a space.
+E.g.: "http://product.com/login" "http://wiki.com/login-flow".
+
+Links can be prefixed with text separated by a pipe "|".
+E.g. "Login page|http://product.com/login" "Login flow docs|http://wiki.com/login-flow"
+
+Optional.
+
+</td>
+</tr>
+
+</tbody>
+</table>
+
+## test delete
+
+Usage: test delete <testNameOrTitle>
+
+Delete a test
+
+## test show
+
+Usage: test show <testNameOrTitle>
+
+Show the full details of a test
+
+## test link add
+
+Usage: test link add [options] <testNameOrTitle> <linkHrefOrTitle>
+
+Add a new link to a test
+
+Options:
+
+<table>
+<thead>
+  <tr>
+    <th>Syntax</th>
+    <th>Description</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+          <td>
+            -t,<br /> --title <value><br />
+          </td>
+          <td>
+            Title of the new link.
+
+Optional.
+
+</td>
+</tr>
+
+</tbody>
+</table>
+
+## test link delete
+
+Usage: test link delete <testNameOrTitle> <linkHrefOrTitle>
+
+Delete a link from a test
+
+## test link open
+
+Usage: test link open <testNameOrTitle> <linkHrefOrTitle>
+
+Open a test link in the browser
+
+## tag list
+
+Usage: tag list
+
+List tags in the current project
+
+## tag add
+
+Usage: tag add [options]
+
+Add a new tag to the project
+
+Options:
+
+<table>
+<thead>
+  <tr>
+    <th>Syntax</th>
+    <th>Description</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+          <td>
+            -t,<br /> --title <value><br />
+          </td>
+          <td>
+            Title of the tag.
+Also used to generate an underscored filename used to refer to the test in short-hand.
+Titles must be unique.
+Titles should briefly describe the tag.
+
+Required - must be provided, either via prompt or command line.
+
+</td>
+</tr>
+
+<tr>
+          <td>
+            -y,<br /> --type <value><br />
+          </td>
+          <td>
+            Type of the tag.
+Used to categorise one or more similar tags.
+E.g. "page" for tags that refer to a page in an website.
+
+Optional.
+
+</td>
+</tr>
+
+<tr>
+          <td>
+            -d,<br /> --description <value><br />
+          </td>
+          <td>
+            Description of the test.
+Longer than the title, provides a more detailed description of the tag.
+
+Optional.
+
+</td>
+</tr>
+
+<tr>
+          <td>
+            -l,<br /> --links [links...]<br />
+          </td>
+          <td>
+            List of links to attach to the tag.
+For example, a deep link to the web page being tested or relevant documentation.
+
+Add each link href in quotes separated by a space.
+E.g.: "http://product.com/login" "http://wiki.com/login-flow".
+
+Links can be prefixed with text separated by a pipe "|".
+E.g. "Login page|http://product.com/login" "Login flow docs|http://wiki.com/login-flow"
+
+Optional.
+
+</td>
+</tr>
+
+</tbody>
+</table>
+
+## tag delete
+
+Usage: tag delete <tagNameOrTitle>
+
+Delete a tag
+
+## tag show
+
+Usage: tag show <tagNameOrTitle>
+
+Show the full details of a tag
+
+## tag link add
+
+Usage: tag link add [options] <tagNameOrTitle> <tagLinkHref>
+
+Add a new link to a tag
+
+Options:
+
+<table>
+<thead>
+  <tr>
+    <th>Syntax</th>
+    <th>Description</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+          <td>
+            -t,<br /> --title <value><br />
+          </td>
+          <td>
+            Title of the new link.
+
+Optional.
+
+</td>
+</tr>
+
+</tbody>
+</table>
+
+## tag link delete
+
+Usage: tag link delete <tagNameOrTitle> <linkHrefOrTitle>
+
+Delete a link from a tag
+
+## tag link open
+
+Usage: tag link open <tagNameOrTitle> <linkHrefOrTitle>
+
+Open a tag link in the browser
+
+## tag impacts
+
+Usage: tag impacts <tagNameOrTitle>
+
+List the tests and tags that are impacted by a tag
+
+## run show
+
+Usage: run show <testNameOrTitle> [runDateTime]
+
+Show the full details of a run
+
+## run open
+
+Usage: run open <testNameOrTitle> [runDateTime]
+
+Open a run folder
+
+<!-- insert cli-reference end -->
+
+## FAQ
+
+### **_Can I add screenshots or screencasts from my testing?_**
+
+Yes!
+
+You can add them to a run folder of your test or link to them from the run markdown file.
+
+See the [Runs](#runs) section under [Advanced](#advanced).
+
+## Notes
 
 ### Benefits of testing in general
 
@@ -338,68 +757,6 @@ npm install
 ```
 
 Congratulations! You now have a working Testmatic project.
-
-## CLI reference
-
-### `project init`
-
-### `test list`
-
-#### `--tag`
-
-### `test add`
-
-### `test remove`
-
-### `test show`
-
-### `test link add`
-
-### `test link delete`
-
-### `test link open`
-
-### `tag list`
-
-### `tag add`
-
-### `tag remove`
-
-### `tag show`
-
-### `tag link add`
-
-### `tag link delete`
-
-### `tag link open`
-
-## FAQ
-
-### **_How does testmatic test execution work under-the-hood?_**
-
-testmatic is built as a layer on top of Jest. So all testmatic test runners are really Jest tests and testmatic step runners are functions called by those tests.
-
-As testmatic tests are build on top of Jest, you can use all the regular Jest facilities, such as `beforeAll`, `beforeEach`, `expect`, etc.
-
-### **_Does testmatic support web automation testing?_**
-
-Yes!
-
-You can import whatever libraries you need (e.g. `phantomjs`, `playwright`) into your step files and write code in the step runners to open a browser, manipulate DOM elements and assert on results.
-
-### **_Does testmatic support web API testing?_**
-
-Yes!
-
-You can import whatever libraries you need (e.g. `fetch`, `axios`) into your step files and write code in the step runners to make calls and assert on results.
-
-### **_Can I add screenshots or screencasts from my testing?_**
-
-Yes!
-
-You can add them to a run folder of your test or link to them from the run markdown file.
-
-See the [Runs](#runs) section under [Advanced](#advanced).
 
 ## Roadmap
 

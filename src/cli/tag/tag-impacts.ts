@@ -1,24 +1,22 @@
 import { createCommand } from "commander";
 
 import {
-  getTagFilename,
-  getTagsReferencingTag,
-  getTestFilename,
-  getTestsReferencingTag,
+  Tag,
+  getTagImpactedTests,
   isError,
   logError,
-  logTable,
+  logHeading,
+  logImpacts,
   projectGetTagByNameOrTitle,
   projectMdRead,
 } from "../../framework";
-import { toAsciiTable } from "../utils/ascii/ascii.utils";
 
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 
 type TagImpactsParameter = string;
 
 export const cliTagImpactsCommand = createCommand("impacts")
-  .description("List the tests and tags that are related to a tag")
+  .description("List the tests and tags that are impacted by a tag")
   .argument(PARAM_TAG_NAME_OR_TITLE.name, PARAM_TAG_NAME_OR_TITLE.description)
   .action(cliTagImpacts);
 
@@ -36,57 +34,15 @@ export function cliTagImpacts(tagNameOrTitle: TagImpactsParameter) {
 
   const tag = getTagResult;
 
-  const tests = getTestsReferencingTag(project.tests, tag);
-  const testsTable = tests.map((test) => ({
-    name: test.title,
-    doc: getTestFilename(test),
-  }));
+  const impacts = getTagImpactedTests({ tests: project.tests, tag, depth: 2 });
 
-  const tags = getTagsReferencingTag(project.tags, tag);
-  const tagsTable = tags.map((tag) => ({
-    Name: tag.title,
-    Doc: getTagFilename(tag),
-  }));
+  logTitle(tag);
 
-  const title = `${tag.title} - Impacts`;
+  logImpacts(impacts);
+}
 
-  console.log(
-    `
-${title}
-${title.asciiUnderlineDouble()}
-`
-  );
+function logTitle(tag: Tag) {
+  const title = `Tag: ${tag.title} - Impacts`;
 
-  console.log(`
-Tests
------
-`);
-
-  logTable(testsTable);
-
-  // ${toAsciiTable(
-  //   tests.map((test) => ({
-  //     Name: test.title,
-  //     Doc: getTestFilename(test),
-  //   })),
-  //   ["Name", "Doc"]
-  // )}
-
-  console.log(`
-Tags
-----
-`);
-
-  logTable(tagsTable);
-
-  // ${toAsciiTable(
-  //   tags.map((tag) => ({
-  //     Name: tag.title,
-  //     Doc: getTagFilename(tag),
-  //   })),
-  //   ["Name", "Doc"]
-  // )}
-
-  // `.trimLines()
-  // );
+  logHeading(title, 1);
 }
