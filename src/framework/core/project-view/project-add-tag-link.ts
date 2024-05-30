@@ -1,6 +1,6 @@
 import { ProjectView, createProjectView } from ".";
 
-import { toGot } from "../../utils";
+import { AlreadyExistsError, toGot } from "../../utils";
 import { Link } from "../link";
 import { Tag } from "../tag";
 
@@ -14,8 +14,8 @@ export function projectAddTagLink({
   readonly newLink: Link;
 }) {
   if (tagLinkAlreadyExists(project, tag, newLink)) {
-    throw new Error(
-      `Link to ${newLink.href} already exists in tag ${tag.title}.`
+    return new AlreadyExistsError(
+      `Link "${newLink.href}" already exists in tag "${tag.title}".`
     );
   }
 

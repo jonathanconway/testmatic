@@ -85,7 +85,13 @@ export function cliTestAdd(args: TestAddParameters) {
 
   const newTest = createTestResult;
 
-  const updatedProject = projectAddTest({ project, newTest });
+  const addTestResult = projectAddTest({ project, newTest });
+  if (isError(addTestResult)) {
+    logError(addTestResult.message);
+    return;
+  }
+
+  const updatedProject = addTestResult;
 
   projectMdWrite(updatedProject);
 }

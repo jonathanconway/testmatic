@@ -4,7 +4,9 @@ export function assertTruthy<T>(
   data?: Object
 ): asserts value is NonNullable<T> {
   if (!value) {
-    throw new Error(`${message} ${JSON.stringify({ value, ...data })}`);
+    const details = JSON.stringify({ value, data });
+
+    throw new Error(`${message}. ${details}`);
   }
 }
 
@@ -15,12 +17,12 @@ export function assertType<T, TT extends T>(
   data?: Object
 ): asserts value is TT {
   if (!checker(value)) {
-    throw new Error(
-      `Expected object to be of type ${typeName} ${JSON.stringify({
-        value,
-        ...data,
-      })}`
-    );
+    const details = JSON.stringify({
+      value,
+      data,
+    });
+
+    throw new Error(`Expected object to be of type ${typeName}. ${details}`);
   }
 }
 

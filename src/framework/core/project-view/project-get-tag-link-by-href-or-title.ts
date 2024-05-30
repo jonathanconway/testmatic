@@ -15,11 +15,11 @@ export function projectGetTagLinkByHrefOrTitle({
 
   const tagLink = tagLinkByHrefOrName;
 
-  if (tagLink) {
-    return tagLink;
+  if (!tagLink) {
+    return new NotFoundError(
+      `Cannot find link in tag "${tag.title}" with title or href matching "${linkHrefOrTitle}".`
+    );
   }
 
-  throw new NotFoundError(
-    `Cannot find link in tag "${tag.title}" with title or href matching "${linkHrefOrTitle}"`
-  );
+  return tagLink;
 }

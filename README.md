@@ -2,13 +2,25 @@
 
 > ⚡️ Supercharge your testing ⚙️
 
-Testmatic is a framework and command-line tool for quickly and easily writing and organising human-readable test cases.
+Testmatic is a command-line tool and framework for quickly and easily writing and organising human-readable test cases.
 
-Simple lists of **_steps_** are grouped into **_tests_**, which can be further organised by **_tags_**.
+Simple lists of **_steps_** are grouped into **_tests_**, which can be organised by **_tags_**, allowing grouping / filtering.
 
-Everything is stored in Markdown files, for easy viewing, editing, searching and version control.
+Everything is stored in Markdown files, for easy viewing, editing, searching and version control. If pushed to a server, links to Markdown files can be shared within your org, via e.g. Wiki pages, Chat posts, email, etc.
 
-If pushed to a server, links to Markdown files can be shared via Wiki, Chat channel, email, etc.
+The main benefit of using Testmatic is the ability to rapidly input and organise test cases. This helps you perform manual testing in an organised and consistent manner. Manual testing may be beneficial when automated test coverage is limited, development time is constrained and rapid delivery is required while minimising defects. (See: [Benefits of using Testmatic](#benefits-of-using-testmatic).)
+
+## Contents
+
+- [Intro](#intro)
+- [Basics](#basics)
+- [Advanced](#advanced)
+- [Notes](#notes)
+- [CLI reference](#cli_reference)
+- [FAQ](#faq)
+- [Contributing](#contributing)
+- [Troubleshooting](#troubleshooting)
+- [Contact](#contact)
 
 ## Intro
 
@@ -151,6 +163,7 @@ Should load homepage   should_load_homepage   ./.testmatic/tests/should_load_hom
 When you perform a test, you might want to record certain details:
 
 - Date/time you performed the test
+- Result of the test – success, failure, mixed
 - Text and links
 - Screen recordings (videos, images, etc.)
 - Outputs (JSON or CSV files, etc.)
@@ -304,17 +317,133 @@ Tag: Homepage url - Impacts
       --> Should show log out button (should_show_log_out_button) [test]
 ```
 
+## Notes
+
+### Benefits of testing in general
+
+Research indicates that thorough testing is critical to success in software projects. According to one study, software failures in the US alone cost the economy USD 1.1 trillion in assets in 2016 and impacted 4.4 billion customers. <sup>1</sup>
+
+Many notable figures in software development, engineering and the Agile movement have emphasised the benefits of rigorous testing, across all phases of the software development lifecycle.
+
+---
+
+<sup>1</sup> [https://www.cloudcomputing-news.net/news/2017/oct/30/glitch-economy-counting-cost-software-failures/](https://www.cloudcomputing-news.net/news/2017/oct/30/glitch-economy-counting-cost-software-failures/)
+
+### Benefits of manual testing
+
+There is much agreement that testing generally is useful, but how about manual testing?
+
+Manual testing provides a rather unique combination of benefits:
+
+- Manual tests give you way of discovering and documenting intended behaviour.
+- Manual test cases can be written immediately, without any automated setup.
+- Manual tests can be run in any environment you have access to.
+- Manual tests allow you to experience the system as an end-user would, observing the whole experience.
+- Manual tests allow you to verify complex, lengthy workflows or workflows involving multiple systems.
+- Manual tests are organised, structured and repeatable, enabling rigor and consistency.
+
+This combination of benefits make manual testing highly useful for certain specific scenarios, such as working on a large and complicated application in a highly time-constrained situation, such as a fast-growing startup.
+
+### Drawbacks of automated testing
+
+Much of the industry has focussed on the benefits of automated testing and some have downplayed manual testing, claiming it to be time-consuming, inefficient and error-prone.
+
+These criticisms may be strong in theory, but in practice they can ignore some important issues with automated testing:
+
+- **Automated test coverage can be limited.**
+- **Automating all important flows can be time-consuming.**
+- **Automating certain kinds of behaviour can be very difficult.** E.g. full user interface testing including observing smoothness, performance, accessibility, etc. or long complex flows involving multiple systems, both internal and external to the organisation, can be very difficult to automate.
+- **Automating testing may limit incidental or unplanned but desirable discoveries.** These would more likely be picked in manual testing. E.g. testing a login flow, one might discover a small UI glitch with the password entry field.
+
+In most environments, the best path is probably some combination of automated and manual testing.
+
+Automated tests are useful and widely applicable, but not the "one ring to rule them all".
+
+### Collaboration in manual testing
+
+One might argue that test specialists, QA departments or third-parties should be responsible for testing. Engineers should focus on building the solution, designers on designing, etc.
+
+While specialisation is good for productivity, a blinkered or siloed approach to testing is not necessarily optimal.
+
+- More (and a variety of) eyes on a product are more likely to uncover errors.
+- Errors (or important ones at least) eventually need to be fixed and this will likely involve engineers. It will likely be easier for engineers to fix errors if they already have a good grasp on key test cases and are generally capable testers themselves.
+- Fixes may come in various forms, not necessarily engineering. E.g. a small error in pricing might be cheaper to fix by simply adjusting copy in an email to alert users, rather than consuming expensive engineer-hours.
+- Engineers who understand test cases can gain a more holistic understanding of the system they are working on. Rather than just focussing on structure / code, engineers can think of how the software is being used and tailor their efforts accordingly. E.g. prioritisation of work, code structure, data structure selection, time estimates, long-term goal-setting.
+
+### Benefits of using Testmatic
+
+Manual testing can be achieved in various ways with various systems.
+
+Some key benefits of using Testmatic for your manual tests are:
+
+- Fast and easy to create and update via CLI or text editor
+- Easy to share with business and tech people alike
+- Searchable by tag, allowing second-order impacts of failures to be identified, tested and fixed
+- Can be used to scaffold automated test code
+
+#### Testing steps are simple and easy for people to read
+
+Given/When/Then syntax is cumbersome and requires a learning curve and is generally the domain of software engineers.
+
+In contrast, simple lists of testing steps, much like the method in a cooking recipe, are easy to understand for a broad set of team members – e.g. agile managers, product owners, QA, designers, engineers.
+
+#### Testing steps support simple, fast and rigorous manual testing
+
+It's easier and faster to manually test software when you are clear on what specific actions need to be taken and in what order.
+
+By documenting and organising testing procedures, manual testing can be performed consistently, ensuring a rigorously tested product.
+
+#### Testmatic tests can be incrementally automated
+
+Testmatic focusses on helping you write and organise your testing steps first, generating empty placeholder functions without you having to immediately write code to automate them.
+
+If and when you decide to add automation, it's easy to locate the places in which to write code, and you can automate step by step, rather than having to automate a whole test sequence all at once.
+
+#### Testmatic tests are easy to share
+
+You can share your test steps with team members and stakeholders easily.
+
+You can link to a whole test, or a list of related tests.
+
+#### Testmatic tests can be hosted in version control, with zero third-party dependencies or additional setup
+
+This makes it easy to get started quickly - simply fork the testmatic project, begin generating and committing your tests, and push to your own repository.
+
+If your organisation has a version control system, and you have permission to create a new repository, you already have everything you need to get started.
+
+#### Testmatic tests are version-controlled and implemented in code
+
+As your testmatic instance is a forked Git repository by default, you reap all the benefits of version control - tracking the history of changes, branching, ability to revert changes, etc.
+
+As tests, steps and tags are stored internally as Typescript code, you can easily make modifications - large or small - using the standard tools of your IDE. For example, in VS Code, you can rename a token and automatically have it update all usages, by renaming the file with [Update imports on file move](https://code.visualstudio.com/docs/typescript/typescript-refactoring#_update-imports-on-file-move) and [Rename symbol](https://code.visualstudio.com/docs/editor/refactoring#_rename-symbol).
+
+#### Testmatic tags provide a powerful way to group related tests
+
+For example, you can instantly retrieve a list of all tests for a particular screen, e.g. Login screen or Dashboard screen.
+
+Or you can instantly retrieve a list of tests that utilise a particular test account.
+
+These lists can be conveniently linked from external repositories of information, such as a Solution design in a Wiki, a task tracking system or company chat.
+
+For example, a wiki page for the Login screen could link to a testmatic doc listing all tests for that screen: http://github.com/myaccount/mytests/blob/main/docs/tags/login_screen.md.
+
 ## CLI reference
 
 <!-- insert cli-reference start -->
 
-## project create
+### init
+
+Usage: init
+
+Create a new project in the current working directory
+
+### project create
 
 Usage: project create
 
 Create a new project in the current working directory (same as `testmatic init`)
 
-## test list
+### test list
 
 Usage: test list [options]
 
@@ -341,7 +470,7 @@ Options:
 </tbody>
 </table>
 
-## test add
+### test add
 
 Usage: test add [options]
 
@@ -425,19 +554,19 @@ Optional.
 </tbody>
 </table>
 
-## test delete
+### test delete
 
 Usage: test delete <testNameOrTitle>
 
 Delete a test
 
-## test show
+### test show
 
 Usage: test show <testNameOrTitle>
 
 Show the full details of a test
 
-## test link add
+### test link add
 
 Usage: test link add [options] <testNameOrTitle> <linkHrefOrTitle>
 
@@ -468,25 +597,25 @@ Optional.
 </tbody>
 </table>
 
-## test link delete
+### test link delete
 
 Usage: test link delete <testNameOrTitle> <linkHrefOrTitle>
 
 Delete a link from a test
 
-## test link open
+### test link open
 
 Usage: test link open <testNameOrTitle> <linkHrefOrTitle>
 
 Open a test link in the browser
 
-## tag list
+### tag list
 
 Usage: tag list
 
 List tags in the current project
 
-## tag add
+### tag add
 
 Usage: tag add [options]
 
@@ -566,19 +695,19 @@ Optional.
 </tbody>
 </table>
 
-## tag delete
+### tag delete
 
 Usage: tag delete <tagNameOrTitle>
 
 Delete a tag
 
-## tag show
+### tag show
 
 Usage: tag show <tagNameOrTitle>
 
 Show the full details of a tag
 
-## tag link add
+### tag link add
 
 Usage: tag link add [options] <tagNameOrTitle> <tagLinkHref>
 
@@ -609,31 +738,31 @@ Optional.
 </tbody>
 </table>
 
-## tag link delete
+### tag link delete
 
 Usage: tag link delete <tagNameOrTitle> <linkHrefOrTitle>
 
 Delete a link from a tag
 
-## tag link open
+### tag link open
 
 Usage: tag link open <tagNameOrTitle> <linkHrefOrTitle>
 
 Open a tag link in the browser
 
-## tag impacts
+### tag impacts
 
 Usage: tag impacts <tagNameOrTitle>
 
 List the tests and tags that are impacted by a tag
 
-## run show
+### run show
 
 Usage: run show <testNameOrTitle> [runDateTime]
 
 Show the full details of a run
 
-## run open
+### run open
 
 Usage: run open <testNameOrTitle> [runDateTime]
 
@@ -651,78 +780,6 @@ You can add them to a run folder of your test or link to them from the run markd
 
 See the [Runs](#runs) section under [Advanced](#advanced).
 
-## Notes
-
-### Benefits of testing in general
-
-Research indicates that thorough testing is critical to success in software projects. According to one study, software failures in the US alone cost the economy USD 1.1 trillion in assets in 2016 and impacted 4.4 billion customers. <sup>1</sup>
-
----
-
-<sup>1</sup> [https://www.cloudcomputing-news.net/news/2017/oct/30/glitch-economy-counting-cost-software-failures/](https://www.cloudcomputing-news.net/news/2017/oct/30/glitch-economy-counting-cost-software-failures/)
-
-### Benefits of manual testing
-
-### Benefits of functional testing
-
-### Benefits of using testmatic for your test cases
-
-Some key benefits of testmatic:
-
-1. Testing steps are simple and easy for people to read
-2. Testing steps support simple, fast and rigorous manual testing
-3. Testmatic tests can be incrementally automated
-4. Testmatic tests are easy to link to
-5. Testmatic tests can be hosted in version control, with zero third-party dependencies or additional setup
-6. Testmatic tests are version-controlled
-7. Testmatic tags provide a powerful way to group related tests
-
-#### 1. Testing steps are simple and easy for people to read
-
-Given/When/Then syntax is cumbersome and requires a learning curve and is generally the domain of software engineers.
-
-In contrast, simple lists of testing steps, much like the method in a cooking recipe, are easy to understand for a broad set of people.
-
-#### 2. Testing steps support simple, fast and rigorous manual testing
-
-It's easier and faster to manually test software when you are clear on what specific actions need to be taken and in what order.
-
-By documenting and organising testing procedures, manual testing can be performed consistently, ensuring a rigorously tested product.
-
-#### 3. Testmatic tests can be incrementally automated
-
-Testmatic focusses on helping you write and organise your testing steps first, generating empty placeholder functions without you having to immediately write code to automate them.
-
-If and when you decide to add automation, it's easy to locate the places in which to write code, and you can automate step by step, rather than having to automate a whole test sequence all at once.
-
-#### 4. Testmatic tests are easy to link to
-
-You can share your test steps with team members and stakeholders easily.
-
-You can link to a whole test, or a list of related tests.
-
-#### 5. Testmatic tests can be hosted in version control, with zero third-party dependencies or additional setup
-
-This makes it easy to get started quickly - simply fork the testmatic project, begin generating and committing your tests, and push to your own repository.
-
-If your organisation has a version control system, and you have permission to create a new repository, you already have everything you need to get started.
-
-#### 6. Testmatic tests are version-controlled and implemented in code
-
-As your testmatic instance is a forked Git repository by default, you reap all the benefits of version control - tracking the history of changes, branching, ability to revert changes, etc.
-
-As tests, steps and tags are stored internally as Typescript code, you can easily make modifications - large or small - using the standard tools of your IDE. For example, in VS Code, you can rename a token and automatically have it update all usages, by renaming the file with [Update imports on file move](https://code.visualstudio.com/docs/typescript/typescript-refactoring#_update-imports-on-file-move) and [Rename symbol](https://code.visualstudio.com/docs/editor/refactoring#_rename-symbol).
-
-#### 7. Testmatic tags provide a powerful way to group related tests
-
-For example, you can instantly retrieve a list of all tests for a particular screen, e.g. Login screen or Dashboard screen.
-
-Or you can instantly retrieve a list of tests that utilise a particular test account.
-
-These lists can be conveniently linked from external repositories of information, such as a Solution design in a Wiki, a task tracking system or company chat.
-
-For example, a wiki page for the Login screen could link to a testmatic doc listing all tests for that screen: http://github.com/myaccount/mytests/blob/main/docs/tags/login_screen.md.
-
 ## Contributing
 
 You can get started by **forking the testmatic repo**.
@@ -733,7 +790,7 @@ You can get started by **forking the testmatic repo**.
 - [Node.js](https://nodejs.org/en/download/) version 16.14 or above:
   - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
 
-## Fork Testmatic
+### Fork Testmatic
 
 1. On GitHub.com, navigate to the testmatic/testmatic repository.
 2. In the top-right corner of the page, click Fork.
@@ -758,7 +815,7 @@ npm install
 
 Congratulations! You now have a working Testmatic project.
 
-## Roadmap
+### Roadmap
 
 <table>
   <tr>
@@ -771,9 +828,13 @@ Congratulations! You now have a working Testmatic project.
   </tr>
 </table>
 
-## Troubleshooting and Support
+## Troubleshooting
 
-Please contact Jon.
+Nothing to write here so far. This section will be updated if and as needed.
+
+## Contact
+
+Please feel free to contact Jonathan, the project maintainer.
 
 - Twitter - @conwy
 - Github - @jonathanconway

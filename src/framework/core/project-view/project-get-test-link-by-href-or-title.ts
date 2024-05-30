@@ -17,11 +17,11 @@ export function projectGetTestLinkByHrefOrTitle({
 
   const testLink = testLinkByHrefOrName;
 
-  if (testLink) {
-    return testLink;
+  if (!testLink) {
+    return new NotFoundError(
+      `Cannot find link in test "${test.title}" with title or href matching "${linkHrefOrTitle}".`
+    );
   }
 
-  throw new NotFoundError(
-    `Cannot find link in test "${test.title}" with title or href matching "${linkHrefOrTitle}"`
-  );
+  return testLink;
 }

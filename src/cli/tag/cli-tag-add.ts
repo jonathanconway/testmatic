@@ -1,4 +1,5 @@
 import { createCommand } from "commander";
+import { isError } from "lodash";
 import promptSync from "prompt-sync";
 
 import {
@@ -86,7 +87,13 @@ export function cliTagAdd(args: TagAddParameters) {
 
   const newTag = createTagResult;
 
-  const updatedProject = projectAddTag({ project, newTag });
+  const addTagResult = projectAddTag({ project, newTag });
+  if (isError(addTagResult)) {
+    logError(addTagResult.message);
+    return;
+  }
+
+  const updatedProject = addTagResult;
 
   projectMdWrite(updatedProject);
 

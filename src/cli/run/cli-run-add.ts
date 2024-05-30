@@ -71,7 +71,12 @@ export function cliTagAdd(...args: RunAddParameters) {
   }
   const newRun = createRunResult;
 
-  const updatedProject = projectAddTestRun({ project, test, newRun });
+  const addTestRunResult = projectAddTestRun({ project, test, newRun });
+  if (isError(addTestRunResult)) {
+    logError(addTestRunResult.message);
+    return;
+  }
+  const updatedProject = addTestRunResult;
 
   projectMdWrite(updatedProject);
 

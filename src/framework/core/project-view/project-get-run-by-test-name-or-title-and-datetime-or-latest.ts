@@ -16,7 +16,7 @@ export function getRunByTestNameOrTitleAndDatetimeOrLatest({
 
   if (!test) {
     return new NotFoundError(
-      `Cannot find test with name or title matching "${test}"`
+      `Cannot find test with name or title matching "${test}".`
     );
   }
 
@@ -26,7 +26,7 @@ export function getRunByTestNameOrTitleAndDatetimeOrLatest({
 
   if (!run) {
     return new NotFoundError(
-      `Cannot find run with date/time stamp matching "${runDateTime}"`
+      `Cannot find run with date/time stamp matching "${runDateTime}".`
     );
   }
 

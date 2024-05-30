@@ -1,11 +1,11 @@
 import { createCommand } from "commander";
 
-import { cliRunAddCommand } from "./run-add";
-import { cliRunDeleteCommand } from "./run-delete";
-import { cliRunListCommand } from "./run-list";
-import { cliRunOpenCommand } from "./run-open";
-import { cliRunResultCommand } from "./run-result";
-import { cliRunShowCommand } from "./run-show";
+import { cliRunAddCommand } from "./cli-run-add";
+import { cliRunDeleteCommand } from "./cli-run-delete";
+import { cliRunListCommand } from "./cli-run-list";
+import { cliRunOpenCommand } from "./cli-run-open";
+import { cliRunResultCommand } from "./cli-run-result";
+import { cliRunShowCommand } from "./cli-run-show";
 
 export const cliRunCommand = createCommand("run")
   .description("Manage project test runs")

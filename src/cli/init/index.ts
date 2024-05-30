@@ -1,1 +1,1 @@
-export * from "./init";
+export * from "./cli-init";

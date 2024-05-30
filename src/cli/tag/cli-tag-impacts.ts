@@ -9,6 +9,7 @@ import {
   logImpacts,
   projectGetTagByNameOrTitle,
   projectMdRead,
+  pruneImpactItems,
 } from "../../framework";
 
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
@@ -34,7 +35,13 @@ export function cliTagImpacts(tagNameOrTitle: TagImpactsParameter) {
 
   const tag = getTagResult;
 
-  const impacts = getTagImpactedTests({ tests: project.tests, tag, depth: 2 });
+  const impacts = pruneImpactItems(
+    getTagImpactedTests({
+      tests: project.tests,
+      tag,
+      depth: 2,
+    })
+  );
 
   logTitle(tag);
 
@@ -42,7 +49,11 @@ export function cliTagImpacts(tagNameOrTitle: TagImpactsParameter) {
 }
 
 function logTitle(tag: Tag) {
-  const title = `Tag: ${tag.title} - Impacts`;
+  const title = `Tag: ${tag.title}`;
 
   logHeading(title, 1);
+
+  console.log();
+
+  logHeading("Impacts", 2);
 }

@@ -1,8 +1,8 @@
 import { createCommand } from "commander";
 
-import { cliTestLinkAddCommand } from "./test-link-add";
-import { cliTestLinkDeleteCommand } from "./test-link-delete";
-import { cliTestLinkOpenCommand } from "./test-link-open";
+import { cliTestLinkAddCommand } from "./cli-test-link-add";
+import { cliTestLinkDeleteCommand } from "./cli-test-link-delete";
+import { cliTestLinkOpenCommand } from "./cli-test-link-open";
 
 export const cliTestLinkCommand = createCommand("link")
   .description("Manage test links")

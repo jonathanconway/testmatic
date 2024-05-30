@@ -1,5 +1,6 @@
 import { ProjectView, createProjectView } from ".";
 
+import { AlreadyExistsError } from "../../utils";
 import { Tag } from "../tag";
 import { Test } from "../test";
 
@@ -13,8 +14,8 @@ export function projectAddTestTag({
   readonly tag: Tag;
 }) {
   if (tagAlreadyExists({ test, tag })) {
-    return new Error(
-      `Tag "${tag.title}" already exists in test ${test.title}.`
+    return new AlreadyExistsError(
+      `Tag "${tag.title}" already exists in test "${test.title}".`
     );
   }
 

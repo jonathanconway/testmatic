@@ -1,3 +1,4 @@
+import { isError } from "../../../utils";
 import {
   MOCK_NEW_TAGS,
   MOCK_NEW_TAG_ONE,
@@ -23,6 +24,10 @@ describe("project-add-test", () => {
         newTest: MOCK_NEW_TEST,
       });
 
+      if (isError(updatedProjectView)) {
+        throw updatedProjectView;
+      }
+
       expect(updatedProjectView.tests).toEqual([
         ...MOCK_PROJECT_VIEW.tests,
         MOCK_NEW_TEST,
@@ -39,6 +44,10 @@ describe("project-add-test", () => {
         project: MOCK_PROJECT_VIEW,
         newTest: MOCK_NEW_TEST,
       });
+
+      if (isError(updatedProjectView)) {
+        throw updatedProjectView;
+      }
 
       expect(updatedProjectView.tags).toEqual(
         expect.arrayContaining([...MOCK_PROJECT_VIEW.tags, ...MOCK_NEW_TAGS])
@@ -59,6 +68,10 @@ describe("project-add-test", () => {
         project: MOCK_PROJECT_VIEW,
         newTest: MOCK_NEW_TEST,
       });
+
+      if (isError(updatedProjectView)) {
+        throw updatedProjectView;
+      }
 
       const updatedProjectTestsNewTest = updatedProjectView.tests.find(
         (test) => test.name === MOCK_NEW_TEST.name

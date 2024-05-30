@@ -45,24 +45,16 @@ export function cliTestTagAdd(...args: TestTagAddParameters) {
   projectMdWrite(updatedProject);
 }
 
-function createTestTagFromArgs(
-  project: ProjectView,
-  [testNameOrTitle, tagNameOrTitle]: TestTagAddParameters
-) {
-  const getTestResult = projectGetTestByNameOrTitle({
-    project,
-    testNameOrTitle,
-  });
-  if (isError(getTestResult)) {
-    return getTestResult;
-  }
-  const test = getTestResult;
-
-  let tag: Tag | Error | undefined;
-
-  let updatedProject = project;
-
+function createTagFromArgs(project: ProjectView, tagNameOrTitle: string) {
   const getTagResult = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
+
+  if (!isError(getTagResult)) {
+    return {
+      tag: getTagResult,
+      updatedProject: project,
+    };
+  }
+
   if (isNotFoundError(getTagResult)) {
     const createTagResult = createTagFromName(tagNameOrTitle);
 
@@ -72,28 +64,53 @@ function createTestTagFromArgs(
 
     const newTag = createTagResult;
 
-    updatedProject = projectAddTag({
+    const addTagResult = projectAddTag({
       project,
       newTag,
     });
 
-    tag = newTag;
+    if (isError(addTagResult)) {
+      return addTagResult;
+    }
+
+    const tag = newTag;
+
+    const updatedProject = project;
+
+    return {
+      tag,
+      updatedProject,
+    };
   }
 
-  if (!tag || isError(tag)) {
-    return new Error("Could not create tag");
+  return getTagResult;
+}
+
+function createTestTagFromArgs(
+  project: ProjectView,
+  [testNameOrTitle, tagNameOrTitle]: TestTagAddParameters
+): ProjectView | Error {
+  const getTestResult = projectGetTestByNameOrTitle({
+    project,
+    testNameOrTitle,
+  });
+  if (isError(getTestResult)) {
+    return getTestResult;
   }
+  const test = getTestResult;
+
+  const createTagFromArgsResult = createTagFromArgs(project, tagNameOrTitle);
+  if (isError(createTagFromArgsResult)) {
+    return createTagFromArgsResult;
+  }
+
+  const { tag, updatedProject } = createTagFromArgsResult;
 
   const projectAddTestTagResult = projectAddTestTag({
     project: updatedProject,
     test,
     tag,
   });
-  if (isError(projectAddTestTagResult)) {
-    return projectAddTestTagResult;
-  }
 
-  updatedProject = projectAddTestTagResult;
-
-  return updatedProject!;
+  return projectAddTestTagResult!;
 }

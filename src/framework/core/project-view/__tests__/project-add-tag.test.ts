@@ -1,3 +1,4 @@
+import { isError } from "../../../utils";
 import { MOCK_NEW_TAG_ONE, MOCK_TAG } from "../../tag";
 import { MOCK_PROJECT_VIEW } from "../project-view.mocks";
 
@@ -12,6 +13,10 @@ describe("project-add-tag", () => {
         project: MOCK_PROJECT_VIEW,
         newTag: MOCK_NEW_TAG_ONE,
       });
+
+      if (isError(updatedProjectView)) {
+        throw updatedProjectView;
+      }
 
       expect(updatedProjectView.tags).toEqual([
         ...MOCK_PROJECT_VIEW.tags,

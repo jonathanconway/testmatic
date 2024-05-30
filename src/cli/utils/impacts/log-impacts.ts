@@ -1,6 +1,6 @@
-import { uniq } from "lodash";
+import chalk from "chalk";
 
-import { ImpactItem, pruneImpacts } from "../../../framework";
+import { ImpactItem } from "../../../framework";
 
 export function logImpacts(impacts: readonly ImpactItem[], indent: number = 0) {
   console.log();
@@ -15,11 +15,13 @@ function getImpactsList(
     return "";
   }
 
-  return uniq(pruneImpacts(impacts, []))
+  return impacts
     .map(
-      (impact) => `${"  ".repeat(indent)}${indent === 0 ? "-" : "-->"} ${
-        impact.item.title
-      } (${impact.item.name}) [${impact.itemType}]
+      (impact) => `${"  ".repeat(indent)}${
+        indent === 0 ? "-" : "-->"
+      } ${chalk.whiteBright(impact.item.title)} ${chalk.grey(
+        `(${impact.item.name})`
+      )} ${chalk.blueBright(`[${impact.itemType}]`)}
 ${getImpactsList(impact.items, indent + 1)}`
     )
     .join("");

@@ -59,7 +59,13 @@ export function cliTagLinkAdd(...args: TagLinkAddParameters) {
 
   const newLink = createTagLinkFromArgsOrPrompts(args);
 
-  const updatedProject = projectAddTagLink({ project, tag, newLink });
+  const addTagLinkResult = projectAddTagLink({ project, tag, newLink });
+  if (isError(addTagLinkResult)) {
+    logError(addTagLinkResult.message);
+    return;
+  }
+
+  const updatedProject = addTagLinkResult;
 
   projectMdWrite(updatedProject);
 }

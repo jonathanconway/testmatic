@@ -1,5 +1,6 @@
 import { ProjectView, createProjectView } from ".";
 
+import { AlreadyExistsError } from "../../utils";
 import { Test } from "../test";
 
 export function projectAddTest({
@@ -10,7 +11,7 @@ export function projectAddTest({
   readonly newTest: Test;
 }) {
   if (testAlreadyExists(project, newTest)) {
-    throw new Error(`Test ${newTest.name} already exists.`);
+    return new AlreadyExistsError(`Test "${newTest.title}" already exists.`);
   }
 
   const tests = [...project.tests, newTest];

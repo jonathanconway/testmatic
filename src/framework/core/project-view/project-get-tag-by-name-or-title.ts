@@ -20,11 +20,11 @@ export function projectGetTagByNameOrTitle({
     (tag) => tag.title.toLowerCase().trim() === tagNameOrTitleLowerTrimmed
   );
 
-  if (tagByTitle) {
-    return tagByTitle;
+  if (!tagByTitle) {
+    return new NotFoundError(
+      `Cannot find tag with name or title matching "${tagNameOrTitle}".`
+    );
   }
 
-  return new NotFoundError(
-    `Cannot find tag with name or title matching "${tagNameOrTitle}"`
-  );
+  return tagByTitle;
 }

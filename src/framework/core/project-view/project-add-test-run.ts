@@ -1,5 +1,6 @@
 import { ProjectView, createProjectView } from ".";
 
+import { AlreadyExistsError } from "../../utils";
 import { Run } from "../run";
 import { Test } from "../test";
 
@@ -13,8 +14,8 @@ export function projectAddTestRun({
   readonly newRun: Run;
 }) {
   if (testRunAlreadyExists(test, newRun)) {
-    throw new Error(
-      `Run with date/time stamp ${newRun.dateTime} already exists in test ${test.title}.`
+    return new AlreadyExistsError(
+      `Run with date/time stamp ${newRun.dateTime} already exists in test "${test.title}".`
     );
   }
 

@@ -1,24 +1,24 @@
 import { Command } from "commander";
 
-import { cliProjectCreateCommand } from "../cli/project/project-create";
-import { cliRunOpenCommand } from "../cli/run/run-open";
-import { cliRunShowCommand } from "../cli/run/run-show";
-import { cliTagAddCommand } from "../cli/tag/tag-add";
-import { cliTagDeleteCommand } from "../cli/tag/tag-delete";
-import { cliTagImpactsCommand } from "../cli/tag/tag-impacts";
-import { cliTagLinkAddCommand } from "../cli/tag/tag-link-add";
-import { cliTagLinkDeleteCommand } from "../cli/tag/tag-link-delete";
-import { cliTagLinkOpenCommand } from "../cli/tag/tag-link-open";
-import { cliTagListCommand } from "../cli/tag/tag-list";
-import { cliTagShowCommand } from "../cli/tag/tag-show";
-import { cliTestAddCommand } from "../cli/test/test-add";
-import { cliTestDeleteCommand } from "../cli/test/test-delete";
-import { cliTestLinkAddCommand } from "../cli/test/test-link-add";
-import { cliTestLinkDeleteCommand } from "../cli/test/test-link-delete";
-import { cliTestLinkOpenCommand } from "../cli/test/test-link-open";
-import { cliTestListCommand } from "../cli/test/test-list";
-import { cliTestShowCommand } from "../cli/test/test-show";
-import { interpolate } from "../framework";
+import { cliProjectCreateCommand } from "../cli/project/cli-project-create";
+import { cliRunOpenCommand } from "../cli/run/cli-run-open";
+import { cliRunShowCommand } from "../cli/run/cli-run-show";
+import { cliTagAddCommand } from "../cli/tag/cli-tag-add";
+import { cliTagDeleteCommand } from "../cli/tag/cli-tag-delete";
+import { cliTagImpactsCommand } from "../cli/tag/cli-tag-impacts";
+import { cliTagLinkAddCommand } from "../cli/tag/cli-tag-link-add";
+import { cliTagLinkDeleteCommand } from "../cli/tag/cli-tag-link-delete";
+import { cliTagLinkOpenCommand } from "../cli/tag/cli-tag-link-open";
+import { cliTagListCommand } from "../cli/tag/cli-tag-list";
+import { cliTagShowCommand } from "../cli/tag/cli-tag-show";
+import { cliTestAddCommand } from "../cli/test/cli-test-add";
+import { cliTestDeleteCommand } from "../cli/test/cli-test-delete";
+import { cliTestLinkAddCommand } from "../cli/test/cli-test-link-add";
+import { cliTestLinkDeleteCommand } from "../cli/test/cli-test-link-delete";
+import { cliTestLinkOpenCommand } from "../cli/test/cli-test-link-open";
+import { cliTestListCommand } from "../cli/test/cli-test-list";
+import { cliTestShowCommand } from "../cli/test/cli-test-show";
+import { cliInitCommand, interpolate } from "../framework";
 
 function getCleanedUsageText(command: Command) {
   const usageText = command.usage();
@@ -30,6 +30,10 @@ function getCleanedUsageText(command: Command) {
 
 export function buildReadmeCliDocs() {
   const commands = [
+    {
+      name: "init",
+      command: cliInitCommand,
+    },
     {
       name: "project create",
       command: cliProjectCreateCommand,
@@ -107,7 +111,7 @@ export function buildReadmeCliDocs() {
   const md = commands
     .map(
       ({ name, command }) => `
-## ${name}
+### ${name}
 
 Usage: ${name} ${getCleanedUsageText(command)}
 

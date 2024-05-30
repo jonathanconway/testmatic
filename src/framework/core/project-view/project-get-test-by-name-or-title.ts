@@ -17,11 +17,11 @@ export function projectGetTestByNameOrTitle({
   const testByTitle = project.tests.find(
     (test) => test.title === testNameOrTitle
   );
-  if (testByTitle) {
-    return testByTitle;
+  if (!testByTitle) {
+    return new NotFoundError(
+      `Cannot find test with name or title matching "${testNameOrTitle}".`
+    );
   }
 
-  return new NotFoundError(
-    `Cannot find test with name or title matching "${testNameOrTitle}"`
-  );
+  return testByTitle;
 }

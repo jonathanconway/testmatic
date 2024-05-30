@@ -1,5 +1,6 @@
 import { ProjectView, createProjectView } from ".";
 
+import { AlreadyExistsError } from "../../utils";
 import { Tag } from "../tag";
 
 export function projectAddTag({
@@ -10,7 +11,7 @@ export function projectAddTag({
   readonly newTag: Tag;
 }) {
   if (tagAlreadyExists(project, newTag)) {
-    throw new Error(`Tag ${newTag.name} already exists.`);
+    return new AlreadyExistsError(`Tag "${newTag.name}" already exists.`);
   }
 
   const tags = [...project.tags, newTag];

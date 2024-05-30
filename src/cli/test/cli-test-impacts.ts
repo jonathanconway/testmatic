@@ -9,6 +9,7 @@ import {
   logImpacts,
   projectGetTestByNameOrTitle,
   projectMdRead,
+  pruneImpactItems,
 } from "../../framework";
 
 import { PARAM_TEST_NAME_OR_TITLE } from "./param-test-name-or-title";
@@ -39,11 +40,13 @@ export function cliTestImpacts(testNameOrTitle: TestImpactsParameter) {
 
   const test = getTestResult;
 
-  const impacts = getTestImpactedTests({
-    tests: project.tests,
-    test,
-    depth: 2,
-  });
+  const impacts = pruneImpactItems(
+    getTestImpactedTests({
+      tests: project.tests,
+      test,
+      depth: 2,
+    })
+  );
 
   logTitle(test);
 
@@ -51,7 +54,11 @@ export function cliTestImpacts(testNameOrTitle: TestImpactsParameter) {
 }
 
 function logTitle(test: Test) {
-  const title = `Test: ${test.title} - Impacts`;
+  const title = `Test: ${test.title}`;
 
   logHeading(title, 1);
+
+  console.log();
+
+  logHeading("Impacts", 2);
 }
