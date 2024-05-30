@@ -3,14 +3,11 @@ import { array, object, string } from "zod";
 
 import {
   ValidationError,
-  ZOD_REGEX_ALPHA_NUMBERS_UNDERSCORES,
   ZOD_REGEX_START_WITH_ALPHA,
   createValidationErrorFromZodError,
-  isValidationError,
   sentenceCase,
 } from "../../utils";
-import { Link, createLinkFromInput } from "../link";
-import { linkValidator } from "../link/link-validator";
+import { createLinkFromInput } from "../link";
 
 import { Tag } from "./tag";
 import { tagValidator } from "./tag-validator";
@@ -23,15 +20,10 @@ export interface CreateTagParams {
 }
 
 export const createTagParamsValidator = object({
-  title: string()
-    .regex(
-      ZOD_REGEX_ALPHA_NUMBERS_UNDERSCORES.regex,
-      ZOD_REGEX_ALPHA_NUMBERS_UNDERSCORES.message
-    )
-    .regex(
-      ZOD_REGEX_START_WITH_ALPHA.regex,
-      ZOD_REGEX_START_WITH_ALPHA.message
-    ),
+  title: string().regex(
+    ZOD_REGEX_START_WITH_ALPHA.regex,
+    ZOD_REGEX_START_WITH_ALPHA.message
+  ),
   type: string().optional(),
   description: string().optional(),
   links: array(string()).optional(),

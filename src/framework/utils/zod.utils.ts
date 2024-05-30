@@ -30,12 +30,6 @@ export function throwIfFieldsError<T extends object, Z extends ZodRawShape>(
   }
 }
 
-export const ZOD_REGEX_ALPHA_NUMBERS_UNDERSCORES = {
-  regex: /^[a-zA-Z0-9_\s()]*$/,
-  message:
-    "Should contain only letters ('a' to 'z'), numbers ('0' to '9'), brackets ('(', ')'), underscores ('_') and spaces.",
-};
-
 export const ZOD_REGEX_START_WITH_ALPHA = {
   regex: /^[a-zA-Z]/,
   message: "Should start with a letter.",

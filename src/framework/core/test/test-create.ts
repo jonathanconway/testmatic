@@ -3,7 +3,6 @@ import { array, object, string } from "zod";
 
 import {
   ValidationError,
-  ZOD_REGEX_ALPHA_NUMBERS_UNDERSCORES,
   ZOD_REGEX_START_WITH_ALPHA,
   createValidationErrorFromZodError,
   sentenceCase,
@@ -24,15 +23,10 @@ export interface CreateTestParams {
 }
 
 export const createTestParamsValidator = object({
-  title: string()
-    .regex(
-      ZOD_REGEX_ALPHA_NUMBERS_UNDERSCORES.regex,
-      ZOD_REGEX_ALPHA_NUMBERS_UNDERSCORES.message
-    )
-    .regex(
-      ZOD_REGEX_START_WITH_ALPHA.regex,
-      ZOD_REGEX_START_WITH_ALPHA.message
-    ),
+  title: string().regex(
+    ZOD_REGEX_START_WITH_ALPHA.regex,
+    ZOD_REGEX_START_WITH_ALPHA.message
+  ),
   description: string().optional(),
   stepTexts: array(string()).nonempty(),
   linkNames: array(string()).optional(),
