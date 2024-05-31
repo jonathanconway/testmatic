@@ -319,30 +319,19 @@ Tag: Homepage url - Impacts
 
 ## Notes
 
-### Benefits of testing in general
-
-Research indicates that thorough testing is critical to success in software projects. According to one study, software failures in the US alone cost the economy USD 1.1 trillion in assets in 2016 and impacted 4.4 billion customers. <sup>1</sup>
-
-Many notable figures in software development, engineering and the Agile movement have emphasised the benefits of rigorous testing, across all phases of the software development lifecycle.
-
----
-
-<sup>1</sup> [https://www.cloudcomputing-news.net/news/2017/oct/30/glitch-economy-counting-cost-software-failures/](https://www.cloudcomputing-news.net/news/2017/oct/30/glitch-economy-counting-cost-software-failures/)
-
 ### Benefits of manual testing
 
-There is much agreement that testing generally is useful, but how about manual testing?
+There is much agreement that testing generally is useful, but what about manual testing?
 
 Manual testing provides a rather unique combination of benefits:
 
-- Manual tests give you way of discovering and documenting intended behaviour.
+- Manual tests give you way of discovering and documenting **intended behaviour** – how the system is expected to behave.
 - Manual test cases can be written immediately, without any automated setup.
 - Manual tests can be run in any environment you have access to.
 - Manual tests allow you to experience the system as an end-user would, observing the whole experience.
-- Manual tests allow you to verify complex, lengthy workflows or workflows involving multiple systems.
-- Manual tests are organised, structured and repeatable, enabling rigor and consistency.
+- Manual tests allow you to verify complex, lengthy workflows or workflows involving multiple systems, without a complex automation framework.
 
-This combination of benefits make manual testing highly useful for certain specific scenarios, such as working on a large and complicated application in a highly time-constrained situation, such as a fast-growing startup.
+This combination of benefits make manual testing highly useful for certain specific scenarios such as working on a large and complicated application in a highly time-constrained context, e.g. a fast-growing startup.
 
 ### Drawbacks of automated testing
 
@@ -350,12 +339,12 @@ Much of the industry has focussed on the benefits of automated testing and some 
 
 These criticisms may be strong in theory, but in practice they can ignore some important issues with automated testing:
 
-- **Automated test coverage can be limited.**
-- **Automating all important flows can be time-consuming.**
-- **Automating certain kinds of behaviour can be very difficult.** E.g. full user interface testing including observing smoothness, performance, accessibility, etc. or long complex flows involving multiple systems, both internal and external to the organisation, can be very difficult to automate.
-- **Automating testing may limit incidental or unplanned but desirable discoveries.** These would more likely be picked in manual testing. E.g. testing a login flow, one might discover a small UI glitch with the password entry field.
+- Automated test coverage can be limited.
+- Automating all important flows can be time-consuming.
+- Automating certain kinds of behaviour can be very difficult. E.g. full user interface testing including observing smoothness, performance, accessibility, etc. or long complex flows involving multiple systems, both internal and external to the organisation, can be very difficult to automate.
+- Automating testing may limit incidental or unplanned but desirable discoveries. These would more likely be picked in manual testing. E.g. testing a login flow, one might discover a small UI glitch with the password entry field.
 
-In most environments, the best path is probably some combination of automated and manual testing.
+In most situations, the optimal choice is probably some combination of automated and manual testing.
 
 Automated tests are useful and widely applicable, but not the "one ring to rule them all".
 
@@ -378,8 +367,9 @@ Some key benefits of using Testmatic for your manual tests are:
 
 - Fast and easy to create and update via CLI or text editor
 - Easy to share with business and tech people alike
+- Organised, structured and repeatable, enabling rigor and consistency in the testing effort
 - Searchable by tag, allowing second-order impacts of failures to be identified, tested and fixed
-- Can be used to scaffold automated test code
+- Can be used to generate automated unit test code scaffolding if desired (see: [Roadmap](#roadmap))
 
 #### Testing steps are simple and easy for people to read
 
@@ -820,7 +810,11 @@ Congratulations! You now have a working Testmatic project.
 <table>
   <tr>
     <th>Future</th>
-    <td>Screenshot and screencast links, more advanced querying, static site generator, dependency graphs, import as a library.</td>
+    <td>More advanced querying, similarity search for tags, web-based UI, re-usability as a library, code generation framework.</td>
+  </tr>
+  <tr>
+    <th>28-May-2024</th>
+    <td>Simplification of core, leveraging of `commander` and `chalk` libraries, deferral of code generation, addition of runs and impacts feature.</td>
   </tr>
   <tr>
     <th>13-Aug-2023</th>

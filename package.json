@@ -1,10 +1,14 @@
 {
   "name": "testmatic",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "CLI to testmatic – a local rapid-entry manual test database.",
-  "main": "index.js",
   "bin": {
     "testmatic": "./dist/src/cli/cli-exec.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js"
   },
   "scripts": {
     "build": "tsc",
