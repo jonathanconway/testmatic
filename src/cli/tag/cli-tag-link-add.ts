@@ -7,12 +7,12 @@ import {
   createLink,
   isError,
   isValidationError,
-  logError,
   projectAddTagLink,
   projectGetTagByNameOrTitle,
   projectMdRead,
   projectMdWrite,
 } from "../../framework";
+import { logError } from "../utils";
 
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 

@@ -4,13 +4,11 @@ import {
   Test,
   getTestImpactedTests,
   isError,
-  logError,
-  logHeading,
-  logImpacts,
   projectGetTestByNameOrTitle,
   projectMdRead,
   pruneImpactItems,
 } from "../../framework";
+import { logError, logHeading, logImpacts } from "../utils";
 
 import { PARAM_TEST_NAME_OR_TITLE } from "./param-test-name-or-title";
 

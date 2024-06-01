@@ -7,13 +7,11 @@ import {
   getTagFilename,
   getTestFilename,
   isError,
-  logError,
-  logHeading,
-  logTable,
   projectGetTestByNameOrTitle,
   projectMdRead,
   sentenceCase,
 } from "../../framework";
+import { logError, logHeading, logTable } from "../utils";
 
 import { PARAM_TEST_NAME_OR_TITLE } from "./param-test-name-or-title";
 

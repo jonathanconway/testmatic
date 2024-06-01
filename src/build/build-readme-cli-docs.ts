@@ -1,5 +1,6 @@
 import { Command } from "commander";
 
+import { cliInitCommand } from "../cli/init/cli-init";
 import { cliProjectCreateCommand } from "../cli/project/cli-project-create";
 import { cliRunOpenCommand } from "../cli/run/cli-run-open";
 import { cliRunShowCommand } from "../cli/run/cli-run-show";
@@ -18,7 +19,7 @@ import { cliTestLinkDeleteCommand } from "../cli/test/cli-test-link-delete";
 import { cliTestLinkOpenCommand } from "../cli/test/cli-test-link-open";
 import { cliTestListCommand } from "../cli/test/cli-test-list";
 import { cliTestShowCommand } from "../cli/test/cli-test-show";
-import { cliInitCommand, interpolate } from "../framework";
+import { interpolate } from "../framework";
 
 function getCleanedUsageText(command: Command) {
   const usageText = command.usage();

@@ -4,13 +4,11 @@ import {
   Tag,
   getTagImpactedTests,
   isError,
-  logError,
-  logHeading,
-  logImpacts,
   projectGetTagByNameOrTitle,
   projectMdRead,
   pruneImpactItems,
 } from "../../framework";
+import { logError, logHeading, logImpacts } from "../utils";
 
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 

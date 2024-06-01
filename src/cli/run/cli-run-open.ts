@@ -6,12 +6,12 @@ import {
   getRunFilepath,
   getRunsFilepath,
   isError,
-  logError,
   projectGetTestByNameOrTitle,
   projectGetTestRunByDateTimeOrLatest,
   projectMdRead,
 } from "../../framework";
 import { PARAM_TEST_NAME_OR_TITLE } from "../test";
+import { logError } from "../utils";
 
 import { PARAM_RUN_DATETIME } from "./param-run-datetime";
 

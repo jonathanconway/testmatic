@@ -1,11 +1,8 @@
 import { createCommand } from "commander";
 import prompts from "prompts";
 
-import {
-  logTable,
-  projectMdCreateFolders,
-  projectMdRead,
-} from "../../framework";
+import { projectMdCreateFolders, projectMdRead } from "../../framework";
+import { logTable } from "../utils";
 
 import { filterByArgsTag } from "./test-list-filter-tag";
 import { convertTestToTestOutputRow } from "./test-list-output-row";

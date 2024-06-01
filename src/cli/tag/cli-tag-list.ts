@@ -1,6 +1,7 @@
 import { createCommand } from "commander";
 
-import { getTagFilename, logTable, projectMdRead } from "../../framework";
+import { getTagFilename, projectMdRead } from "../../framework";
+import { logTable } from "../utils";
 
 export const cliTagListCommand = createCommand("list")
   .description("List tags in the current project")

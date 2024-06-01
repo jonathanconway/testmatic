@@ -5,13 +5,11 @@ import {
   formatRunResult,
   getRunFilepath,
   isError,
-  logError,
-  logHeading,
-  logTable,
   projectGetTestByNameOrTitle,
   projectMdRead,
 } from "../../framework";
 import { PARAM_TEST_NAME_OR_TITLE } from "../test";
+import { logError, logHeading, logTable } from "../utils";
 
 type RunListParameters = string;
 

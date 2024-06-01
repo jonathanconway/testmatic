@@ -6,14 +6,12 @@ import {
   formatDateTimeString,
   getRunFiles,
   isError,
-  logError,
-  logHeading,
-  logTable,
   projectGetTestByNameOrTitle,
   projectGetTestRunByDateTimeOrLatest,
   projectMdRead,
 } from "../../framework";
 import { PARAM_TEST_NAME_OR_TITLE } from "../test";
+import { logError, logHeading, logTable } from "../utils";
 
 import { PARAM_RUN_DATETIME } from "./param-run-datetime";
 

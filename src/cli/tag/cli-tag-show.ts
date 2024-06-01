@@ -6,14 +6,12 @@ import {
   getTagFilename,
   getTestFilename,
   isError,
-  logError,
-  logHeading,
-  logTable,
   projectGetTagByNameOrTitle,
   projectGetTestsByTag,
   projectMdRead,
   sentenceCase,
 } from "../../framework";
+import { logError, logHeading, logTable } from "../utils";
 
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 

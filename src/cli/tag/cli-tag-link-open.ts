@@ -3,12 +3,12 @@ import { createCommand } from "commander";
 
 import {
   isError,
-  logError,
   projectGetTagByNameOrTitle,
   projectGetTagLinkByHrefOrTitle,
   projectMdRead,
 } from "../../framework";
 import { PARAM_LINK_HREF_OR_TITLE } from "../link";
+import { logError } from "../utils";
 
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 

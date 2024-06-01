@@ -8,11 +8,11 @@ import {
   createTag,
   exportMdTag,
   isValidationError,
-  logError,
   projectAddTag,
   projectMdRead,
   projectMdWrite,
 } from "../../framework";
+import { logError } from "../utils";
 
 interface TagAddParameters {
   readonly title: string;

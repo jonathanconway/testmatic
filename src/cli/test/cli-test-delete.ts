@@ -2,12 +2,12 @@ import { createCommand } from "commander";
 
 import {
   isError,
-  logError,
   projectDeleteTest,
   projectGetTestByNameOrTitle,
   projectMdRead,
   projectMdWrite,
 } from "../../framework";
+import { logError } from "../utils";
 
 import { PARAM_TEST_NAME_OR_TITLE } from "./param-test-name-or-title";
 

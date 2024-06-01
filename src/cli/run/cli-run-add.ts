@@ -7,7 +7,6 @@ import {
   getRunFilepath,
   isError,
   isValidationError,
-  logError,
   nowDateTimeString,
   projectAddTestRun,
   projectGetTestByNameOrTitle,
@@ -15,6 +14,7 @@ import {
   projectMdWrite,
 } from "../../framework";
 import { PARAM_TEST_NAME_OR_TITLE } from "../test";
+import { logError } from "../utils";
 
 type RunAddParameters = [
   string /* testNameOrTitle */,

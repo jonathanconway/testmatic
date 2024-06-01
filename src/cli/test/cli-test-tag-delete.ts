@@ -2,7 +2,6 @@ import { createCommand } from "commander";
 
 import {
   isError,
-  logError,
   projectDeleteTestTag,
   projectGetTagByNameOrTitle,
   projectGetTestByNameOrTitle,
@@ -10,6 +9,7 @@ import {
   projectMdWrite,
 } from "../../framework";
 import { PARAM_TAG_NAME_OR_TITLE } from "../tag";
+import { logError } from "../utils";
 
 import { PARAM_TEST_NAME_OR_TITLE } from "./param-test-name-or-title";
 
