@@ -1,4 +1,4 @@
-import { Stats, readdirSync, statSync } from "fs";
+import { readdirSync, statSync } from "fs";
 import { resolve } from "path";
 
 import { isNotNil } from "../utils";

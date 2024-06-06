@@ -1,4 +1,4 @@
-import snakeCase from "lodash/snakeCase";
+import { snakeCase } from "lodash";
 
 import { Tag, isTag } from "./tag";
 import { createTagFromName } from "./tag-create";

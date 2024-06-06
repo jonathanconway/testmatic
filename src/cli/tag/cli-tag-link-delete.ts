@@ -13,7 +13,10 @@ import { logError } from "../utils";
 
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 
-type TagDeleteParameter = [string, string];
+type TagDeleteParameter = [
+  string /* tagNameOrTitle */,
+  string /* linkHrefOrTitle */
+];
 
 export const cliTagLinkDeleteCommand = createCommand("delete")
   .description("Delete a link from a tag")
@@ -22,7 +25,7 @@ export const cliTagLinkDeleteCommand = createCommand("delete")
   .action(cliTagDelete);
 
 export function cliTagDelete(
-  ...[tagNameOrTitle, tagLinkHrefOrTitle]: TagDeleteParameter
+  ...[tagNameOrTitle, linkHrefOrTitle]: TagDeleteParameter
 ) {
   const project = projectMdRead();
 
@@ -40,7 +43,7 @@ export function cliTagDelete(
 
   const getTagLinkResult = projectGetTagLinkByHrefOrTitle({
     tag,
-    linkHrefOrTitle: tagLinkHrefOrTitle,
+    linkHrefOrTitle,
   });
   if (isError(getTagLinkResult)) {
     logError(getTagLinkResult.message);

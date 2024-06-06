@@ -1,4 +1,4 @@
-import fromPairs from "lodash/fromPairs";
+import { fromPairs } from "lodash";
 
 import { FileTree } from "../files";
 

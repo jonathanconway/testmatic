@@ -1,4 +1,4 @@
-import fromPairs from "lodash/fromPairs";
+import { fromPairs } from "lodash";
 
 import { Tag, testGetTags } from "../core";
 import { DirTree, FileTree } from "../files";

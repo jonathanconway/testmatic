@@ -1,6 +1,6 @@
-import fromPairs from "lodash/fromPairs";
+import { fromPairs } from "lodash";
 
-import { Project } from "../project/project";
+import { Project } from "../project";
 import { Tag } from "../tag";
 import { Test } from "../test";
 

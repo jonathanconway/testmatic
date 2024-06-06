@@ -1,4 +1,4 @@
-import memoize from "lodash/memoize";
+import { memoize } from "lodash";
 import { TokensList } from "marked";
 
 import { assertNotNil, betweenElements, isNotNil } from "../utils";

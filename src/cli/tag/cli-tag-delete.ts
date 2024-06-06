@@ -11,7 +11,7 @@ import { logError } from "../utils";
 
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 
-type TagDeleteParameter = string;
+type TagDeleteParameter = string /* tagNameOrTitle */;
 
 export const cliTagDeleteCommand = createCommand("delete")
   .description("Delete a tag")

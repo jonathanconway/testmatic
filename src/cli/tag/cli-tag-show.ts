@@ -15,7 +15,7 @@ import { logError, logHeading, logTable } from "../utils";
 
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 
-type TagShowParameter = string;
+type TagShowParameter = string /* tagNameOrTitle */;
 
 export const cliTagShowCommand = createCommand("show")
   .description("Show the full details of a tag")

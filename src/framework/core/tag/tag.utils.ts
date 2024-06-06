@@ -1,4 +1,3 @@
-import { getTagFilenameRelative } from "../../markdown";
 import { byEquals } from "../../utils";
 import { Step } from "../step";
 import { Test } from "../test";
@@ -36,16 +35,5 @@ export function getTestsReferencingTag(tests: readonly Test[], tag: Tag) {
     (test) =>
       test.tags.includes(tag) ||
       test.steps.find((step) => step.tags.includes(tag))
-  );
-}
-
-export function getTagsReferencingTag(tags: readonly Tag[], tag: Tag) {
-  const tagFilename = getTagFilenameRelative(tag);
-  return tags.filter((tag) =>
-    tag.links.find(
-      (link) =>
-        link.href.includes(tagFilename) ||
-        tag.description?.includes(tagFilename)
-    )
   );
 }

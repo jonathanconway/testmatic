@@ -11,7 +11,7 @@ import {
 import { PARAM_TEST_NAME_OR_TITLE } from "../test";
 import { logError, logHeading, logTable } from "../utils";
 
-type RunListParameters = string;
+type RunListParameters = string /* testNameOrTitle */;
 
 export const cliRunListCommand = createCommand("list")
   .description("List runs for the specified test")

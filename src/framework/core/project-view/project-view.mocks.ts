@@ -1,4 +1,4 @@
-import fromPairs from "lodash/fromPairs";
+import { fromPairs } from "lodash";
 
 import { MOCK_TAGS } from "../tag/tag.mocks";
 import { MOCK_TESTS } from "../test/test.mocks";

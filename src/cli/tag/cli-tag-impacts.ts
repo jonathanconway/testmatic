@@ -12,7 +12,7 @@ import { logError, logHeading, logImpacts } from "../utils";
 
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 
-type TagImpactsParameter = string;
+type TagImpactsParameter = string /* tagNameOrTitle */;
 
 export const cliTagImpactsCommand = createCommand("impacts")
   .description("List the tests and tags that are impacted by a tag")

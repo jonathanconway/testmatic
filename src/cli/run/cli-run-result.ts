@@ -13,13 +13,18 @@ import { PARAM_TEST_NAME_OR_TITLE } from "../test";
 import { logError } from "../utils";
 
 import { PARAM_RUN_DATETIME } from "./param-run-datetime";
+import { PARAM_RUN_RESULT } from "./param-run-result";
 
-type RunOpenParameter = [string, string, string | undefined];
+type RunOpenParameter = [
+  string /* testNameOrTitle */,
+  string /* runResult */,
+  string | undefined /* runDateTime */
+];
 
 export const cliRunResultCommand = createCommand("result")
   .description("Record the result of a run")
   .argument(PARAM_TEST_NAME_OR_TITLE.name, PARAM_TEST_NAME_OR_TITLE.description)
-  .argument("<runResult>", "Result to record for the run")
+  .argument(PARAM_RUN_RESULT.name, PARAM_RUN_RESULT.description)
   .argument(PARAM_RUN_DATETIME.name, PARAM_RUN_DATETIME.description)
   .action(cliRunResult);
 

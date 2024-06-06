@@ -13,7 +13,10 @@ import { logError } from "../utils";
 
 import { PARAM_RUN_DATETIME } from "./param-run-datetime";
 
-type RunDeleteParameter = string;
+type RunDeleteParameter = [
+  string /* testNameOrTitle */,
+  string /* runDateTime */
+];
 
 export const cliRunDeleteCommand = createCommand("delete")
   .description("Delete a run")

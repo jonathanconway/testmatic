@@ -12,7 +12,7 @@ import { logError, logHeading, logImpacts } from "../utils";
 
 import { PARAM_TEST_NAME_OR_TITLE } from "./param-test-name-or-title";
 
-type TestImpactsParameter = string;
+type TestImpactsParameter = string /* testNameOrTitle */;
 
 export const cliTestImpactsCommand = createCommand("impacts")
   .description(

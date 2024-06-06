@@ -27,7 +27,7 @@ export function promptValue({
 }: {
   readonly message: string;
   readonly repeatIfEmpty?: boolean;
-}) {
+}): string | Error {
   const result = prompt(message);
 
   if (result === null) {

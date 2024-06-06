@@ -1,4 +1,4 @@
-import snakeCase from "lodash/snakeCase";
+import { snakeCase } from "lodash";
 import { array, object, string } from "zod";
 
 import {

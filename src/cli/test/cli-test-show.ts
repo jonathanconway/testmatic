@@ -15,14 +15,14 @@ import { logError, logHeading, logTable } from "../utils";
 
 import { PARAM_TEST_NAME_OR_TITLE } from "./param-test-name-or-title";
 
-type TestShowParameter = string;
+type TestShowParameter = string /* testNameOrTitle */;
 
 export const cliTestShowCommand = createCommand("show")
   .description("Show the full details of a test")
   .argument(PARAM_TEST_NAME_OR_TITLE.name, PARAM_TEST_NAME_OR_TITLE.description)
   .action(cliTestShow);
 
-export function cliTestShow(name: TestShowParameter) {
+export function cliTestShow(testNameOrTitle: TestShowParameter) {
   const project = projectMdRead();
   if (!project) {
     return;
@@ -30,7 +30,7 @@ export function cliTestShow(name: TestShowParameter) {
 
   const getTestResult = projectGetTestByNameOrTitle({
     project,
-    testNameOrTitle: name,
+    testNameOrTitle,
   });
   if (isError(getTestResult)) {
     logError(getTestResult.message);

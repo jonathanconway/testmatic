@@ -1,6 +1,5 @@
 import {
   existsSync,
-  mkdir,
   mkdirSync,
   readFileSync,
   readdirSync,
@@ -8,9 +7,7 @@ import {
   unlinkSync,
   writeFileSync,
 } from "fs";
-import fromPairs from "lodash/fromPairs";
-import isObject from "lodash/isObject";
-import isString from "lodash/isString";
+import { fromPairs, isObject, isString } from "lodash";
 import { resolve } from "path";
 
 export type FileTree = Record<string, string>;

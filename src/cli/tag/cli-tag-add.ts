@@ -4,7 +4,6 @@ import promptSync from "prompt-sync";
 
 import {
   CreateTestParams,
-  Tag,
   createTag,
   exportMdTag,
   isValidationError,

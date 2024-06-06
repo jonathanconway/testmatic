@@ -19,7 +19,8 @@ import { cliTestLinkDeleteCommand } from "../cli/test/cli-test-link-delete";
 import { cliTestLinkOpenCommand } from "../cli/test/cli-test-link-open";
 import { cliTestListCommand } from "../cli/test/cli-test-list";
 import { cliTestShowCommand } from "../cli/test/cli-test-show";
-import { interpolate } from "../framework";
+
+import { interpolate } from "./interpolate.utils";
 
 function getCleanedUsageText(command: Command) {
   const usageText = command.usage();

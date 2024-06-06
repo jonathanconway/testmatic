@@ -1,4 +1,4 @@
-import isNil from "lodash/isNil";
+import { isNil } from "lodash";
 
 export function getKeysWithNonNilValue(input: object) {
   return Object.entries(input)

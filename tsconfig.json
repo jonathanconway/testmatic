@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
-    "outDir": "dist",
-    "strict": true,
-    "target": "es2021",
     "module": "commonjs",
+    "target": "es2021",
+    "declaration": true,
+    "outDir": "./dist",
+    "strict": true,
     "sourceMap": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
     "resolveJsonModule": true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "core/**/*"]
 }

@@ -1,6 +1,6 @@
 import { array, object, string } from "zod";
 
-import { linkValidator } from "../link/link-validator";
+import { linkValidator } from "../link";
 
 export const tagValidator = object({
   name: string(),

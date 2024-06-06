@@ -15,7 +15,10 @@ import { logError } from "../utils";
 
 import { PARAM_RUN_DATETIME } from "./param-run-datetime";
 
-type RunOpenParameter = [string, string];
+type RunOpenParameter = [
+  string /* testNameOrTitle */,
+  string /* runDateTime */
+];
 
 export const cliRunOpenCommand = createCommand("open")
   .description("Open a run folder")

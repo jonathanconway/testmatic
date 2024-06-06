@@ -13,7 +13,10 @@ import { logError } from "../utils";
 
 import { PARAM_TEST_NAME_OR_TITLE } from "./param-test-name-or-title";
 
-type TestDeleteParameter = [string, string];
+type TestDeleteParameter = [
+  string /* testNameOrTitle */,
+  string /* linkHrefOrTitle */
+];
 
 export const cliTestLinkDeleteCommand = createCommand("delete")
   .description("Delete a link from a test")

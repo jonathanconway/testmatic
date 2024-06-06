@@ -2,7 +2,6 @@ import { createCommand } from "commander";
 
 import {
   ProjectView,
-  Tag,
   createTagFromName,
   isError,
   isNotFoundError,

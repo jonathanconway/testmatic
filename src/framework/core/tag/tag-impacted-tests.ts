@@ -1,5 +1,3 @@
-import { uniq, without } from "lodash";
-
 import { ImpactItem } from "../impact";
 import { Test, testGetTags } from "../test";
 

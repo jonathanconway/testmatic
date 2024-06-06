@@ -15,7 +15,10 @@ import { logError, logHeading, logTable } from "../utils";
 
 import { PARAM_RUN_DATETIME } from "./param-run-datetime";
 
-type RunShowParameter = [string, string];
+type RunShowParameter = [
+  string /* testNameOrTitle */,
+  string /* runDateTime */
+];
 
 export const cliRunShowCommand = createCommand("show")
   .description("Show the full details of a run")

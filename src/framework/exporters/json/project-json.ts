@@ -1,4 +1,4 @@
-import fromPairs from "lodash/fromPairs";
+import { fromPairs } from "lodash";
 
 import {
   Link,
@@ -12,7 +12,6 @@ import {
   createTagFromName,
   parseTagNames,
 } from "../../core";
-import { Timestamp } from "../../core/timestamp";
 
 export interface ProjectJSON {
   readonly tests: Record<string, ProjectJSONTest>;

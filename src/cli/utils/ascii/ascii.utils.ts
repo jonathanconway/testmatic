@@ -1,5 +1,4 @@
-import max from "lodash/max";
-import toUpper from "lodash/toUpper";
+import { max, toUpper } from "lodash";
 
 import { isNotNil } from "../../../framework/utils";
 

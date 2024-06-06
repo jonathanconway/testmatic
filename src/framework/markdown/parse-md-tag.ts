@@ -1,5 +1,4 @@
-import snakeCase from "lodash/snakeCase";
-import trim from "lodash/trim";
+import { snakeCase } from "lodash";
 import { marked } from "marked";
 
 import { MarkdownSource, Tag } from "../core";

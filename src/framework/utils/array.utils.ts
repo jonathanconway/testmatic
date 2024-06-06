@@ -1,8 +1,13 @@
-import { List, Many, PropertyPath, uniq, without } from "lodash";
-import fromPairs from "lodash/fromPairs";
-import get from "lodash/get";
-import pick from "lodash/pick";
-import { Token } from "marked";
+import {
+  List,
+  Many,
+  PropertyPath,
+  fromPairs,
+  get,
+  pick,
+  uniq,
+  without,
+} from "lodash";
 
 export function isNotNil<T>(item?: T | undefined | null | false): item is T {
   return Boolean(item);

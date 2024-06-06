@@ -1,8 +1,4 @@
-import flow from "lodash/flow";
-import snakeCase from "lodash/snakeCase";
-import startCase from "lodash/startCase";
-import toLower from "lodash/toLower";
-import trim from "lodash/trim";
+import { flow, snakeCase, toLower, trim } from "lodash";
 
 import { isNotNil } from "./array.utils";
 
@@ -29,8 +25,9 @@ String.prototype.sentenceCase = function (this: string) {
 };
 
 export function sentenceCase(input: string) {
-  const [a, ...b] = startCase(input);
-  return `${a.toUpperCase()}${b.join("").toLowerCase()}`;
+  const a = input.substring(0, 1).toUpperCase();
+  const b = input.substring(1).toLowerCase();
+  return `${a}${b}`;
 }
 
 String.prototype.convertToLowerCaseWithTags = function (this: string) {
