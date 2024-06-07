@@ -1,10 +1,7 @@
 import * as fs from "fs";
 
-import {
-  MOCK_PROJECT_JSON,
-  readProjectFile,
-  writeProjectFile,
-} from "../../../exporters";
+import { MOCK_PROJECT_JSON } from "../../../exporters";
+import { readProjectFile, writeProjectFile } from "../project-json-file";
 
 jest.mock("fs", () => ({
   readFileSync: jest.fn(),
