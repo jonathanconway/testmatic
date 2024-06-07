@@ -1,7 +1,7 @@
 import { marked } from "marked";
 
 import { Tag, Test } from "../core";
-import { DirTree } from "../files";
+import { DirFileTree } from "../files";
 import { convertTitleToName } from "../utils";
 
 import { parseMdLinks } from "./parse-md-links";
@@ -14,7 +14,7 @@ import { parseDescription } from "./parse-md.utils";
 export function parseMdTest(
   source: string,
   existingTagsByName: Record<string, Tag>,
-  runsDirTree: DirTree
+  runsDirFileTree: DirFileTree
 ): Test {
   const root = marked.lexer(source);
 
@@ -30,9 +30,10 @@ export function parseMdTest(
 
   const tags = parseMdTestTags(root, existingTagsByName);
 
-  const runs = parseMdRuns(runsDirTree, name);
+  const runs = parseMdRuns(runsDirFileTree, name);
 
   return {
+    type: "test",
     name,
     title,
     steps,

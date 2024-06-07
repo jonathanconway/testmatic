@@ -1,25 +1,29 @@
-import { uniq } from "lodash";
+import { isObject, uniq } from "lodash";
 
 import { ProjectView, createProjectView } from "../core";
-import { DirTree, FileTree } from "../files";
+import { DirFileTree } from "../files";
 
 import { parseMdTags } from "./parse-md-tags";
 import { parseMdTests } from "./parse-md-tests";
 
 export function parseMd({
-  testsFileTree,
-  tagsFileTree,
-  runsDirTree,
+  projectFileTree,
 }: {
-  readonly testsFileTree: FileTree;
-  readonly tagsFileTree: FileTree;
-  readonly runsDirTree: DirTree;
+  projectFileTree: DirFileTree;
 }): ProjectView {
-  const { tags, tagsByName } = parseMdTags(tagsFileTree);
+  const tagsDirFileTree = isObject(projectFileTree["tags"])
+    ? projectFileTree["tags"]
+    : {};
+
+  const { tags, tagsByName } = parseMdTags(tagsDirFileTree);
+
+  const testsDirFileTree = isObject(projectFileTree["tests"])
+    ? projectFileTree["tests"]
+    : {};
 
   const { tests, testTags } = parseMdTests(
-    testsFileTree,
-    runsDirTree,
+    testsDirFileTree,
+    tagsDirFileTree,
     tagsByName
   );
 

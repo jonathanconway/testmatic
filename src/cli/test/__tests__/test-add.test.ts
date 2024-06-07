@@ -1,5 +1,5 @@
-import * as projectJsonFile from "../../../framework/exporters/json/project-json-file";
-import { MOCK_PROJECT_JSON_FILE_EMPTY } from "../../../framework/exporters/json/project-json-file.mocks";
+import { MOCK_PROJECT_JSON_EMPTY } from "../../../framework/exporters/json/project-json.mocks";
+import * as projectJsonFile from "../../../framework/fs/json/project-json-file";
 import { program } from "../../cli";
 
 jest.mock("../../../exporters/json/project-json-file", () => ({

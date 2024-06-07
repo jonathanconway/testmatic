@@ -1,7 +1,7 @@
-import { Tokens, TokensList } from "marked";
+import { TokensList } from "marked";
 
 import { Link } from "../core";
-import { getNextElement, getNextElements, isNotNil } from "../utils";
+import { getNextElements, isNotNil } from "../utils";
 
 import {
   isMdLink,

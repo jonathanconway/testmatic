@@ -1,11 +1,13 @@
-import { getFileTree } from "../file-tree";
+import { readDirFileTree } from "../read-dir-file-tree";
 
-describe("file-tree", () => {
-  describe("getFileTree", () => {
+describe("read-dir-file-tree", () => {
+  describe("readDirFileTree", () => {
     it("returns a map of filenames to file contents in the given folder for the given file extensions", () => {
-      const result = getFileTree(`${__dirname}/../../../.testmatic/tests`, [
-        "md",
-      ]);
+      // todo: move files into local test folder
+      const result = readDirFileTree(
+        `${__dirname}/../../../../../.testmatic/tests`,
+        ["md"]
+      );
 
       expect(result).toEqual({
         "user_can_log_in_with_username_and_email_validation.md":
@@ -29,7 +31,7 @@ describe("file-tree", () => {
           "\n" +
           "## Tags\n" +
           "\n" +
-          "- Log in flow\n",
+          "- Log in flow",
         "user_can_log_in_with_username_and_password.md":
           "# User can log in with username and password\n" +
           "\n" +
@@ -50,7 +52,7 @@ describe("file-tree", () => {
           "\n" +
           "## Tags\n" +
           "\n" +
-          "- Log in flow\n",
+          "- Log in flow",
         "user_cannot_log_in_from_an_unsupported_region.md":
           "# User cannot log in from an unsupported region\n" +
           "\n" +
@@ -73,11 +75,13 @@ describe("file-tree", () => {
           "## Tags\n" +
           "\n" +
           "- Log in flow\n" +
-          "- Region support\n",
+          "- Region support",
         "user_is_logged_out_if_switched_to_unsupported_region.md":
           "# User is logged out if switched to unsupported region\n" +
           "\n" +
           "We do not allow any users who are logged in to continue using the application from any unsupported regions.\n" +
+          "\n" +
+          "## Steps\n" +
           "\n" +
           "- Go to (login screen)\n" +
           "- Log in by either username and password or email verification\n" +
@@ -95,7 +99,7 @@ describe("file-tree", () => {
           "## Tags\n" +
           "\n" +
           "- Log out flow\n" +
-          "- Region support\n",
+          "- Region support",
       });
     });
   });

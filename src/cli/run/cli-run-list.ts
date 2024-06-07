@@ -40,9 +40,7 @@ export function cliRunList(testNameOrTitle: RunListParameters) {
 }
 
 function logTitle(test: Test) {
-  logHeading(test.title, 1);
-
-  console.log();
+  logHeading(`Test: ${test.title}`, 1);
 }
 
 function logRuns(test: Test) {

@@ -51,7 +51,5 @@ function logTitle(tag: Tag) {
 
   logHeading(title, 1);
 
-  console.log();
-
   logHeading("Impacts", 2);
 }

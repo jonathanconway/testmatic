@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync } from "fs";
 
-import { projectPathGet } from "./project-path-get";
+import { projectPathGet } from "../../markdown";
 
 export function projectMdCreateFolders() {
   const projectPath = projectPathGet();

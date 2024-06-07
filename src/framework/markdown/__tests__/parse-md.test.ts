@@ -5,7 +5,7 @@ import { parseMdTest } from "../parse-md-test";
 
 describe("parse-md", () => {
   describe("parseMdTag", () => {
-    it("correctly converts markdown", async () => {
+    it("correctly converts markdown to tag", async () => {
       const tag = parseMdTag(
         `
 # Log in flow

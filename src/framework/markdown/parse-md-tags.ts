@@ -1,11 +1,11 @@
-import { fromPairs } from "lodash";
+import { fromPairs, isString } from "lodash";
 
-import { FileTree } from "../files";
+import { DirFileTree } from "../files";
 
 import { parseMdTag } from "./parse-md-tag";
 
-export function parseMdTags(fileTree: FileTree) {
-  const tagsSources = Object.values(fileTree);
+export function parseMdTags(fileTree: DirFileTree) {
+  const tagsSources = Object.values(fileTree).filter(isString);
 
   const tags = tagsSources.map(parseMdTag);
 

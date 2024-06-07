@@ -6,6 +6,7 @@ import { cliTagImpactsCommand } from "./cli-tag-impacts";
 import { cliTagLinkCommand } from "./cli-tag-link";
 import { cliTagListCommand } from "./cli-tag-list";
 import { cliTagShowCommand } from "./cli-tag-show";
+import { cliTagTypeCommand } from "./cli-tag-type";
 
 export const cliTagCommand = createCommand("tag")
   .description("Manage project tags")
@@ -14,4 +15,5 @@ export const cliTagCommand = createCommand("tag")
   .addCommand(cliTagAddCommand)
   .addCommand(cliTagDeleteCommand)
   .addCommand(cliTagLinkCommand)
+  .addCommand(cliTagTypeCommand)
   .addCommand(cliTagImpactsCommand);

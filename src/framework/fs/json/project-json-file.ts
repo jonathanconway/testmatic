@@ -1,5 +1,6 @@
 import { readFileSync, writeFileSync } from "fs";
-import { ProjectJSON } from "./project-json";
+
+import { ProjectJSON } from "../../exporters/json/project-json";
 
 const PROJECT_FILENAME = "project.json";
 

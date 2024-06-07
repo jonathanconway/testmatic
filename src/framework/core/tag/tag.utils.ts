@@ -33,7 +33,9 @@ export function testByTag(tagFilterValue: string) {
 export function getTestsReferencingTag(tests: readonly Test[], tag: Tag) {
   return tests.filter(
     (test) =>
-      test.tags.includes(tag) ||
-      test.steps.find((step) => step.tags.includes(tag))
+      test.tags.map((tag) => tag.name).includes(tag.name) ||
+      test.steps.find((step) =>
+        step.tags.map((tag) => tag.name).includes(tag.name)
+      )
   );
 }

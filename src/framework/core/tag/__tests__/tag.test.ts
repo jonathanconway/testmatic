@@ -7,6 +7,7 @@ describe("tag", () => {
       const tag = createTagFromName("username_field");
 
       expect(tag).toEqual({
+        type: "tag",
         links: [],
         name: "username_field",
         title: "Username field",
@@ -22,11 +23,13 @@ describe("tag", () => {
 
       expect(tags).toEqual([
         {
+          type: "tag",
           links: [],
           name: "username_field",
           title: "Username field",
         },
         {
+          type: "tag",
           links: [],
           name: "submit_button",
           title: "Submit button",
@@ -41,7 +44,7 @@ describe("tag", () => {
         "Enter email address into (username field) and click (submit button) on form"
       );
 
-      expect(tagNames).toEqual(["username_field", "submit_button"]);
+      expect(tagNames).toEqual(["username field", "submit button"]);
     });
   });
 });

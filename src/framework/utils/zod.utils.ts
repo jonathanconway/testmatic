@@ -1,4 +1,7 @@
 import { ZodObject, ZodRawShape } from "zod";
+import { ZodError, fromZodError } from "zod-validation-error";
+
+import { ValidationError } from "./errors";
 
 export const hasErrorFields = <T extends object, Z extends ZodRawShape>(
   validator: ZodObject<Z>,
@@ -41,3 +44,9 @@ export const ZOD_REGEX_DATE_TIME_STRING = {
   regex: /[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}/,
   message: "Should be a date/time string in the format: yyyy-MM-dd_hh-mm.",
 };
+
+export function createValidationErrorFromZodError(zodError: ZodError) {
+  const message = fromZodError(zodError).toString();
+
+  return new ValidationError(message);
+}

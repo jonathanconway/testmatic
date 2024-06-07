@@ -1,5 +1,4 @@
 import { Test } from "../core";
-import { trimLines } from "../utils";
 
 import { exportMdLink } from "./export-md-link";
 

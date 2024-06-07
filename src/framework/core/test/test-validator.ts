@@ -7,6 +7,7 @@ import { stepValidator } from "../step";
 import { tagValidator } from "../tag";
 
 export const testValidator = object({
+  type: string(),
   title: string().regex(
     ZOD_REGEX_START_WITH_ALPHA.regex,
     ZOD_REGEX_START_WITH_ALPHA.message

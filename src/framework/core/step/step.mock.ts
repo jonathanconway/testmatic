@@ -2,6 +2,7 @@ export const MOCK_STEP = {
   text: "Go to (login screen)",
   tags: [
     {
+      type: "tag",
       name: "login_screen",
       links: [],
       title: "Login screen",
@@ -14,6 +15,7 @@ export const MOCK_STEPS = [
     text: "Go to (login screen)",
     tags: [
       {
+        type: "tag",
         name: "login_screen",
         links: [],
         title: "Login screen",
@@ -24,6 +26,7 @@ export const MOCK_STEPS = [
     text: "Enter email address into (username field)",
     tags: [
       {
+        type: "tag",
         name: "username_field",
         links: [],
         title: "Username field",
@@ -34,6 +37,7 @@ export const MOCK_STEPS = [
     text: "Click (log in via email button)",
     tags: [
       {
+        type: "tag",
         name: "log_in_via_email_button",
         links: [],
         title: "Log in via email button",

@@ -153,7 +153,6 @@ function getTestAddTitleFromPrompt() {
     message: "Please enter test title: ",
     repeatIfEmpty: true,
   });
-  console.log();
 }
 
 function getTestAddStepsFromPrompt() {
@@ -161,5 +160,4 @@ function getTestAddStepsFromPrompt() {
     message:
       "\nThank you!\n\nNow, please enter your steps, one-by-one.\n(Empty line to finish)\n",
   });
-  console.log();
 }

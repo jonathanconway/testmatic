@@ -418,26 +418,32 @@ These lists can be conveniently linked from external repositories of information
 For example, a wiki page for the Login screen could link to a testmatic doc listing all tests for that screen: http://github.com/myaccount/mytests/blob/main/docs/tags/login_screen.md.
 
 ## CLI reference
-
 <!-- insert cli-reference start -->
 
 ### init
 
-Usage: init
+Usage: init 
 
 Create a new project in the current working directory
 
+
+
+
 ### project create
 
-Usage: project create
+Usage: project create 
 
 Create a new project in the current working directory (same as `testmatic init`)
+
+
+
 
 ### test list
 
 Usage: test list [options]
 
 List tests in the current project
+
 
 Options:
 
@@ -460,11 +466,13 @@ Options:
 </tbody>
 </table>
 
+
 ### test add
 
 Usage: test add [options]
 
 Add a new test to the project
+
 
 Options:
 
@@ -487,10 +495,8 @@ Titles must be unique.
 Titles should briefly summarise the test steps.
 
 Required - must be provided, either via prompt or command line.
-
-</td>
-</tr>
-
+          </td>
+        </tr>
 <tr>
           <td>
             -d,<br /> --description <value><br />
@@ -503,10 +509,8 @@ Tests can also include tags, enclosed in round brackets: (, ).
 For further information, see 'testmatic tag help'.
 
 Optional.
-
-</td>
-</tr>
-
+          </td>
+        </tr>
 <tr>
           <td>
             -s,<br /> --steps [steps...]<br />
@@ -518,10 +522,8 @@ Add each step in quotes separated by a space, e.g.: "step one" "step two"
 Steps will be in the order that they are provided.
 
 Required - at least one step must be provided, either via prompt or command line.
-
-</td>
-</tr>
-
+          </td>
+        </tr>
 <tr>
           <td>
             -l,<br /> --links [links...]<br />
@@ -537,30 +539,36 @@ Links can be prefixed with text separated by a pipe "|".
 E.g. "Login page|http://product.com/login" "Login flow docs|http://wiki.com/login-flow"
 
 Optional.
-
-</td>
-</tr>
-
+          </td>
+        </tr>
 </tbody>
 </table>
 
+
 ### test delete
 
-Usage: test delete <testNameOrTitle>
+Usage: test delete  <testNameOrTitle>
 
 Delete a test
 
+
+
+
 ### test show
 
-Usage: test show <testNameOrTitle>
+Usage: test show  <testNameOrTitle>
 
 Show the full details of a test
+
+
+
 
 ### test link add
 
 Usage: test link add [options] <testNameOrTitle> <linkHrefOrTitle>
 
 Add a new link to a test
+
 
 Options:
 
@@ -580,36 +588,45 @@ Options:
             Title of the new link.
 
 Optional.
-
-</td>
-</tr>
-
+          </td>
+        </tr>
 </tbody>
 </table>
 
+
 ### test link delete
 
-Usage: test link delete <testNameOrTitle> <linkHrefOrTitle>
+Usage: test link delete  <testNameOrTitle> <linkHrefOrTitle>
 
 Delete a link from a test
 
+
+
+
 ### test link open
 
-Usage: test link open <testNameOrTitle> <linkHrefOrTitle>
+Usage: test link open  <testNameOrTitle> <linkHrefOrTitle>
 
 Open a test link in the browser
 
+
+
+
 ### tag list
 
-Usage: tag list
+Usage: tag list 
 
 List tags in the current project
+
+
+
 
 ### tag add
 
 Usage: tag add [options]
 
 Add a new tag to the project
+
 
 Options:
 
@@ -632,10 +649,8 @@ Titles must be unique.
 Titles should briefly describe the tag.
 
 Required - must be provided, either via prompt or command line.
-
-</td>
-</tr>
-
+          </td>
+        </tr>
 <tr>
           <td>
             -y,<br /> --type <value><br />
@@ -646,10 +661,8 @@ Used to categorise one or more similar tags.
 E.g. "page" for tags that refer to a page in an website.
 
 Optional.
-
-</td>
-</tr>
-
+          </td>
+        </tr>
 <tr>
           <td>
             -d,<br /> --description <value><br />
@@ -659,10 +672,8 @@ Optional.
 Longer than the title, provides a more detailed description of the tag.
 
 Optional.
-
-</td>
-</tr>
-
+          </td>
+        </tr>
 <tr>
           <td>
             -l,<br /> --links [links...]<br />
@@ -678,30 +689,36 @@ Links can be prefixed with text separated by a pipe "|".
 E.g. "Login page|http://product.com/login" "Login flow docs|http://wiki.com/login-flow"
 
 Optional.
-
-</td>
-</tr>
-
+          </td>
+        </tr>
 </tbody>
 </table>
 
+
 ### tag delete
 
-Usage: tag delete <tagNameOrTitle>
+Usage: tag delete  <tagNameOrTitle>
 
 Delete a tag
 
+
+
+
 ### tag show
 
-Usage: tag show <tagNameOrTitle>
+Usage: tag show  <tagNameOrTitle>
 
 Show the full details of a tag
+
+
+
 
 ### tag link add
 
 Usage: tag link add [options] <tagNameOrTitle> <tagLinkHref>
 
 Add a new link to a tag
+
 
 Options:
 
@@ -721,45 +738,66 @@ Options:
             Title of the new link.
 
 Optional.
-
-</td>
-</tr>
-
+          </td>
+        </tr>
 </tbody>
 </table>
 
+
 ### tag link delete
 
-Usage: tag link delete <tagNameOrTitle> <linkHrefOrTitle>
+Usage: tag link delete  <tagNameOrTitle> <linkHrefOrTitle>
 
 Delete a link from a tag
 
+
+
+
 ### tag link open
 
-Usage: tag link open <tagNameOrTitle> <linkHrefOrTitle>
+Usage: tag link open  <tagNameOrTitle> <linkHrefOrTitle>
 
 Open a tag link in the browser
 
+
+
+
+### tag type
+
+Usage: tag type  <tagNameOrTitle> <tagType>
+
+Set the type of a tag
+
+
+
+
 ### tag impacts
 
-Usage: tag impacts <tagNameOrTitle>
+Usage: tag impacts  <tagNameOrTitle>
 
 List the tests and tags that are impacted by a tag
 
+
+
+
 ### run show
 
-Usage: run show <testNameOrTitle> [runDateTime]
+Usage: run show  <testNameOrTitle> [runDateTime]
 
 Show the full details of a run
 
+
+
+
 ### run open
 
-Usage: run open <testNameOrTitle> [runDateTime]
+Usage: run open  <testNameOrTitle> [runDateTime]
 
 Open a run folder
 
-<!-- insert cli-reference end -->
 
+
+<!-- insert cli-reference end -->
 ## FAQ
 
 ### **_Can I add screenshots or screencasts from my testing?_**

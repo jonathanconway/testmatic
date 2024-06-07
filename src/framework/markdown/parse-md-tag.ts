@@ -4,43 +4,41 @@ import { marked } from "marked";
 import { MarkdownSource, Tag } from "../core";
 import { byNot, byStartsWith } from "../utils";
 
+import { TYPE_LINE_PREFIX } from "./md-tag";
 import { parseMdLinks } from "./parse-md-links";
 import { parseMdTitle } from "./parse-md-title";
-import { parseDescriptionLines } from "./parse-md.utils";
-
-const TYPE_LINE_PREFIX = "Type:";
+import {
+  parseDescriptionJoinedByNotPrefix,
+  parseDescriptionLineByPrefix,
+  parseDescriptionLines,
+} from "./parse-md.utils";
 
 export function parseMdTag(source: MarkdownSource): Tag {
   const root = marked.lexer(source);
 
   const title = parseMdTitle(root);
   const name = snakeCase(title);
+  const type = "tag";
 
   const descriptions = parseDescriptionLines(root);
-  const description = descriptions
-    .filter(byNot(byStartsWith(TYPE_LINE_PREFIX)))
-    .join("\n")
-    .trim()
-    .trimLines();
+  const description = parseDescriptionJoinedByNotPrefix(descriptions, [
+    TYPE_LINE_PREFIX,
+  ]);
 
-  const type = parseMdTagType(descriptions);
+  const tagType = parseMdTagType(descriptions);
 
   const links = parseMdLinks(root);
 
   return {
     title,
+    type,
     name,
     description,
-    type,
+    tagType,
     links,
   };
 }
 
 function parseMdTagType(descriptions: readonly string[]) {
-  return snakeCase(
-    descriptions
-      .find(byStartsWith(TYPE_LINE_PREFIX))
-      ?.split(TYPE_LINE_PREFIX)[1]
-      .trim()
-  );
+  return parseDescriptionLineByPrefix(descriptions, TYPE_LINE_PREFIX);
 }

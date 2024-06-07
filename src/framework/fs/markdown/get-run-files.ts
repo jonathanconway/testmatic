@@ -1,9 +1,8 @@
 import { readdirSync } from "fs";
 
-import { Run, Test } from "../core";
-import { isNonJunkFile } from "../files";
-
-import { getRunFilepath } from "./get-run-filepath";
+import { Run, Test } from "../../core";
+import { isNonJunkFile } from "../../files";
+import { getRunFilepath } from "../../markdown";
 
 export function getRunFiles({ test, run }: { test: Test; run: Run }) {
   const runFilePath = getRunFilepath(test, run);

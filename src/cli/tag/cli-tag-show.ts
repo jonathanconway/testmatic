@@ -38,11 +38,9 @@ export function cliTagShow(tagNameOrTitle: TagShowParameter) {
 
   const tests = projectGetTestsByTag({ project, tag });
 
-  logHeading(tag.title, 1);
+  logHeading(`Tag: ${tag.title}`, 1);
 
-  console.log();
-
-  logType(tag.type);
+  logType(tag.tagType);
 
   logDoc(tag);
 
@@ -61,7 +59,7 @@ function logType(type?: string) {
 }
 
 function logDoc(tag: Tag) {
-  console.log(`Doc: ${getTagFilename(tag)}`);
+  console.log(`Doc:  ${getTagFilename(tag)}`);
   console.log();
 }
 

@@ -1,14 +1,15 @@
-import { ValidationError, isValidationError } from "../../utils";
+import { Item } from "../item";
 import { Link } from "../link";
 
-export interface Tag {
+export interface Tag extends Item {
+  readonly type: "tag";
   readonly name: string;
-  readonly type?: string;
+  readonly tagType?: string;
   readonly title: string;
   readonly description?: string;
   readonly links: readonly Link[];
 }
 
-export function isTag(tagOrError: Tag | ValidationError): tagOrError is Tag {
-  return !isValidationError(tagOrError);
+export function isTag(input: object): input is Tag {
+  return "type" in input && input.type === "tag";
 }

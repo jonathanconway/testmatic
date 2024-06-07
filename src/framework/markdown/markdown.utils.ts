@@ -1,7 +1,5 @@
 import { Token, Tokens } from "marked";
 
-import { TypeOfConst, isNotNil } from "../utils";
-
 const NodeTypes = {
   Heading: "heading",
   Link: "link",
@@ -10,8 +8,6 @@ const NodeTypes = {
   Paragraph: "paragraph",
   Text: "text",
 } as const;
-
-type NodeType = TypeOfConst<typeof NodeTypes>;
 
 export function isMdText(node: Token): node is Tokens.Text {
   return node.type === NodeTypes.Text;

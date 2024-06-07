@@ -5,3 +5,10 @@ export function getKeysWithNonNilValue(input: object) {
     .filter(([, value]) => !isNil(value))
     .map(([key]) => key);
 }
+
+export function fieldOrEmpty<T>(field: string, value?: T) {
+  if (value) {
+    return { [field]: value };
+  }
+  return {};
+}

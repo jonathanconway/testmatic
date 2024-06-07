@@ -14,6 +14,7 @@ import {
 } from "../../framework";
 import { logError } from "../utils";
 
+import { PARAM_TAG_LINK_HREF } from "./param-tag-link-href";
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 
 type TagLinkAddParameters = [
@@ -29,7 +30,7 @@ type TagLinkAddParameters = [
 export const cliTagLinkAddCommand = createCommand("add")
   .description("Add a new link to a tag")
   .argument(PARAM_TAG_NAME_OR_TITLE.name, PARAM_TAG_NAME_OR_TITLE.description)
-  .argument("<tagLinkHref>", "Href of the tag link to add")
+  .argument(PARAM_TAG_LINK_HREF.name, PARAM_TAG_LINK_HREF.description)
   .option(
     "-t, --title <value>",
     `

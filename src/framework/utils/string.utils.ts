@@ -25,6 +25,7 @@ String.prototype.sentenceCase = function (this: string) {
 };
 
 export function sentenceCase(input: string) {
+  input = input.replaceAll("_", " ").split(" ").filter(isNotNil).join(" ");
   const a = input.substring(0, 1).toUpperCase();
   const b = input.substring(1).toLowerCase();
   return `${a}${b}`;
@@ -166,3 +167,7 @@ export function asciiUnderlineDouble(input: string) {
 String.prototype.asciiUnderlineDouble = function (this: string) {
   return asciiUnderlineDouble(this);
 };
+
+export function removeBrackets(input: string) {
+  return input.replaceAll("(", "").replaceAll(")", "");
+}

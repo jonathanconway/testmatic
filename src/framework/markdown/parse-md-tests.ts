@@ -1,19 +1,19 @@
-import { fromPairs } from "lodash";
+import { fromPairs, isString } from "lodash";
 
 import { Tag, testGetTags } from "../core";
-import { DirTree, FileTree } from "../files";
+import { DirFileTree } from "../files";
 
 import { parseMdTest } from "./parse-md-test";
 
 export function parseMdTests(
-  fileTree: FileTree,
-  runsDirTree: DirTree,
+  testsDirFileTree: DirFileTree,
+  runsDirFileTree: DirFileTree,
   tagsByName: Record<string, Tag>
 ) {
-  const testsSources = Object.values(fileTree);
+  const testsSources = Object.values(testsDirFileTree).filter(isString);
 
   const tests = testsSources.map((testSource) =>
-    parseMdTest(testSource, tagsByName, runsDirTree)
+    parseMdTest(testSource, tagsByName, runsDirFileTree)
   );
 
   const testsByName = fromPairs(tests.map((test) => [test.name, test]));

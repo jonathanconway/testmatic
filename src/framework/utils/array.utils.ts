@@ -13,12 +13,6 @@ export function isNotNil<T>(item?: T | undefined | null | false): item is T {
   return Boolean(item);
 }
 
-export function toPicked<T extends object, U extends keyof T>(
-  ...props: Array<Many<U>>
-) {
-  return (item: T) => pick(item, ...props);
-}
-
 export function toGot<T extends object, U extends keyof T>(path: U | [U]) {
   return (item: T) => get(item, path);
 }
@@ -28,10 +22,6 @@ export function byEquals<T extends object, U extends keyof T>(
   value: T[U]
 ) {
   return (item: T) => get(item, field) === value;
-}
-
-export function byHas<T extends object>(predicate: (item: T) => boolean) {
-  return (item: T) => predicate(item);
 }
 
 export function betweenElements<T>(

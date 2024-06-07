@@ -1,20 +1,29 @@
 import { ProjectView } from "../core";
-import { DirOrFileTree } from "../files";
+import { DirFileTree } from "../files";
 import "../utils";
 
+import { exportMdTestRun } from "./export-md-run";
 import { exportMdTag } from "./export-md-tag";
 import { exportMdTest } from "./export-md-test";
-import { exportMdTestRun } from "./export-md-test-run";
+
+export interface ProjectViewDirFileTree {
+  readonly tests: Record<string, string>;
+  readonly tags: Record<string, string>;
+  readonly runs: Record<
+    string,
+    Record<string, Record<string, object | string>>
+  >;
+}
 
 export function exportMd(project: ProjectView) {
   return {
     tests: project.tests
       .map((test) => [`${test.name}.md`, exportMdTest(test)])
-      .toObject() as DirOrFileTree,
+      .toObject() as DirFileTree,
 
     tags: project.tags
       .map((tag) => [`${tag.name}.md`, exportMdTag(tag)])
-      .toObject() as DirOrFileTree,
+      .toObject() as DirFileTree,
 
     runs: project.tests
       .map((test) => [
@@ -27,8 +36,8 @@ export function exportMd(project: ProjectView) {
               [`${run.dateTime}.md`]: exportMdTestRun(test, run),
             },
           ])
-          .toObject() as DirOrFileTree,
+          .toObject() as DirFileTree,
       ])
-      .toObject() as DirOrFileTree,
-  };
+      .toObject() as DirFileTree,
+  } as ProjectViewDirFileTree;
 }

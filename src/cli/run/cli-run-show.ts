@@ -63,11 +63,9 @@ export function cliRunShow(
 
 function logTitle({ test, run }: { test: Test; run: Run }) {
   const dateTimeFormatted = formatDateTimeString(run.dateTime);
-  const title = `${test.title} – ${dateTimeFormatted}`;
+  const title = `Test: ${test.title} – Run: ${dateTimeFormatted}`;
 
   logHeading(title, 1);
-
-  console.log();
 }
 
 function logFiles(files: string[]) {

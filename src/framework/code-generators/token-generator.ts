@@ -1,7 +1,7 @@
 import { appendFileSync, existsSync, writeFileSync } from "fs";
 
-import { Maybe, convertTokenToSnakeParts } from "../utils";
 import { Tag } from "../core";
+import { Maybe, convertTokenToSnakeParts } from "../utils";
 
 export interface GenerateTokenInfo {
   readonly token: string;
@@ -84,7 +84,7 @@ export function generateTokenFromObject({
     return undefined;
   }
 
-  const { type, name, links } = token;
+  const { tagType: type, name, links } = token;
 
   const tokenFnName = `${name}_${type}`;
   const tokenFileNameBody = `${name}.${type}.token`.toLowerCase();

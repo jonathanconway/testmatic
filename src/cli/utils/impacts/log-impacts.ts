@@ -3,7 +3,6 @@ import chalk from "chalk";
 import { ImpactItem } from "../../../framework";
 
 export function logImpacts(impacts: readonly ImpactItem[], indent: number = 0) {
-  console.log();
   console.log(getImpactsList(impacts, indent));
 }
 
@@ -12,17 +11,17 @@ function getImpactsList(
   indent: number = 0
 ): string {
   if (impacts.length === 0) {
-    return "";
+    return "(No items)\n";
   }
 
-  return impacts
-    .map(
-      (impact) => `${"  ".repeat(indent)}${
-        indent === 0 ? "-" : "-->"
-      } ${chalk.whiteBright(impact.item.title)} ${chalk.grey(
-        `(${impact.item.name})`
-      )} ${chalk.blueBright(`[${impact.itemType}]`)}
+  const impactItems = impacts.map(
+    (impact) => `${"  ".repeat(indent)}${
+      indent === 0 ? "-" : "-->"
+    } ${chalk.whiteBright(impact.item.title)} ${chalk.grey(
+      `(${impact.item.name})`
+    )} ${chalk.blueBright(`[${impact.itemType}]`)}
 ${getImpactsList(impact.items, indent + 1)}`
-    )
-    .join("");
+  );
+
+  return impactItems.join("");
 }

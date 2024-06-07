@@ -12,6 +12,7 @@ import { cliTagLinkDeleteCommand } from "../cli/tag/cli-tag-link-delete";
 import { cliTagLinkOpenCommand } from "../cli/tag/cli-tag-link-open";
 import { cliTagListCommand } from "../cli/tag/cli-tag-list";
 import { cliTagShowCommand } from "../cli/tag/cli-tag-show";
+import { cliTagTypeCommand } from "../cli/tag/cli-tag-type";
 import { cliTestAddCommand } from "../cli/test/cli-test-add";
 import { cliTestDeleteCommand } from "../cli/test/cli-test-delete";
 import { cliTestLinkAddCommand } from "../cli/test/cli-test-link-add";
@@ -95,6 +96,10 @@ export function buildReadmeCliDocs() {
     {
       name: "tag link open",
       command: cliTagLinkOpenCommand,
+    },
+    {
+      name: "tag type",
+      command: cliTagTypeCommand,
     },
     {
       name: "tag impacts",

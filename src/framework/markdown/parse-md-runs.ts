@@ -1,18 +1,73 @@
-import { Run } from "../core";
-import { DirTree } from "../files";
+import { isObject, isString } from "lodash";
+import { marked } from "marked";
 
-export function parseMdRuns(runsDirTree: DirTree, testName: string): Run[] {
-  const runs = Object.entries(runsDirTree[testName] ?? {}).flatMap(
-    ([timestamp, runFiles]) => parseMdRun(timestamp, "")
+import { Run, RunResult } from "../core";
+import { DirFileTree } from "../files";
+import { isNotNil } from "../utils";
+
+import { getRunFilename } from "./get-run-filename";
+import { RESULT_LINE_PREFIX } from "./md-run";
+import {
+  parseDescriptionJoinedByNotPrefix,
+  parseDescriptionLineByPrefix,
+  parseDescriptionLines,
+} from "./parse-md.utils";
+
+export function parseMdRuns(
+  runsDirFileTree: DirFileTree,
+  testName: string
+): Run[] {
+  const runsTestDir = Object.entries(runsDirFileTree[testName] ?? {});
+
+  const runsTestDirRuns = runsTestDir.filter(([timestamp, dir]) =>
+    isObject(dir)
   );
+
+  const runs = runsTestDirRuns
+    .map(([timestamp, runDir]) => parseMdRun(timestamp, runDir))
+    .filter(isNotNil);
 
   return runs;
 }
 
-function parseMdRun(timestamp: string, runFile: string): Run {
+function parseMdRun(
+  dateTime: string,
+  runDir: DirFileTree | string | undefined
+): Run | undefined {
+  if (!isObject(runDir)) {
+    // Todo: report error here
+    return undefined;
+  }
+
+  const runMdFilename = getRunFilename(dateTime);
+  if (!isString(runDir[runMdFilename])) {
+    // Todo: report error here
+    return undefined;
+  }
+
+  const source = runDir[runMdFilename] as string;
+
+  const root = marked.lexer(source);
+
+  const descriptions = parseDescriptionLines(root);
+
+  const description = parseDescriptionJoinedByNotPrefix(descriptions, [
+    RESULT_LINE_PREFIX,
+  ]);
+
+  const result = parseMdRunResult(descriptions);
+
   return {
+    dateTime,
+    description,
+    result,
     links: [],
-    result: "passed",
-    dateTime: timestamp,
   };
+}
+
+function parseMdRunResult(descriptions: readonly string[]) {
+  return parseDescriptionLineByPrefix(
+    descriptions,
+    RESULT_LINE_PREFIX
+  ) as RunResult;
 }

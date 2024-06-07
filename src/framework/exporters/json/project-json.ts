@@ -1,4 +1,4 @@
-import { fromPairs } from "lodash";
+import { fromPairs, snakeCase } from "lodash";
 
 import {
   Link,
@@ -12,6 +12,7 @@ import {
   createTagFromName,
   parseTagNames,
 } from "../../core";
+import { fieldOrEmpty } from "../../utils";
 
 export interface ProjectJSON {
   readonly tests: Record<string, ProjectJSONTest>;
@@ -19,25 +20,43 @@ export interface ProjectJSON {
 }
 
 export function convertProjectToProjectJSON(project: ProjectView): ProjectJSON {
+  const tests = fromPairs(
+    project.tests
+      .map(convertTestToProjectJSONTest)
+      .map((test) => [test.name, test])
+  );
+  const tags = fromPairs(
+    project.tags.map(convertTagToProjectJSONTag).map((tag) => [tag.name, tag])
+  );
+
   return {
-    tests: fromPairs(
-      project.tests
-        .map(convertTestToProjectJSONTest)
-        .map((test) => [test.name, test])
-    ),
-    tags: fromPairs(
-      project.tags.map(convertTagToProjectJSONTag).map((tag) => [tag.name, tag])
-    ),
+    tests,
+    tags,
   };
 }
 
-export interface ProjectJSONTest {
+export function convertProjectJSONToProject(
+  projectJSON: ProjectJSON
+): ProjectView {
+  const tags = Object.values(projectJSON.tags).map(convertProjectJSONTagToTag);
+  const tagsByName = Object.fromEntries(tags.map((tag) => [tag.name, tag]));
+  const tests = Object.values(projectJSON.tests).map(
+    convertProjectJSONTestToTest(projectJSON, tagsByName)
+  );
+
+  return createProjectView({
+    tests,
+    tags,
+  });
+}
+
+interface ProjectJSONTest {
   readonly title: string;
   readonly name: string;
-  readonly steps: ReadonlyArray<string>;
+  readonly stepTexts: ReadonlyArray<string>;
   readonly description?: string;
   readonly links: readonly ProjectJSONLink[];
-  readonly tags: readonly string[];
+  readonly tagNames: readonly string[];
   readonly runs: readonly ProjectJSONRun[];
 }
 
@@ -47,13 +66,13 @@ function convertTestToProjectJSONTest(test: Test): ProjectJSONTest {
     name: test.name,
     description: test.description,
     links: test.links.map(convertLinkToProjectJSONLink),
-    steps: test.steps.map((step) => step.text),
-    tags: test.tags.map((tag) => tag.name),
+    stepTexts: test.steps.map((step) => step.text),
+    tagNames: test.tags.map((tag) => tag.name),
     runs: test.runs.map(convertRunToProjectRunJSON),
   };
 }
 
-export interface ProjectJSONLink {
+interface ProjectJSONLink {
   readonly href: string;
   readonly title?: string;
 }
@@ -65,10 +84,10 @@ function convertLinkToProjectJSONLink(link: Link): ProjectJSONLink {
   };
 }
 
-export interface ProjectJSONTag {
+interface ProjectJSONTag {
   readonly name: string;
   readonly title: string;
-  readonly type?: string;
+  readonly tagType?: string;
   readonly description?: string;
   readonly links: readonly ProjectJSONLink[];
 }
@@ -77,13 +96,15 @@ function convertTagToProjectJSONTag(tag: Tag): ProjectJSONTag {
   return {
     name: tag.name,
     title: tag.title,
-    type: tag.type,
-    description: tag.description,
+
+    ...fieldOrEmpty("tagType", tag.tagType),
+    ...fieldOrEmpty("description", tag.description),
+
     links: tag.links.map(convertLinkToProjectJSONLink),
   };
 }
 
-export interface ProjectJSONRun {
+interface ProjectJSONRun {
   readonly dateTime: string;
   readonly result?: RunResult;
   readonly links: readonly ProjectJSONLink[];
@@ -97,82 +118,62 @@ function convertRunToProjectRunJSON(run: Run): ProjectJSONRun {
   };
 }
 
-export function parseProjectJSON(json: string): ProjectJSON {
-  return JSON.parse(json) as ProjectJSON;
-}
-
-export function convertProjectJSONToProject(
-  projectJSON: ProjectJSON
-): ProjectView {
-  const tags = Object.values(projectJSON.tags).map(convertProjectJSONTagToTag);
-  const tests = Object.values(projectJSON.tests).map(
-    convertProjectJSONTestToTest(projectJSON)
-  );
-
-  return createProjectView({
-    tests,
-    tags,
+function convertProjectJSONTestToTest(
+  projectJSON: ProjectJSON,
+  tagsByName: Record<string, Tag>
+) {
+  return (projectJSONTest: ProjectJSONTest): Test => ({
+    type: "test",
+    name: projectJSONTest.name,
+    title: projectJSONTest.title,
+    description: projectJSONTest.description,
+    steps: projectJSONTest.stepTexts.map(
+      convertProjectJSONStepToStep(projectJSON)
+    ),
+    runs: projectJSONTest.runs.map(convertProjectJSONRunToRun),
+    links: projectJSONTest.links.map(convertProjectJSONLinkToLink),
+    tags: projectJSONTest.tagNames
+      .map(convertProjectJSONTestTagToTag(projectJSON))
+      .map((tag) => tagsByName[tag.name] ?? tag),
   });
 }
 
-export function convertProjectJSONTestToTest(projectJSON: ProjectJSON) {
-  return (projectJSONTest: ProjectJSONTest): Test => {
-    return {
-      name: projectJSONTest.name,
-      title: projectJSONTest.title,
-      description: projectJSONTest.description,
-      steps: projectJSONTest.steps.map(
-        convertProjectJSONStepToStep(projectJSON)
-      ),
-      runs: projectJSONTest.runs.map(convertProjectJSONRunToRun),
-      links: projectJSONTest.links.map(convertProjectJSONLinkToLink),
-      tags: projectJSONTest.tags.map(
-        convertProjectJSONTestTagToTag(projectJSON)
-      ),
-    };
-  };
-}
-
-export function convertProjectJSONStepToStep(projectJSON: ProjectJSON) {
-  return (projectJSONStep: string): Step => {
-    return {
-      text: projectJSONStep,
-      tags: parseTagNames(projectJSONStep)
-        .map(convertProjectJSONTestTagToTag(projectJSON))
-        .map(convertProjectJSONTagToTag),
-    };
-  };
+function convertProjectJSONStepToStep(projectJSON: ProjectJSON) {
+  return (projectJSONStep: string): Step => ({
+    text: projectJSONStep,
+    tags: parseTagNames(projectJSONStep)
+      .map(snakeCase)
+      .map(convertProjectJSONTestTagToTag(projectJSON))
+      .map(convertProjectJSONTagToTag),
+  });
 }
 
 function convertProjectJSONTestTagToTag(projectJSON: ProjectJSON) {
   return (tagName: string): Tag =>
-    projectJSON.tags[tagName] ?? createTagFromName(tagName);
+    (projectJSON.tags[tagName] as Tag) ?? createTagFromName(tagName);
 }
 
-export function convertProjectJSONTagToTag(
-  projectJSONTag: ProjectJSONTag
-): Tag {
+function convertProjectJSONTagToTag(projectJSONTag: ProjectJSONTag): Tag {
   return {
+    type: "tag",
     name: projectJSONTag.name,
     title: projectJSONTag.title,
-    type: projectJSONTag.type,
-    description: projectJSONTag.description,
+
+    ...fieldOrEmpty("tagType", projectJSONTag.tagType),
+    ...fieldOrEmpty("description", projectJSONTag.description),
+
     links: projectJSONTag.links,
   };
 }
 
-export function convertProjectJSONLinkToLink(
-  projectJSONRun: ProjectJSONLink
-): Link {
+function convertProjectJSONLinkToLink(projectJSONRun: ProjectJSONLink): Link {
   return {
     href: projectJSONRun.href,
     title: projectJSONRun.title,
   };
 }
 
-export function convertProjectJSONRunToRun(
-  projectJSONRun: ProjectJSONRun
-): Run {
+function convertProjectJSONRunToRun(projectJSONRun: ProjectJSONRun): Run {
   return {
     dateTime: projectJSONRun.dateTime,
     result: projectJSONRun.result,

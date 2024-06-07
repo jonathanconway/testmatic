@@ -55,9 +55,7 @@ export function cliTestShow(testNameOrTitle: TestShowParameter) {
 }
 
 function logTitle({ title }: Test) {
-  logHeading(title, 1);
-
-  console.log();
+  logHeading(`Test: ${title}`, 1);
 }
 
 function logDocFile(test: Test) {

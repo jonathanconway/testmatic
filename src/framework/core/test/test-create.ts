@@ -45,6 +45,7 @@ export function createTest(
     params as CreateTestParams;
 
   const newTest = {
+    type: "test",
     name: snakeCase(title),
     title: sentenceCase(title),
     description,
@@ -52,7 +53,7 @@ export function createTest(
     links: linkNames?.map(createLinkFromInput) ?? [],
     tags: tagNames?.map(createTagFromName).filter(isTag) ?? [],
     runs: [],
-  };
+  } as Test;
 
   const testValidatorResult = testValidator.safeParse(newTest);
   if (!testValidatorResult.success) {

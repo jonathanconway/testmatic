@@ -1,7 +1,14 @@
-import { memoize } from "lodash";
+import { memoize, snakeCase } from "lodash";
 import { TokensList } from "marked";
 
-import { assertNotNil, betweenElements, isNotNil } from "../utils";
+import {
+  assertNotNil,
+  betweenElements,
+  byNot,
+  byStartsWith,
+  byStartsWithOneOf,
+  isNotNil,
+} from "../utils";
 
 import { isMdHeadingLevel, isMdParagraph } from "./markdown.utils";
 
@@ -40,6 +47,26 @@ export function parseDescriptionLines(root: TokensList) {
   const descriptionLines = descriptionElements.map((element) => element.raw);
 
   return descriptionLines;
+}
+
+export function parseDescriptionLineByPrefix(
+  descriptions: readonly string[],
+  prefix: string
+) {
+  return snakeCase(
+    descriptions.find(byStartsWith(prefix))?.split(prefix)[1].trim()
+  );
+}
+
+export function parseDescriptionJoinedByNotPrefix(
+  descriptions: readonly string[],
+  prefixes: readonly string[]
+) {
+  return descriptions
+    .filter(byNot(byStartsWithOneOf(prefixes)))
+    .join("\n")
+    .trim()
+    .trimLines();
 }
 
 export function parseDescription(root: TokensList) {

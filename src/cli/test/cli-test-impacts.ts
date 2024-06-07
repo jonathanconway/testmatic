@@ -56,7 +56,5 @@ function logTitle(test: Test) {
 
   logHeading(title, 1);
 
-  console.log();
-
   logHeading("Impacts", 2);
 }
