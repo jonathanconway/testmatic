@@ -1,4 +1,3 @@
-import { MOCK_PROJECT_JSON_EMPTY } from "../../../framework/exporters/json/project-json.mocks";
 import * as projectJsonFile from "../../../framework/fs/json/project-json-file";
 import { program } from "../../cli";
 
@@ -6,10 +5,6 @@ jest.mock("../../../exporters/json/project-json-file", () => ({
   readProjectFile: jest.fn(),
   writeProjectFile: jest.fn(),
 }));
-
-// const readProjectFileSpy = jest
-//   .spyOn(projectJsonFile, "readProjectFile")
-//   .mockReturnValue(MOCK_PROJECT_JSON_FILE_EMPTY);
 
 const writeProjectFileSpy = jest.spyOn(projectJsonFile, "writeProjectFile");
 

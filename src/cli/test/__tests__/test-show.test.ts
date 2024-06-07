@@ -1,22 +1,14 @@
-import { MOCK_PROJECT_JSON } from "../../../framework/exporters/json/project-json.mocks";
-import * as projectJsonFile from "../../../framework/fs/json/project-json-file";
 import { program } from "../../cli";
 
 jest.mock("../../../exporters/json/project-json-file", () => ({
   readProjectFile: jest.fn(),
 }));
 
-// const readProjectFileSpy = jest
-//   .spyOn(projectJsonFile, "readProjectFile")
-//   .mockReturnValue(MOCK_PROJECT_JSON_FILE);
-
 const consoleLogSpy = jest.spyOn(console, "log");
 
 describe("cli test show", () => {
   it("shows test looked up by name", () => {
     program.parse(["test", "show", "test_one"]);
-
-    // expect(readProjectFileSpy).toBeCalled();
 
     expect(consoleLogSpy).toBeCalledWith(
       `

@@ -1,1 +1,1 @@
-export * from "../src/framework/files";
+export * from "../src/framework/fs";
