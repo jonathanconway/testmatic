@@ -1,6 +1,6 @@
 {
   "name": "testmatic",
-  "version": "0.0.29",
+  "version": "0.0.30",
   "description": "CLI to testmatic – a local rapid-entry manual test database.",
   "bin": {
     "testmatic": "./dist/src/cli/cli-exec.js"

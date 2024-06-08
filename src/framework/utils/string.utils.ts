@@ -17,6 +17,7 @@ declare global {
     trimLines(this: string): string;
     asciiUnderline(this: string): string;
     asciiUnderlineDouble(this: string): string;
+    trimWithEllipsis(this: string, maxLength: number): string;
   }
 }
 
@@ -170,4 +171,15 @@ String.prototype.asciiUnderlineDouble = function (this: string) {
 
 export function removeBrackets(input: string) {
   return input.replaceAll("(", "").replaceAll(")", "");
+}
+
+String.prototype.trimWithEllipsis = function (this: string, maxLength: number) {
+  return trimWithEllipsis(this, maxLength);
+};
+
+export function trimWithEllipsis(input: string, maxLength: number) {
+  if (input.length > maxLength) {
+    return `${input.substring(0, maxLength - 3)}...`;
+  }
+  return input;
 }

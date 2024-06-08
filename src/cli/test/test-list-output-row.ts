@@ -1,9 +1,8 @@
 import { Test } from "../../framework";
 
-export function convertTestToTestOutputRow(test: Test) {
+export function convertTestToOutputRow(test: Test) {
   return {
-    title: test.title,
+    title: test.title.trimWithEllipsis(60),
     name: test.name,
-    doc: `./.testmatic/tests/${test.name}.md`,
   };
 }

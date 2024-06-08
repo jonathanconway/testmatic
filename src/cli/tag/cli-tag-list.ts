@@ -1,7 +1,9 @@
 import { createCommand } from "commander";
 
-import { getTagFilename, projectMdRead } from "../../framework";
+import { projectMdRead } from "../../framework";
 import { logTable } from "../utils";
+
+import { convertTagToOutputRow } from "./tag-list-output-row";
 
 export const cliTagListCommand = createCommand("list")
   .description("List tags in the current project")
@@ -14,11 +16,8 @@ export function cliTagList() {
   }
 
   const { tags } = project;
-  const tagsTable = Object.values(tags).map((tag) => ({
-    title: tag.title,
-    name: tag.name,
-    doc: getTagFilename(tag),
-  }));
+
+  const tagsTable = tags.map(convertTagToOutputRow);
 
   logTable(tagsTable);
 

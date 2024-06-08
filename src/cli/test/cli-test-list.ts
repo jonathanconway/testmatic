@@ -5,7 +5,7 @@ import { projectMdCreateFolders, projectMdRead } from "../../framework";
 import { logTable } from "../utils";
 
 import { filterByArgsTag } from "./test-list-filter-tag";
-import { convertTestToTestOutputRow } from "./test-list-output-row";
+import { convertTestToOutputRow } from "./test-list-output-row";
 
 interface TestListParameters {
   readonly tag?: string;
@@ -40,7 +40,7 @@ export async function cliTestList(args: TestListParameters) {
 
   const testsFiltered = filterByArgsTag({ tests, tagFilterValue: tag });
 
-  const testList = testsFiltered.map(convertTestToTestOutputRow);
+  const testList = testsFiltered.map(convertTestToOutputRow);
 
   logTable(testList);
 

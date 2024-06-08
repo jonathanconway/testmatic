@@ -1,4 +1,4 @@
-import { isObject, uniq } from "lodash";
+import { isObject, uniq, uniqBy } from "lodash";
 
 import { ProjectView, createProjectView } from "../core";
 import { DirFileTree } from "../files";
@@ -30,6 +30,6 @@ export function parseMd({
   return createProjectView({
     tests,
 
-    tags: uniq([...tags, ...testTags]),
+    tags: uniqBy([...tags, ...testTags], (tag) => tag.name),
   });
 }
