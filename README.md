@@ -2,13 +2,13 @@
 
 > ⚡️ Supercharge your testing ⚙️
 
-Testmatic is a command-line tool and framework for quickly and easily writing and organising human-readable test cases.
+Testmatic is a system for quickly and easily writing and organising human-readable test cases.
 
 Simple lists of **_steps_** are grouped into **_tests_**, which can be organised by **_tags_**, allowing grouping / filtering.
 
 Everything is stored in Markdown files, for easy viewing, editing, searching and version control. If pushed to a server, links to Markdown files can be shared within your org, via e.g. Wiki pages, Chat posts, email, etc.
 
-The main benefit of using Testmatic is the ability to rapidly input and organise test cases. This helps you perform manual testing in an organised and consistent manner. Manual testing may be beneficial when automated test coverage is limited, development time is constrained and rapid delivery is required while minimising defects. (See: [Benefits of using Testmatic](#benefits-of-using-testmatic).)
+The main benefit of using Testmatic is the ability to rapidly create, organise and find test cases. This helps you to perform [manual testing](#benefits-of-manual-testing) in an organised and consistent manner. Manual testing may be beneficial when automated test coverage is limited, development time is constrained and rapid delivery is required while minimising defects. (See: [Benefits of using Testmatic](#benefits-of-using-testmatic).)
 
 ## Contents
 
@@ -418,33 +418,27 @@ These lists can be conveniently linked from external repositories of information
 For example, a wiki page for the Login screen could link to a testmatic doc listing all tests for that screen: http://github.com/myaccount/mytests/blob/main/docs/tags/login_screen.md.
 
 ## CLI reference
+
 <!-- insert cli-reference start -->
 
 ### init
 
-Usage: init 
+Usage: `init`
 
 Create a new project in the current working directory
 
-
-
-
 ### project create
 
-Usage: project create 
+Usage: `project create`
 
 Create a new project in the current working directory (same as `testmatic init`)
 
-
-
-
 ### test list
 
-Usage: test list [options]
+Usage: `test list [options]`
 
 List tests in the current project
 
-
 Options:
 
 <table>
@@ -456,23 +450,21 @@ Options:
 </thead>
 <tbody>
   <tr>
-          <td>
-            -t,<br /> --tag <value><br />
-          </td>
-          <td>
-            Filter by tag
-          </td>
-        </tr>
+<td>
+<code>-t</code>,<br /><code> --tag &lt;value&gt;</code>
+</td>
+<td>
+Filter by tag
+</td>
+</tr>
 </tbody>
 </table>
 
-
 ### test add
 
-Usage: test add [options]
+Usage: `test add [options]`
 
 Add a new test to the project
-
 
 Options:
 
@@ -485,51 +477,54 @@ Options:
 </thead>
 <tbody>
   <tr>
-          <td>
-            -t,<br /> --title <value><br />
-          </td>
-          <td>
-            Title of the test.
+<td>
+<code>-t</code>,<br /><code> --title &lt;value&gt;</code>
+</td>
+<td>
+Title of the test.
 Also used to generate an underscored filename used to refer to the test in short-hand.
 Titles must be unique.
 Titles should briefly summarise the test steps.
 
 Required - must be provided, either via prompt or command line.
-          </td>
-        </tr>
+
+</td>
+</tr>
 <tr>
-          <td>
-            -d,<br /> --description <value><br />
-          </td>
-          <td>
-            Description of the test.
+<td>
+<code>-d</code>,<br /><code> --description &lt;value&gt;</code>
+</td>
+<td>
+Description of the test.
 Longer than the title, provides a more detailed summary of the test.
 
 Tests can also include tags, enclosed in round brackets: (, ).
 For further information, see 'testmatic tag help'.
 
 Optional.
-          </td>
-        </tr>
+
+</td>
+</tr>
 <tr>
-          <td>
-            -s,<br /> --steps [steps...]<br />
-          </td>
-          <td>
-            List of steps of the test.
+<td>
+<code>-s</code>,<br /><code> --steps [steps...]</code>
+</td>
+<td>
+List of steps of the test.
 
 Add each step in quotes separated by a space, e.g.: "step one" "step two"
 Steps will be in the order that they are provided.
 
 Required - at least one step must be provided, either via prompt or command line.
-          </td>
-        </tr>
+
+</td>
+</tr>
 <tr>
-          <td>
-            -l,<br /> --links [links...]<br />
-          </td>
-          <td>
-            List of links to associate with the test.
+<td>
+<code>-l</code>,<br /><code> --links [links...]</code>
+</td>
+<td>
+List of links to associate with the test.
 For example, a deep link to the web page being tested or relevant documentation.
 
 Add each link href in quotes separated by a space.
@@ -539,37 +534,30 @@ Links can be prefixed with text separated by a pipe "|".
 E.g. "Login page|http://product.com/login" "Login flow docs|http://wiki.com/login-flow"
 
 Optional.
-          </td>
-        </tr>
+
+</td>
+</tr>
 </tbody>
 </table>
-
 
 ### test delete
 
-Usage: test delete  <testNameOrTitle>
+Usage: `test delete <testNameOrTitle>`
 
 Delete a test
 
-
-
-
 ### test show
 
-Usage: test show  <testNameOrTitle>
+Usage: `test show <testNameOrTitle>`
 
 Show the full details of a test
 
-
-
-
 ### test link add
 
-Usage: test link add [options] <testNameOrTitle> <linkHrefOrTitle>
+Usage: `test link add [options] <testNameOrTitle> <linkHrefOrTitle>`
 
 Add a new link to a test
 
-
 Options:
 
 <table>
@@ -581,52 +569,42 @@ Options:
 </thead>
 <tbody>
   <tr>
-          <td>
-            -t,<br /> --title <value><br />
-          </td>
-          <td>
-            Title of the new link.
+<td>
+<code>-t</code>,<br /><code> --title &lt;value&gt;</code>
+</td>
+<td>
+Title of the new link.
 
 Optional.
-          </td>
-        </tr>
+
+</td>
+</tr>
 </tbody>
 </table>
 
-
 ### test link delete
 
-Usage: test link delete  <testNameOrTitle> <linkHrefOrTitle>
+Usage: `test link delete <testNameOrTitle> <linkHrefOrTitle>`
 
 Delete a link from a test
 
-
-
-
 ### test link open
 
-Usage: test link open  <testNameOrTitle> <linkHrefOrTitle>
+Usage: `test link open <testNameOrTitle> <linkHrefOrTitle>`
 
 Open a test link in the browser
 
-
-
-
 ### tag list
 
-Usage: tag list 
+Usage: `tag list`
 
 List tags in the current project
 
-
-
-
 ### tag add
 
-Usage: tag add [options]
+Usage: `tag add [options]`
 
 Add a new tag to the project
-
 
 Options:
 
@@ -639,47 +617,50 @@ Options:
 </thead>
 <tbody>
   <tr>
-          <td>
-            -t,<br /> --title <value><br />
-          </td>
-          <td>
-            Title of the tag.
+<td>
+<code>-t</code>,<br /><code> --title &lt;value&gt;</code>
+</td>
+<td>
+Title of the tag.
 Also used to generate an underscored filename used to refer to the test in short-hand.
 Titles must be unique.
 Titles should briefly describe the tag.
 
 Required - must be provided, either via prompt or command line.
-          </td>
-        </tr>
+
+</td>
+</tr>
 <tr>
-          <td>
-            -y,<br /> --type <value><br />
-          </td>
-          <td>
-            Type of the tag.
+<td>
+<code>-y</code>,<br /><code> --type &lt;value&gt;</code>
+</td>
+<td>
+Type of the tag.
 Used to categorise one or more similar tags.
 E.g. "page" for tags that refer to a page in an website.
 
 Optional.
-          </td>
-        </tr>
+
+</td>
+</tr>
 <tr>
-          <td>
-            -d,<br /> --description <value><br />
-          </td>
-          <td>
-            Description of the test.
+<td>
+<code>-d</code>,<br /><code> --description &lt;value&gt;</code>
+</td>
+<td>
+Description of the test.
 Longer than the title, provides a more detailed description of the tag.
 
 Optional.
-          </td>
-        </tr>
+
+</td>
+</tr>
 <tr>
-          <td>
-            -l,<br /> --links [links...]<br />
-          </td>
-          <td>
-            List of links to attach to the tag.
+<td>
+<code>-l</code>,<br /><code> --links [links...]</code>
+</td>
+<td>
+List of links to attach to the tag.
 For example, a deep link to the web page being tested or relevant documentation.
 
 Add each link href in quotes separated by a space.
@@ -689,36 +670,29 @@ Links can be prefixed with text separated by a pipe "|".
 E.g. "Login page|http://product.com/login" "Login flow docs|http://wiki.com/login-flow"
 
 Optional.
-          </td>
-        </tr>
+
+</td>
+</tr>
 </tbody>
 </table>
 
-
 ### tag delete
 
-Usage: tag delete  <tagNameOrTitle>
+Usage: `tag delete <tagNameOrTitle>`
 
 Delete a tag
 
-
-
-
 ### tag show
 
-Usage: tag show  <tagNameOrTitle>
+Usage: `tag show <tagNameOrTitle>`
 
 Show the full details of a tag
 
-
-
-
 ### tag link add
 
-Usage: tag link add [options] <tagNameOrTitle> <tagLinkHref>
+Usage: `tag link add [options] <tagNameOrTitle> <tagLinkHref>`
 
 Add a new link to a tag
-
 
 Options:
 
@@ -731,76 +705,60 @@ Options:
 </thead>
 <tbody>
   <tr>
-          <td>
-            -t,<br /> --title <value><br />
-          </td>
-          <td>
-            Title of the new link.
+<td>
+<code>-t</code>,<br /><code> --title &lt;value&gt;</code>
+</td>
+<td>
+Title of the new link.
 
 Optional.
-          </td>
-        </tr>
+
+</td>
+</tr>
 </tbody>
 </table>
 
-
 ### tag link delete
 
-Usage: tag link delete  <tagNameOrTitle> <linkHrefOrTitle>
+Usage: `tag link delete <tagNameOrTitle> <linkHrefOrTitle>`
 
 Delete a link from a tag
 
-
-
-
 ### tag link open
 
-Usage: tag link open  <tagNameOrTitle> <linkHrefOrTitle>
+Usage: `tag link open <tagNameOrTitle> <linkHrefOrTitle>`
 
 Open a tag link in the browser
 
-
-
-
 ### tag type
 
-Usage: tag type  <tagNameOrTitle> <tagType>
+Usage: `tag type <tagNameOrTitle> <tagType>`
 
 Set the type of a tag
 
-
-
-
 ### tag impacts
 
-Usage: tag impacts  <tagNameOrTitle>
+Usage: `tag impacts <tagNameOrTitle>`
 
 List the tests and tags that are impacted by a tag
 
-
-
-
 ### run show
 
-Usage: run show  <testNameOrTitle> [runDateTime]
+Usage: `run show <testNameOrTitle> [runDateTime]`
 
 Show the full details of a run
 
-
-
-
 ### run open
 
-Usage: run open  <testNameOrTitle> [runDateTime]
+Usage: `run open <testNameOrTitle> [runDateTime]`
 
 Open a run folder
 
-
-
 <!-- insert cli-reference end -->
+
 ## FAQ
 
-### **_Can I add screenshots or screencasts from my testing?_**
+### Can I add screenshots or screencasts from my testing?
 
 Yes!
 

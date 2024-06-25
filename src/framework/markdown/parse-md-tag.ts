@@ -2,7 +2,6 @@ import { snakeCase } from "lodash";
 import { marked } from "marked";
 
 import { MarkdownSource, Tag } from "../core";
-import { byNot, byStartsWith } from "../utils";
 
 import { TYPE_LINE_PREFIX } from "./md-tag";
 import { parseMdLinks } from "./parse-md-links";

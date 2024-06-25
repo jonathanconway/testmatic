@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { max, toUpper } from "lodash";
 
 import { isNotNil } from "../../../framework/utils";
@@ -28,8 +29,19 @@ export function toAsciiTable<T extends object>(
 
   const colMaxWidths = cols.map(getColWidths(items));
 
-  const header = colNames
-    .map((colName, colNameIndex) => colName.padEnd(colMaxWidths[colNameIndex]))
+  const colNamesPadded = colNames.map((colName, colNameIndex) =>
+    colName.padEnd(colMaxWidths[colNameIndex])
+  );
+
+  const header = colNamesPadded
+    .map((colName) => chalk.grey(colName))
+    .join(COLUMN_SPACING);
+
+  const headerUnderlines = colNames
+    .map((colName, colNameIndex) =>
+      "-".repeat(colName.length).padEnd(colMaxWidths[colNameIndex])
+    )
+    .map((colName) => chalk.grey(colName))
     .join(COLUMN_SPACING);
 
   const rows = items
@@ -42,5 +54,5 @@ export function toAsciiTable<T extends object>(
     )
     .join("\n");
 
-  return `${header}\n${rows}`;
+  return `${header}\n${headerUnderlines}\n${rows}`;
 }

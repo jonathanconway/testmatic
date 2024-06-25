@@ -8,6 +8,6 @@ export function getRunFiles({ test, run }: { test: Test; run: Run }) {
   const runFilePath = getRunFilepath(test, run);
   const files = readdirSync(runFilePath)
     .filter(isNonJunkFile)
-    .map((filename) => `${runFilePath}/${filename}`);
+    .map((filename) => `- ${runFilePath}/${filename}`);
   return files;
 }

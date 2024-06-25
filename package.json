@@ -1,6 +1,6 @@
 {
   "name": "testmatic",
-  "version": "0.0.30",
+  "version": "0.0.32",
   "description": "CLI to testmatic – a local rapid-entry manual test database.",
   "bin": {
     "testmatic": "./dist/src/cli/cli-exec.js"
@@ -14,7 +14,7 @@
   "scripts": {
     "prepublish": "tsc",
     "build": "tsc",
-    "build-readme": "ts-node ./src/build/build-readme-cli-docs",
+    "build-readme": "ts-node ./src/build/build-readme",
     "test": "echo \"Error: no test specified\" && exit 1",
     "cli": "ts-node ./src/cli/cli-exec"
   },

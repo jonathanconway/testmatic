@@ -1,6 +1,8 @@
+import chalk from "chalk";
 import { createCommand } from "commander";
 
 import {
+  Step,
   Test,
   formatDateTimeString,
   getRunFilepath,
@@ -76,13 +78,24 @@ function logSteps({ steps }: Test) {
   logHeading("Steps", 2);
 
   const testStepsTable = steps.map((step, index) => ({
-    "": (index + 1).toString(),
-    step: step.text,
+    "#": (index + 1).toString(),
+    step: formatStepText(step),
   }));
 
   logTable(testStepsTable);
 
   console.log();
+}
+
+function formatStepText(step: Step) {
+  let stepText = step.text;
+  for (const tag of step.tags) {
+    stepText = stepText.replaceAll(
+      `(${tag.title.toLowerCase()})`,
+      chalk.greenBright(`(${tag.title.toLowerCase()})`)
+    );
+  }
+  return stepText;
 }
 
 function logLinks({ links }: Test) {

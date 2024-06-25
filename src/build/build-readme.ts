@@ -1,4 +1,5 @@
 import { Command } from "commander";
+import { trim } from "lodash";
 
 import { cliInitCommand } from "../cli/init/cli-init";
 import { cliProjectCreateCommand } from "../cli/project/cli-project-create";
@@ -20,16 +21,9 @@ import { cliTestLinkDeleteCommand } from "../cli/test/cli-test-link-delete";
 import { cliTestLinkOpenCommand } from "../cli/test/cli-test-link-open";
 import { cliTestListCommand } from "../cli/test/cli-test-list";
 import { cliTestShowCommand } from "../cli/test/cli-test-show";
+import { isNotNil } from "../framework";
 
 import { interpolate } from "./interpolate.utils";
-
-function getCleanedUsageText(command: Command) {
-  const usageText = command.usage();
-  if (command.options.length === 0) {
-    return usageText.replaceAll("[options]", "").removeDoubleSpaces();
-  }
-  return usageText;
-}
 
 export function buildReadmeCliDocs() {
   const commands = [
@@ -120,7 +114,7 @@ export function buildReadmeCliDocs() {
       ({ name, command }) => `
 ### ${name}
 
-Usage: ${name} ${getCleanedUsageText(command)}
+Usage: ${getCleanedCommandAndUsageText(name, command)}
 
 ${command.description()}
 
@@ -138,16 +132,20 @@ Options:
 </thead>
 <tbody>
   ${command.options
-    .map(
-      (o) =>
-        `<tr>
-          <td>
-            ${o.flags.split(",").join(",<br />")}<br />
-          </td>
-          <td>
-            ${o.description}
-          </td>
-        </tr>`
+    .map((o) =>
+      `
+<tr>
+<td>
+${o.flags
+  .split(",")
+  .map((flag) => `<code>${escapeTagBrackets(flag)}</code>`)
+  .join(",<br />")}
+</td>
+<td>
+${o.description}
+</td>
+</tr>
+`.trim()
     )
     .join("\n")}
 </tbody>
@@ -161,4 +159,24 @@ Options:
   interpolate(__dirname + "/../../README.md", "cli-reference", md);
 }
 
+function escapeTagBrackets(input: string) {
+  return input.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+}
+
+function getCleanedCommandAndUsageText(name: string, command: Command) {
+  const cleanedCommandAndUsageText = [name, getCleanedUsageText(command)]
+    .map(trim)
+    .filter(isNotNil)
+    .join(" ")
+    .trim();
+  return `\`${cleanedCommandAndUsageText}\``;
+}
+
+function getCleanedUsageText(command: Command) {
+  const usageText = command.usage();
+  if (command.options.length === 0) {
+    return usageText.replaceAll("[options]", "").removeDoubleSpaces().trim();
+  }
+  return usageText.trim();
+}
 buildReadmeCliDocs();

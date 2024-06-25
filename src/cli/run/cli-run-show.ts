@@ -9,7 +9,9 @@ import {
   projectGetTestByNameOrTitle,
   projectGetTestRunByDateTimeOrLatest,
   projectMdRead,
+  sentenceCase,
 } from "../../framework";
+import { runResultEmoji } from "../../framework/core/run/run-result-emoji";
 import { PARAM_TEST_NAME_OR_TITLE } from "../test";
 import { logError, logHeading, logTable } from "../utils";
 
@@ -58,6 +60,18 @@ export function cliRunShow(
 
   logTitle({ test, run });
 
+  console.log(
+    `File: ./.testmatic/runs/${test.name}/${run.dateTime}/${run.dateTime}.md`
+  );
+  console.log();
+
+  console.log(
+    `Result: ${runResultEmoji(run.result)} ${
+      run.result ? sentenceCase(run.result) : "-"
+    }`
+  );
+  console.log();
+
   logFiles(files);
 }
 
@@ -71,9 +85,9 @@ function logTitle({ test, run }: { test: Test; run: Run }) {
 function logFiles(files: string[]) {
   logHeading("Files", 2);
 
-  const filesTable = files.map((file) => ({ file }));
+  // const filesTable = files.map((file) => ({ file }));
 
-  logTable(filesTable);
+  console.log(files.join("\n"));
 
   console.log();
 }

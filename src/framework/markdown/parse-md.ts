@@ -21,9 +21,13 @@ export function parseMd({
     ? projectFileTree["tests"]
     : {};
 
+  const runsDirFileTree = isObject(projectFileTree["runs"])
+    ? projectFileTree["runs"]
+    : {};
+
   const { tests, testTags } = parseMdTests(
     testsDirFileTree,
-    tagsDirFileTree,
+    runsDirFileTree,
     tagsByName
   );
 

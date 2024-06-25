@@ -5,7 +5,7 @@ import { Test } from "../test";
 import { Tag } from "./tag";
 
 export function getTestsHavingTag(tests: readonly Test[], tag: Tag) {
-  return tests.filter((test) => test.tags.includes(tag));
+  return tests.filter((test) => test.tags.find((tag) => tag.name === tag.name));
 }
 
 export function getStepsHavingTag(steps: readonly Step[], tag: Tag) {

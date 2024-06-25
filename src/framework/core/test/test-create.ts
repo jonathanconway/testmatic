@@ -12,6 +12,7 @@ import { createTestStepFromText } from "../step";
 import { createTagFromName, isTag } from "../tag";
 
 import { Test } from "./test";
+import { testCreateNameFromTitle } from "./test-create-name-from-title";
 import { testValidator } from "./test-validator";
 
 export interface CreateTestParams {
@@ -46,7 +47,7 @@ export function createTest(
 
   const newTest = {
     type: "test",
-    name: snakeCase(title),
+    name: testCreateNameFromTitle(title),
     title: sentenceCase(title),
     description,
     steps: stepTexts.map(createTestStepFromText),

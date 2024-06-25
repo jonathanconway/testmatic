@@ -15,6 +15,7 @@ export function projectGetTagByNameOrTitle({
     return tagByName;
   }
 
+  // todo: optimise
   const tagNameOrTitleLowerTrimmed = tagNameOrTitle.toLowerCase().trim();
   const tagByTitle = project.tags.find(
     (tag) => tag.title.toLowerCase().trim() === tagNameOrTitleLowerTrimmed
