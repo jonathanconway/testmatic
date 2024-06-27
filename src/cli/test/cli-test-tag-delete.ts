@@ -55,7 +55,18 @@ export function cliTestTagDelete([
 
   const tag = getTagResult;
 
-  const updatedProject = projectDeleteTestTag({ project, test, tag });
+  const projectDeleteTestTagResult = projectDeleteTestTag({
+    project,
+    test,
+    tag,
+  });
+
+  if (isError(projectDeleteTestTagResult)) {
+    logError(projectDeleteTestTagResult.message);
+    return;
+  }
+
+  const updatedProject = projectDeleteTestTagResult;
 
   projectMdWrite(updatedProject);
 }

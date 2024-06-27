@@ -36,6 +36,7 @@ export function cliTestDelete(
     project,
     testNameOrTitle,
   });
+
   if (isError(getTestResult)) {
     logError(getTestResult.message);
     return;
@@ -47,10 +48,12 @@ export function cliTestDelete(
     test,
     linkHrefOrTitle,
   });
+
   if (isError(getTestLinkResult)) {
     logError(getTestLinkResult.message);
     return;
   }
+
   const linkToDelete = getTestLinkResult;
 
   const updatedProject = projectDeleteTestLink({
