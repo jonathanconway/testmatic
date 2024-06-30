@@ -26,13 +26,15 @@ export function byEquals<T extends object, U extends keyof T>(
 
 export function betweenElements<T>(
   array: T[] | readonly T[],
-  afterElement: T,
+  afterElement?: T,
   beforeElement?: T
 ) {
-  return array.slice(
-    array.indexOf(afterElement) + 1,
-    beforeElement ? array.indexOf(beforeElement) : undefined
-  );
+  return array
+    .slice(
+      afterElement ? array.indexOf(afterElement) + 1 : 0,
+      beforeElement ? array.indexOf(beforeElement) : undefined
+    )
+    .filter(isNotNil);
 }
 
 export function getNextElement<T>(array: T[] | readonly T[], element: T) {

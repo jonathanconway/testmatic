@@ -23,9 +23,13 @@ export const getHeadingsNodesByText = memoize((root: TokensList) =>
 );
 
 export const getTitleNode = memoize((root: TokensList) => {
-  const titleNode = root.find(isMdHeadingLevel(1));
+  const titleNode = tryGetTitleNode(root);
   assertNotNil(titleNode, "title", { root });
   return titleNode;
+});
+
+export const tryGetTitleNode = memoize((root: TokensList) => {
+  return root.find(isMdHeadingLevel(1));
 });
 
 const PARSABLE_HEADINGS = ["Links"];
@@ -37,7 +41,7 @@ export function parseDescriptionLines(root: TokensList) {
     PARSABLE_HEADINGS.includes(headingNode?.text?.trim() ?? "")
   );
 
-  const titleNode = getTitleNode(root);
+  const titleNode = tryGetTitleNode(root);
 
   const descriptionElements = betweenElements(
     root,

@@ -108,6 +108,7 @@ interface ProjectJSONRun {
   readonly dateTime: string;
   readonly result?: RunResult;
   readonly links: readonly ProjectJSONLink[];
+  readonly recordings: readonly string[];
 }
 
 function convertRunToProjectRunJSON(run: Run): ProjectJSONRun {
@@ -115,6 +116,7 @@ function convertRunToProjectRunJSON(run: Run): ProjectJSONRun {
     dateTime: run.dateTime,
     result: run.result,
     links: run.links.map(convertLinkToProjectJSONLink),
+    recordings: run.recordings,
   };
 }
 
@@ -177,6 +179,7 @@ function convertProjectJSONRunToRun(projectJSONRun: ProjectJSONRun): Run {
   return {
     dateTime: projectJSONRun.dateTime,
     result: projectJSONRun.result,
-    links: Object.values(projectJSONRun.links),
+    links: projectJSONRun.links,
+    recordings: projectJSONRun.recordings,
   };
 }

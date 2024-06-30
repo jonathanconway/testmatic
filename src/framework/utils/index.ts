@@ -3,6 +3,7 @@ export * from "./assertion.utils";
 export * from "./date-time.utils";
 export * from "./errors";
 export * from "./filter.utils";
+export * from "./filename.utils";
 export * from "./object.utils";
 export * from "./regex.utils";
 export * from "./string.utils";

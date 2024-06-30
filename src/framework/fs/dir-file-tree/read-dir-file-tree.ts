@@ -3,6 +3,7 @@ import { partition } from "lodash";
 import { resolve } from "path";
 
 import { DirFileTree } from "../../files";
+import { hasOneOfExtensions } from "../../utils";
 
 export function readDirFileTree(
   path: string,
@@ -30,9 +31,4 @@ export function readDirFileTree(
   ]);
 
   return dirFileTree;
-}
-
-function hasOneOfExtensions(extensions: readonly string[]) {
-  return (filename: string) =>
-    extensions.includes(filename.split(".").slice(-1)[0].toLowerCase());
 }

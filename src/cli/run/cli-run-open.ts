@@ -1,15 +1,6 @@
-import { exec } from "child_process";
 import { createCommand } from "commander";
 
-import {
-  NotFoundError,
-  getRunFilepath,
-  getRunsFilepath,
-  isError,
-  projectGetTestByNameOrTitle,
-  projectGetTestRunByDateTimeOrLatest,
-  projectMdRead,
-} from "../../framework";
+import { isError, runOpen } from "../../framework";
 import { PARAM_TEST_NAME_OR_TITLE } from "../test";
 import { logError } from "../utils";
 
@@ -29,35 +20,8 @@ export const cliRunOpenCommand = createCommand("open")
 export function cliRunOpen(
   ...[testNameOrTitle, runDateTime]: RunOpenParameter
 ) {
-  const project = projectMdRead();
-  if (!project) {
-    return;
+  const runOpenResult = runOpen({ testNameOrTitle, runDateTime });
+  if (isError(runOpenResult)) {
+    logError(runOpenResult.message);
   }
-
-  const getTestResult = projectGetTestByNameOrTitle({
-    project,
-    testNameOrTitle,
-  });
-  if (isError(getTestResult)) {
-    logError(getTestResult.message);
-    return;
-  }
-  const test = getTestResult;
-
-  const getRunResult = projectGetTestRunByDateTimeOrLatest({
-    test,
-    runDateTime,
-  });
-  if (isError(getRunResult)) {
-    logError(getRunResult.message);
-    return;
-  }
-  if (isError(getRunResult) && getRunResult instanceof NotFoundError) {
-    exec(`open "${getRunsFilepath(test)}"`);
-    return;
-  }
-
-  const run = getRunResult;
-
-  exec(`open "${getRunFilepath(test, run)}"`);
 }

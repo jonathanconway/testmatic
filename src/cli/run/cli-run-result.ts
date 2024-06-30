@@ -1,14 +1,6 @@
 import { createCommand } from "commander";
 
-import {
-  isError,
-  parseRunResult,
-  projectGetTestByNameOrTitle,
-  projectGetTestRunByDateTimeOrLatest,
-  projectMdRead,
-  projectMdWrite,
-  projectUpdateTestRun,
-} from "../../framework";
+import { RunResult, isError, runResult } from "../../framework";
 import { PARAM_TEST_NAME_OR_TITLE } from "../test";
 import { logError } from "../utils";
 
@@ -17,7 +9,7 @@ import { PARAM_RUN_RESULT } from "./param-run-result";
 
 type RunOpenParameter = [
   string /* testNameOrTitle */,
-  string /* runResult */,
+  string /* runResultValue */,
   string | undefined /* runDateTime */
 ];
 
@@ -29,40 +21,16 @@ export const cliRunResultCommand = createCommand("result")
   .action(cliRunResult);
 
 export function cliRunResult(
-  ...[testNameOrTitle, runResult, runDateTime]: RunOpenParameter
+  ...[testNameOrTitle, runResultValue, runDateTime]: RunOpenParameter
 ) {
-  const project = projectMdRead();
-  if (!project) {
-    return;
-  }
-
-  const getTestResult = projectGetTestByNameOrTitle({
-    project,
+  const runResultResult = runResult({
     testNameOrTitle,
-  });
-  if (isError(getTestResult)) {
-    logError(getTestResult.message);
-    return;
-  }
-  const test = getTestResult;
-
-  const getRunResult = projectGetTestRunByDateTimeOrLatest({
-    test,
+    runResultValue: runResultValue as RunResult,
     runDateTime,
   });
-  if (isError(getRunResult)) {
-    logError(getRunResult.message);
+
+  if (isError(runResultResult)) {
+    logError(runResultResult.message);
     return;
   }
-  const run = getRunResult;
-
-  const result = parseRunResult(runResult);
-  const updatedRun = {
-    ...run,
-    result,
-  };
-
-  const updatedProject = projectUpdateTestRun({ project, test, updatedRun });
-
-  projectMdWrite(updatedProject);
 }

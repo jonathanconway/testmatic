@@ -7,4 +7,5 @@ export interface Run {
   readonly description?: string;
   readonly result?: RunResult;
   readonly links: ReadonlyArray<Link>;
+  readonly recordings: ReadonlyArray<string>;
 }

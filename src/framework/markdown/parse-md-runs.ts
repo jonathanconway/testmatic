@@ -1,9 +1,9 @@
 import { isObject, isString } from "lodash";
 import { marked } from "marked";
 
-import { Run, RunResult } from "../core";
+import { RUN_RECORDING_EXTENSIONS, Run, RunResult } from "../core";
 import { DirFileTree } from "../files";
-import { isNotNil } from "../utils";
+import { hasOneOfExtensions, isNotNil } from "../utils";
 
 import { getRunFilename } from "./get-run-filename";
 import { RESULT_LINE_PREFIX } from "./md-run";
@@ -57,11 +57,16 @@ function parseMdRun(
 
   const result = parseMdRunResult(descriptions);
 
+  const files = Object.keys(runDir);
+
+  const recordings = files.filter(hasOneOfExtensions(RUN_RECORDING_EXTENSIONS));
+
   return {
     dateTime,
     description,
     result,
     links: [],
+    recordings,
   };
 }
 

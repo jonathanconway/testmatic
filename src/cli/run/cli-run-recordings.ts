@@ -17,19 +17,19 @@ import { logError, logHeading, logTable } from "../utils";
 
 import { PARAM_RUN_DATETIME } from "./param-run-datetime";
 
-type RunShowParameter = [
+type RunRecordingsParameter = [
   string /* testNameOrTitle */,
   string /* runDateTime */
 ];
 
-export const cliRunShowCommand = createCommand("show")
-  .description("Show the full details of a run")
+export const cliRunShowCommand = createCommand("recordings")
+  .description("Show a list of recordings for a run")
   .argument(PARAM_TEST_NAME_OR_TITLE.name, PARAM_TEST_NAME_OR_TITLE.description)
   .argument(PARAM_RUN_DATETIME.name, PARAM_RUN_DATETIME.description)
   .action(cliRunShow);
 
 export function cliRunShow(
-  ...[testNameOrTitle, runDateTime]: RunShowParameter
+  ...[testNameOrTitle, runDateTime]: RunRecordingsParameter
 ) {
   const project = projectMdRead();
   if (!project) {

@@ -12,17 +12,20 @@ export interface CreateRunParams {
   readonly dateTime: string;
   readonly result?: RunResult;
   readonly links?: ReadonlyArray<Link>;
+  readonly recordings?: ReadonlyArray<string>;
 }
 
 export function createRun({
   dateTime,
   result,
   links = [],
+  recordings = [],
 }: CreateRunParams): Run | ValidationError {
   const run = {
     dateTime,
     result,
     links,
+    recordings,
   };
 
   const runValidatorResult = runValidator.safeParse(run);
