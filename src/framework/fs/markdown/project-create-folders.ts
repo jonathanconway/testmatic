@@ -2,9 +2,7 @@ import { existsSync, mkdirSync } from "fs";
 
 import { projectPathGet } from "../../markdown";
 
-export function projectMdCreateFolders() {
-  const projectPath = projectPathGet();
-
+export function projectMdCreateFolders(projectPath = projectPathGet()) {
   if (!existsSync(projectPath)) {
     mkdirSync(projectPath);
   }

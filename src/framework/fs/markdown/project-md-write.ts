@@ -4,9 +4,10 @@ import { ProjectView } from "../../core";
 import { DirFileTree } from "../../files";
 import { exportMd, projectPathGet } from "../../markdown";
 
-export function projectMdWrite(project: ProjectView) {
-  const projectPath = projectPathGet();
-
+export function projectMdWrite(
+  project: ProjectView,
+  projectPath = projectPathGet()
+) {
   const newFileTree = exportMd(project);
 
   writeFileTree(`${projectPath}/tests`, newFileTree.tests);

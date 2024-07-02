@@ -12,11 +12,13 @@ import { NotFoundError } from "../../utils";
 export function runOpen({
   testNameOrTitle,
   runDateTime,
+  projectPath,
 }: {
   readonly testNameOrTitle: string;
   readonly runDateTime?: string;
+  readonly projectPath?: string;
 }) {
-  const project = projectMdRead();
+  const project = projectMdRead(projectPath);
   if (!project) {
     return;
   }

@@ -1,9 +1,16 @@
+import { TESTMATIC_ROOT_DIRNAME } from "../../const";
 import { Run, Test } from "../core";
 
-export function getRunsFilepath(test: Test) {
-  return `./.testmatic/runs/${test.name}`;
+const defaultProjectPath = `./${TESTMATIC_ROOT_DIRNAME}`;
+
+export function getRunsFilepath(test: Test, projectPath = defaultProjectPath) {
+  return `${projectPath}/runs/${test.name}`;
 }
 
-export function getRunFilepath(test: Test, run: Run) {
-  return `./.testmatic/runs/${test.name}/${run.dateTime}`;
+export function getRunFilepath(
+  test: Test,
+  run: Run,
+  projectPath = defaultProjectPath
+) {
+  return `${projectPath}/runs/${test.name}/${run.dateTime}`;
 }

@@ -13,6 +13,11 @@ export function parseMdTestTags(
 ) {
   const headingsByText = getHeadingsNodesByText(root);
   const tagsHeading = headingsByText["Tags"];
+
+  if (!tagsHeading) {
+    return [];
+  }
+
   const tagsList = getNextElements(root, tagsHeading).find(isMdList);
 
   const tags: readonly Tag[] =

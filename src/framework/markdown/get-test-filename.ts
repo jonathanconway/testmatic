@@ -1,5 +1,8 @@
+import { TESTMATIC_ROOT_DIRNAME } from "../../const";
 import { Test } from "../core";
 
-export function getTestFilename(test: Test) {
-  return `./.testmatic/tests/${test.name}.md`;
+const defaultProjectPath = `./${TESTMATIC_ROOT_DIRNAME}`;
+
+export function getTestFilename(test: Test, projectPath = defaultProjectPath) {
+  return `${projectPath}/tests/${test.name}.md`;
 }

@@ -10,5 +10,5 @@
     "moduleResolution": "node",
     "resolveJsonModule": true
   },
-  "include": ["src/**/*", "core/**/*", "files/**/*"]
+  "include": ["src/**/*", "core/**/*", "files/**/*", "cli/**/*"]
 }

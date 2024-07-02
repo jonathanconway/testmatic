@@ -1,7 +1,10 @@
+import { TESTMATIC_ROOT_DIRNAME } from "../../const";
 import { Tag } from "../core";
 
-export function getTagFilename(tag: Tag) {
-  return `./.testmatic/tags/${tag.name}.md`;
+const defaultProjectPath = `./${TESTMATIC_ROOT_DIRNAME}`;
+
+export function getTagFilename(tag: Tag, projectPath = defaultProjectPath) {
+  return `${projectPath}/tags/${tag.name}.md`;
 }
 
 export function getTagFilenameRelative(tag: Tag) {

@@ -1,5 +1,6 @@
 import { createCommand } from "commander";
 
+import { TESTMATIC_ROOT_DIRNAME } from "../../const";
 import {
   Run,
   Test,
@@ -61,7 +62,7 @@ export function cliRunShow(
   logTitle({ test, run });
 
   console.log(
-    `File: ./.testmatic/runs/${test.name}/${run.dateTime}/${run.dateTime}.md`
+    `File: ./${TESTMATIC_ROOT_DIRNAME}/runs/${test.name}/${run.dateTime}/${run.dateTime}.md`
   );
   console.log();
 

@@ -1,6 +1,7 @@
 import { createCommand } from "commander";
 import prompts from "prompts";
 
+import { TESTMATIC_ROOT_DIRNAME } from "../../const";
 import { projectMdCreateFolders, projectMdRead } from "../../framework";
 import { logTable } from "../utils";
 
@@ -23,8 +24,7 @@ export async function cliTestList(args: TestListParameters) {
     const { createProjectFolder } = await prompts({
       type: "confirm",
       name: "createProjectFolder",
-      message:
-        'Cannot find ".testmatic" folder in current working directory. Create?',
+      message: `Cannot find "${TESTMATIC_ROOT_DIRNAME}" folder in current working directory. Create?`,
     });
 
     if (createProjectFolder) {

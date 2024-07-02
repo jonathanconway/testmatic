@@ -112,7 +112,7 @@ export function buildReadmeCliDocs() {
   const md = commands
     .map(
       ({ name, command }) => `
-### ${name}
+#### ${name}
 
 Usage: ${getCleanedCommandAndUsageText(name, command)}
 

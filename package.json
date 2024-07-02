@@ -9,14 +9,16 @@
   "types": "./dist/core/index.d.ts",
   "exports": {
     ".": "./dist/core/index.js",
-    "./files": "./dist/files/index.js"
+    "./files": "./dist/files/index.js",
+    "./cli": "./dist/cli/index.js"
   },
   "scripts": {
     "prepublish": "tsc",
     "build": "tsc",
     "build-readme": "ts-node ./src/build/build-readme",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "cli": "ts-node ./src/cli/cli-exec"
+    "cli": "ts-node ./src/cli/cli-exec",
+    "redeploy-cli": "npm uninstall -g && npm run build && npm i -g"
   },
   "repository": {
     "type": "git",

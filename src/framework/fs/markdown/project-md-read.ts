@@ -3,8 +3,7 @@ import { existsSync } from "fs";
 import { parseMd, projectPathGet } from "../../markdown";
 import { readDirFileTree } from "../dir-file-tree/read-dir-file-tree";
 
-export function projectMdRead() {
-  const projectPath = projectPathGet();
+export function projectMdRead(projectPath = projectPathGet()) {
   if (!existsSync(projectPath)) {
     return undefined;
   }

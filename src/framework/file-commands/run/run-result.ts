@@ -13,12 +13,14 @@ export function runResult({
   testNameOrTitle,
   runResultValue,
   runDateTime,
+  projectPath,
 }: {
   readonly testNameOrTitle: string;
   readonly runResultValue: RunResult;
   readonly runDateTime?: string;
+  readonly projectPath?: string;
 }) {
-  const project = projectMdRead();
+  const project = projectMdRead(projectPath);
   if (!project) {
     return;
   }
@@ -51,5 +53,5 @@ export function runResult({
 
   const updatedProject = projectUpdateTestRun({ project, test, updatedRun });
 
-  projectMdWrite(updatedProject);
+  projectMdWrite(updatedProject, projectPath);
 }
