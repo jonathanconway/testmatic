@@ -5,14 +5,11 @@ import {
   CreateLinkParams,
   Link,
   createLink,
-  isError,
-  isValidationError,
   projectAddTagLink,
-  projectGetTagByNameOrTitle,
   projectMdRead,
   projectMdWrite,
+  throwIfError,
 } from "../../framework";
-import { logError } from "../utils";
 
 import { PARAM_TAG_LINK_HREF } from "./param-tag-link-href";
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
@@ -42,31 +39,19 @@ Optional.
   .action(cliTagLinkAdd);
 
 export function cliTagLinkAdd(...args: TagLinkAddParameters) {
-  const [tagNameOrTitle] = args;
+  const [lookupTagNameOrTitle] = args;
 
-  const project = projectMdRead();
-
-  if (!project) {
-    return;
-  }
-
-  const getTagResult = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
-  if (isError(getTagResult)) {
-    logError(getTagResult.message);
-    return;
-  }
-
-  const tag = getTagResult;
+  const project = throwIfError(projectMdRead());
 
   const newLink = createTagLinkFromArgsOrPrompts(args);
 
-  const addTagLinkResult = projectAddTagLink({ project, tag, newLink });
-  if (isError(addTagLinkResult)) {
-    logError(addTagLinkResult.message);
-    return;
-  }
-
-  const updatedProject = addTagLinkResult;
+  const updatedProject = throwIfError(
+    projectAddTagLink({
+      project,
+      lookupTagNameOrTitle,
+      newLink,
+    })
+  );
 
   projectMdWrite(updatedProject);
 }
@@ -86,11 +71,7 @@ function createTagLinkFromArgsOrPrompts(args: TagLinkAddParameters): Link {
     ...paramsFromPrompts,
   };
 
-  const createLinkResult = createLink(params as CreateLinkParams);
-
-  if (isValidationError(createLinkResult)) {
-    throw createLinkResult.message;
-  }
+  const createLinkResult = throwIfError(createLink(params as CreateLinkParams));
 
   return createLinkResult;
 }

@@ -1,6 +1,6 @@
-import { ProjectView, createProjectView } from ".";
+import { ProjectView, createProjectView, projectGetTestByNameOrTitle } from ".";
 
-import { chain } from "lodash";
+import { isError } from "lodash";
 
 import { AlreadyExistsError, toGot } from "../../utils";
 import { Link } from "../link";
@@ -8,13 +8,24 @@ import { Test } from "../test";
 
 export function projectAddTestLink({
   project,
-  test,
+  lookupTestNameOrTitle,
   newLink,
 }: {
   readonly project: ProjectView;
-  readonly test: Test;
+  readonly lookupTestNameOrTitle: string;
   readonly newLink: Link;
 }) {
+  const projectGetTestByNameOrTitleResult = projectGetTestByNameOrTitle({
+    project,
+    lookupTestNameOrTitle,
+  });
+
+  if (isError(projectGetTestByNameOrTitleResult)) {
+    return projectGetTestByNameOrTitleResult;
+  }
+
+  const test = projectGetTestByNameOrTitleResult;
+
   if (testLinkAlreadyExists(test, newLink)) {
     return new AlreadyExistsError(
       `Link to "${newLink.href}" already exists in test "${test.title}".`
@@ -28,9 +39,7 @@ export function projectAddTestLink({
     links: updatedLinks,
   };
 
-  const tests = project.tests.map((existingTest) =>
-    existingTest.name === test.name ? updatedTest : existingTest
-  );
+  const tests = project.tests.upsert("name", test.name, updatedTest);
 
   const updatedProject = createProjectView({
     ...project,

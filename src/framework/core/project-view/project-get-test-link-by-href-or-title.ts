@@ -3,23 +3,23 @@ import { Test } from "../test";
 
 export function projectGetTestLinkByHrefOrTitle({
   test,
-  linkHrefOrTitle,
+  lookupLinkHref,
 }: {
   readonly test: Test;
-  readonly linkHrefOrTitle: string;
+  readonly lookupLinkHref: string;
 }) {
   const testLinkByHref = test.links.find(
-    (link) => link.href === linkHrefOrTitle
+    (link) => link.href === lookupLinkHref
   );
 
   const testLinkByHrefOrName =
-    testLinkByHref ?? test.links.find((link) => link.title === linkHrefOrTitle);
+    testLinkByHref ?? test.links.find((link) => link.title === lookupLinkHref);
 
   const testLink = testLinkByHrefOrName;
 
   if (!testLink) {
     return new NotFoundError(
-      `Cannot find link in test "${test.title}" with title or href matching "${linkHrefOrTitle}".`
+      `Cannot find link in test "${test.title}" with href matching "${lookupLinkHref}".`
     );
   }
 

@@ -10,41 +10,41 @@ import { getRunFilepath, getRunsFilepath } from "../../markdown";
 import { NotFoundError } from "../../utils";
 
 export function runOpen({
-  testNameOrTitle,
-  runDateTime,
+  lookupTestNameOrTitle,
+  lookupRunDateTime,
   projectPath,
 }: {
-  readonly testNameOrTitle: string;
-  readonly runDateTime?: string;
+  readonly lookupTestNameOrTitle: string;
+  readonly lookupRunDateTime?: string;
   readonly projectPath?: string;
 }) {
   const project = projectMdRead(projectPath);
-  if (!project) {
-    return;
+  if (isError(project)) {
+    return project;
   }
 
-  const getTestResult = projectGetTestByNameOrTitle({
+  const test = projectGetTestByNameOrTitle({
     project,
-    testNameOrTitle,
+    lookupTestNameOrTitle,
   });
-  if (isError(getTestResult)) {
-    return getTestResult;
+  if (isError(test)) {
+    return test;
   }
-  const test = getTestResult;
 
-  const getRunResult = projectGetTestRunByDateTimeOrLatest({
+  const run = projectGetTestRunByDateTimeOrLatest({
+    project,
+    lookupTestNameOrTitle,
     test,
-    runDateTime,
+    lookupRunDateTime,
   });
-  if (isError(getRunResult)) {
-    return getRunResult;
+  if (isError(run)) {
+    if (run instanceof NotFoundError) {
+      exec(`open "${getRunsFilepath(test)}"`);
+      return;
+    } else {
+      return run;
+    }
   }
-  if (isError(getRunResult) && getRunResult instanceof NotFoundError) {
-    exec(`open "${getRunsFilepath(test)}"`);
-    return;
-  }
-
-  const run = getRunResult;
 
   exec(`open "${getRunFilepath(test, run)}"`);
 }

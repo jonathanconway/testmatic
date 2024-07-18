@@ -1,8 +1,6 @@
 import { createCommand } from "commander";
-import prompts from "prompts";
 
-import { TESTMATIC_ROOT_DIRNAME } from "../../const";
-import { projectMdCreateFolders, projectMdRead } from "../../framework";
+import { projectMdRead, throwIfError } from "../../framework";
 import { logTable } from "../utils";
 
 import { filterByArgsTag } from "./test-list-filter-tag";
@@ -18,22 +16,7 @@ export const cliTestListCommand = createCommand("list")
   .action(cliTestList);
 
 export async function cliTestList(args: TestListParameters) {
-  const project = projectMdRead();
-
-  if (!project) {
-    const { createProjectFolder } = await prompts({
-      type: "confirm",
-      name: "createProjectFolder",
-      message: `Cannot find "${TESTMATIC_ROOT_DIRNAME}" folder in current working directory. Create?`,
-    });
-
-    if (createProjectFolder) {
-      projectMdCreateFolders();
-      cliTestList(args);
-    }
-
-    return;
-  }
+  const project = throwIfError(projectMdRead());
 
   const { tag } = args;
   const { tests } = project;

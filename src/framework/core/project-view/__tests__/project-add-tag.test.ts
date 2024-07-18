@@ -1,12 +1,11 @@
-import { isError } from "../../../utils";
-import { MOCK_NEW_TAG_ONE, MOCK_TAG } from "../../tag";
+import { isError } from "lodash";
+
+import { MOCK_NEW_TAG_ONE } from "../../tag";
 import { MOCK_PROJECT_VIEW } from "../project-view.mocks";
 
 describe("project-add-tag", () => {
   describe("addProjectTag", () => {
     it("adds the provided tag to the provided project", async () => {
-      // const { MOCK_NEW_TAG_ONE, MOCK_TAG } = await import("../../tag");
-      // const { MOCK_PROJECT_VIEW } = await import("../project-view.mocks");
       const { projectAddTag } = await import("../project-add-tag");
 
       const updatedProjectView = projectAddTag({
@@ -28,17 +27,5 @@ describe("project-add-tag", () => {
         [MOCK_NEW_TAG_ONE.name]: MOCK_NEW_TAG_ONE,
       });
     });
-
-    // it("does not overwrite tag that already exists", () => {
-    //   expect(() => {
-    //     projectAddTag({
-    //       project: MOCK_PROJECT_VIEW,
-    //       newTag: {
-    //         ...MOCK_TAG,
-    //         description: "desc",
-    //       },
-    //     });
-    //   }).toThrow();
-    // });
   });
 });

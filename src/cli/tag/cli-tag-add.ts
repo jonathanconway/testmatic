@@ -1,17 +1,15 @@
 import { createCommand } from "commander";
-import { isError } from "lodash";
 import promptSync from "prompt-sync";
 
 import {
   CreateTestParams,
   createTag,
   exportMdTag,
-  isValidationError,
   projectAddTag,
   projectMdRead,
   projectMdWrite,
+  throwIfError,
 } from "../../framework";
-import { logError } from "../utils";
 
 interface TagAddParameters {
   readonly title: string;
@@ -71,28 +69,11 @@ Optional.
   .action(cliTagAdd);
 
 export function cliTagAdd(args: TagAddParameters) {
-  const project = projectMdRead();
+  const project = throwIfError(projectMdRead());
 
-  if (!project) {
-    return;
-  }
+  const newTag = throwIfError(createTagFromArgsOrPrompts(args));
 
-  const createTagResult = createTagFromArgsOrPrompts(args);
-
-  if (isValidationError(createTagResult)) {
-    logError(createTagResult.message);
-    return;
-  }
-
-  const newTag = createTagResult;
-
-  const addTagResult = projectAddTag({ project, newTag });
-  if (isError(addTagResult)) {
-    logError(addTagResult.message);
-    return;
-  }
-
-  const updatedProject = addTagResult;
+  const updatedProject = throwIfError(projectAddTag({ project, newTag }));
 
   projectMdWrite(updatedProject);
 

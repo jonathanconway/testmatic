@@ -1,6 +1,7 @@
+import { isError } from "lodash";
 import promptSync from "prompt-sync";
 
-import { CancelledError, isError, sentenceCase } from "../../../framework";
+import { CancelledError, sentenceCase } from "../../../framework";
 
 const prompt = promptSync();
 

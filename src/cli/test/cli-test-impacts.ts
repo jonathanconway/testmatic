@@ -3,12 +3,12 @@ import { createCommand } from "commander";
 import {
   Test,
   getTestImpactedTests,
-  isError,
   projectGetTestByNameOrTitle,
   projectMdRead,
   pruneImpactItems,
+  throwIfError,
 } from "../../framework";
-import { logError, logHeading, logImpacts } from "../utils";
+import { logHeading, logImpacts } from "../utils";
 
 import { PARAM_TEST_NAME_OR_TITLE } from "./param-test-name-or-title";
 
@@ -22,21 +22,14 @@ export const cliTestImpactsCommand = createCommand("impacts")
   .action(cliTestImpacts);
 
 export function cliTestImpacts(testNameOrTitle: TestImpactsParameter) {
-  const project = projectMdRead();
-  if (!project) {
-    return;
-  }
+  const project = throwIfError(projectMdRead());
 
-  const getTestResult = projectGetTestByNameOrTitle({
-    project,
-    testNameOrTitle,
-  });
-  if (isError(getTestResult)) {
-    logError(getTestResult.message);
-    return;
-  }
-
-  const test = getTestResult;
+  const test = throwIfError(
+    projectGetTestByNameOrTitle({
+      project,
+      lookupTestNameOrTitle: testNameOrTitle,
+    })
+  );
 
   const impacts = pruneImpactItems(
     getTestImpactedTests({

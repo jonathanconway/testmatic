@@ -6,15 +6,16 @@ import {
   Test,
   formatDateTimeString,
   getRunFiles,
-  isError,
   projectGetTestByNameOrTitle,
   projectGetTestRunByDateTimeOrLatest,
   projectMdRead,
   sentenceCase,
+  throwIfError,
 } from "../../framework";
 import { runResultEmoji } from "../../framework/core/run/run-result-emoji";
 import { PARAM_TEST_NAME_OR_TITLE } from "../test";
-import { logError, logHeading, logTable } from "../utils";
+import { formatStepText } from "../test/format-step-text";
+import { logHeading, logTable } from "../utils";
 
 import { PARAM_RUN_DATETIME } from "./param-run-datetime";
 
@@ -30,48 +31,35 @@ export const cliRunShowCommand = createCommand("show")
   .action(cliRunShow);
 
 export function cliRunShow(
-  ...[testNameOrTitle, runDateTime]: RunShowParameter
+  ...[lookupTestNameOrTitle, lookupRunDateTime]: RunShowParameter
 ) {
-  const project = projectMdRead();
-  if (!project) {
-    return;
-  }
+  const project = throwIfError(projectMdRead());
 
-  const getTestResult = projectGetTestByNameOrTitle({
-    project,
-    testNameOrTitle,
-  });
-  if (isError(getTestResult)) {
-    logError(getTestResult.message);
-    return;
-  }
-  const test = getTestResult;
+  const test = throwIfError(
+    projectGetTestByNameOrTitle({
+      project,
+      lookupTestNameOrTitle,
+    })
+  );
 
-  const getRunResult = projectGetTestRunByDateTimeOrLatest({
-    test,
-    runDateTime,
-  });
-  if (isError(getRunResult)) {
-    logError(getRunResult.message);
-    return;
-  }
-  const run = getRunResult;
+  const run = throwIfError(
+    projectGetTestRunByDateTimeOrLatest({
+      project,
+      test,
+      lookupTestNameOrTitle,
+      lookupRunDateTime,
+    })
+  );
 
   const files = getRunFiles({ test, run });
 
   logTitle({ test, run });
 
-  console.log(
-    `File: ./${TESTMATIC_ROOT_DIRNAME}/runs/${test.name}/${run.dateTime}/${run.dateTime}.md`
-  );
-  console.log();
+  logFilePath(run);
 
-  console.log(
-    `Result: ${runResultEmoji(run.result)} ${
-      run.result ? sentenceCase(run.result) : "(No result)"
-    }`
-  );
-  console.log();
+  logRunResult(run);
+
+  logSteps(run);
 
   logFiles(files);
 }
@@ -81,6 +69,36 @@ function logTitle({ test, run }: { test: Test; run: Run }) {
   const title = `Test: ${test.title} – Run: ${dateTimeFormatted}`;
 
   logHeading(title, 1);
+}
+
+function logFilePath(run: Run) {
+  console.log(
+    `File: ./${TESTMATIC_ROOT_DIRNAME}/runs/${test.name}/${run.dateTime}/${run.dateTime}.md`
+  );
+  console.log();
+}
+
+function logSteps({ steps }: Run) {
+  logHeading("Steps", 2);
+
+  const testStepsTable = steps.map((step, index) => ({
+    Completed: step.isCompleted ? "✅" : " ",
+    "#": (index + 1).toString(),
+    step: formatStepText(step),
+  }));
+
+  logTable(testStepsTable);
+
+  console.log();
+}
+
+function logRunResult(run: Run) {
+  console.log(
+    `Result: ${runResultEmoji(run.result)} ${
+      run.result ? sentenceCase(run.result) : "(No result)"
+    }`
+  );
+  console.log();
 }
 
 function logFiles(files: string[]) {

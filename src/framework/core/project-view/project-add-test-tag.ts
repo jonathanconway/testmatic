@@ -1,18 +1,32 @@
-import { ProjectView, createProjectView } from ".";
+import { ProjectView, createProjectView, projectGetTestByNameOrTitle } from ".";
+
+import { isError } from "lodash";
 
 import { AlreadyExistsError } from "../../utils";
+import "../../utils";
 import { Tag } from "../tag";
 import { Test } from "../test";
 
 export function projectAddTestTag({
   project,
-  test,
+  lookupTestNameOrTitle,
   tag,
 }: {
   readonly project: ProjectView;
-  readonly test: Test;
+  readonly lookupTestNameOrTitle: string;
   readonly tag: Tag;
 }) {
+  const projectGetTestByNameOrTitleResult = projectGetTestByNameOrTitle({
+    project,
+    lookupTestNameOrTitle,
+  });
+
+  if (isError(projectGetTestByNameOrTitleResult)) {
+    return projectGetTestByNameOrTitleResult;
+  }
+
+  const test = projectGetTestByNameOrTitleResult;
+
   if (tagAlreadyExists({ test, tag })) {
     return new AlreadyExistsError(
       `Tag "${tag.title}" already exists in test "${test.title}".`
@@ -28,9 +42,7 @@ export function projectAddTestTag({
 
   const updatedProject = createProjectView({
     ...project,
-    tests: project.tests.map((existingTest) =>
-      existingTest.name === test.name ? updatedTest : existingTest
-    ),
+    tests: project.tests.upsert("name", test.name, updatedTest),
   });
 
   return updatedProject;

@@ -1,4 +1,6 @@
-import { ProjectView, createProjectView } from ".";
+import { ProjectView, createProjectView, projectGetTagByNameOrTitle } from ".";
+
+import { isError } from "lodash";
 
 import { AlreadyExistsError, toGot } from "../../utils";
 import { Link } from "../link";
@@ -6,13 +8,24 @@ import { Tag } from "../tag";
 
 export function projectAddTagLink({
   project,
-  tag,
+  lookupTagNameOrTitle,
   newLink,
 }: {
   readonly project: ProjectView;
-  readonly tag: Tag;
+  readonly lookupTagNameOrTitle: string;
   readonly newLink: Link;
 }) {
+  const projectGetTagByNameOrTitleResult = projectGetTagByNameOrTitle({
+    project,
+    lookupTagNameOrTitle,
+  });
+
+  if (isError(projectGetTagByNameOrTitleResult)) {
+    return projectGetTagByNameOrTitleResult;
+  }
+
+  const tag = projectGetTagByNameOrTitleResult;
+
   if (tagLinkAlreadyExists(project, tag, newLink)) {
     return new AlreadyExistsError(
       `Link "${newLink.href}" already exists in tag "${tag.title}".`
@@ -26,9 +39,7 @@ export function projectAddTagLink({
     links: updatedLinks,
   };
 
-  const tags = project.tags.map((existingTag) =>
-    existingTag.name === tag.name ? updatedTag : existingTag
-  );
+  const tags = project.tags.upsert("name", lookupTagNameOrTitle, updatedTag);
 
   const updatedProject = createProjectView({
     ...project,

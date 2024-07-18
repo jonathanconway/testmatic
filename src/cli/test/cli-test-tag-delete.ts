@@ -1,15 +1,14 @@
 import { createCommand } from "commander";
 
 import {
-  isError,
   projectDeleteTestTag,
   projectGetTagByNameOrTitle,
   projectGetTestByNameOrTitle,
   projectMdRead,
   projectMdWrite,
+  throwIfError,
 } from "../../framework";
 import { PARAM_TAG_NAME_OR_TITLE } from "../tag";
-import { logError } from "../utils";
 
 import { PARAM_TEST_NAME_OR_TITLE } from "./param-test-name-or-title";
 
@@ -25,48 +24,32 @@ export const cliTestTagDeleteCommand = createCommand("delete")
   .action(cliTestTagDelete);
 
 export function cliTestTagDelete([
-  testNameOrTitle,
-  tagNameOrTitle,
+  lookupTestNameOrTitle,
+  lookupTagNameOrTitle,
 ]: TestTagDeleteParameter) {
-  const project = projectMdRead();
-  if (!project) {
-    return;
-  }
+  const project = throwIfError(projectMdRead());
 
-  const getTestResult = projectGetTestByNameOrTitle({
-    project,
-    testNameOrTitle,
-  });
-  if (isError(getTestResult)) {
-    logError(getTestResult.message);
-    return;
-  }
+  const test = throwIfError(
+    projectGetTestByNameOrTitle({
+      project,
+      lookupTestNameOrTitle: lookupTestNameOrTitle,
+    })
+  );
 
-  const test = getTestResult;
+  const tag = throwIfError(
+    projectGetTagByNameOrTitle({
+      project,
+      lookupTagNameOrTitle,
+    })
+  );
 
-  const getTagResult = projectGetTagByNameOrTitle({
-    project,
-    tagNameOrTitle,
-  });
-  if (isError(getTagResult)) {
-    logError(getTagResult.message);
-    return;
-  }
-
-  const tag = getTagResult;
-
-  const projectDeleteTestTagResult = projectDeleteTestTag({
-    project,
-    test,
-    tag,
-  });
-
-  if (isError(projectDeleteTestTagResult)) {
-    logError(projectDeleteTestTagResult.message);
-    return;
-  }
-
-  const updatedProject = projectDeleteTestTagResult;
+  const updatedProject = throwIfError(
+    projectDeleteTestTag({
+      project,
+      test,
+      tag,
+    })
+  );
 
   projectMdWrite(updatedProject);
 }

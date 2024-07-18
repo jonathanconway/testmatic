@@ -1,22 +1,44 @@
+import { isError } from "lodash";
+
 import { Test } from "../test";
 
+import { projectAddNewTagsFromUpdatedTest } from "./project-add-new-tags-from-test";
+import { projectGetTestByNameOrTitle } from "./project-get-test-by-name-or-title";
 import { ProjectView, createProjectView } from "./project-view";
 
 export function projectUpdateTest({
   project,
-  testName,
-  updatedTest,
+  lookupTestNameOrTitle,
+  updateTestChanges,
 }: {
   readonly project: ProjectView;
-  readonly testName: string;
-  readonly updatedTest: Test;
+  readonly lookupTestNameOrTitle: string;
+  readonly updateTestChanges: Partial<Test>;
 }) {
-  const updatedTests = project.tests.map((existingTest) =>
-    existingTest.name === testName ? updatedTest : existingTest
-  );
+  const test = projectGetTestByNameOrTitle({
+    project,
+    lookupTestNameOrTitle,
+  });
+
+  if (isError(test)) {
+    return test;
+  }
+
+  const updatedTest = {
+    ...test,
+    ...updateTestChanges,
+  };
+
+  const tests = project.tests.upsert("name", test.name, updatedTest);
+
+  const tags = projectAddNewTagsFromUpdatedTest({
+    project,
+    updatedTest,
+  });
 
   return createProjectView({
     ...project,
-    tests: updatedTests,
+    tests,
+    tags,
   });
 }

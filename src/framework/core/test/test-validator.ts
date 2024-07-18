@@ -13,7 +13,7 @@ export const testValidator = object({
     ZOD_REGEX_START_WITH_ALPHA.message
   ),
   description: string().optional(),
-  steps: array(stepValidator).nonempty(),
+  steps: array(stepValidator),
   links: array(linkValidator),
   tags: array(tagValidator),
   runs: array(runValidator),

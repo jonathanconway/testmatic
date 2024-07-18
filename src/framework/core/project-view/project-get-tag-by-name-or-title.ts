@@ -5,25 +5,25 @@ import { ProjectView } from "./project-view";
 
 export function projectGetTagByNameOrTitle({
   project,
-  tagNameOrTitle,
+  lookupTagNameOrTitle,
 }: {
   readonly project: ProjectView;
-  readonly tagNameOrTitle: string;
+  readonly lookupTagNameOrTitle: string;
 }): Tag | Error {
-  const tagByName = project.tagsByName[tagNameOrTitle];
+  const tagByName = project.tagsByName[lookupTagNameOrTitle];
   if (tagByName) {
     return tagByName;
   }
 
   // todo: optimise
-  const tagNameOrTitleLowerTrimmed = tagNameOrTitle.toLowerCase().trim();
+  const tagNameOrTitleLowerTrimmed = lookupTagNameOrTitle.toLowerCase().trim();
   const tagByTitle = project.tags.find(
     (tag) => tag.title.toLowerCase().trim() === tagNameOrTitleLowerTrimmed
   );
 
   if (!tagByTitle) {
     return new NotFoundError(
-      `Cannot find tag with name or title matching "${tagNameOrTitle}".`
+      `Cannot find tag with name or title matching "${lookupTagNameOrTitle}".`
     );
   }
 

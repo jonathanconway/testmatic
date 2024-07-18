@@ -1,4 +1,6 @@
-export class CancelledError extends Error {
+import { TestmaticError } from "./testmatic-error";
+
+export class CancelledError extends TestmaticError {
   public name = "CancelledError";
 
   public constructor() {

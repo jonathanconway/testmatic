@@ -1,15 +1,14 @@
 import { createCommand } from "commander";
 
 import {
-  isError,
   projectDeleteRun,
   projectGetTestByNameOrTitle,
   projectGetTestRunByDateTimeOrLatest,
   projectMdRead,
   projectMdWrite,
+  throwIfError,
 } from "../../framework";
 import { PARAM_TEST_NAME_OR_TITLE } from "../test";
-import { logError } from "../utils";
 
 import { PARAM_RUN_DATETIME } from "./param-run-datetime";
 
@@ -25,34 +24,33 @@ export const cliRunDeleteCommand = createCommand("delete")
   .action(cliRunDelete);
 
 export function cliRunDelete(
-  ...[testNameOrTitle, runDateTime]: RunDeleteParameter
+  ...[lookupTestNameOrTitle, lookupRunDateTime]: RunDeleteParameter
 ) {
-  const project = projectMdRead();
-  if (!project) {
-    return;
-  }
+  const project = throwIfError(projectMdRead());
 
-  const getTestResult = projectGetTestByNameOrTitle({
-    project,
-    testNameOrTitle,
-  });
-  if (isError(getTestResult)) {
-    logError(getTestResult.message);
-    return;
-  }
-  const test = getTestResult;
+  const test = throwIfError(
+    projectGetTestByNameOrTitle({
+      project,
+      lookupTestNameOrTitle,
+    })
+  );
 
-  const getRunResult = projectGetTestRunByDateTimeOrLatest({
-    test,
-    runDateTime,
-  });
-  if (isError(getRunResult)) {
-    logError(getRunResult.message);
-    return;
-  }
-  const runToDelete = getRunResult;
+  const runToDelete = throwIfError(
+    projectGetTestRunByDateTimeOrLatest({
+      project,
+      test,
+      lookupRunDateTime,
+      lookupTestNameOrTitle,
+    })
+  );
 
-  const updatedProject = projectDeleteRun({ project, test, runToDelete });
+  const updatedProject = throwIfError(
+    projectDeleteRun({
+      project,
+      lookupTestNameOrTitle,
+      runToDelete,
+    })
+  );
 
   projectMdWrite(updatedProject);
 }

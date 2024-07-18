@@ -1,14 +1,14 @@
-import { isError as _isError } from "lodash";
-import { ValidationError } from "zod-validation-error";
+import { isError } from "lodash";
 
-import { CancelledError } from "./cancelled-error";
-import { NotFoundError } from "./not-found-error";
+import { TestmaticError } from "./testmatic-error";
 
-export function isError<T>(input: T | Error): input is Error {
-  return (
-    _isError(input) ||
-    input instanceof NotFoundError ||
-    input instanceof CancelledError ||
-    input instanceof ValidationError
-  );
+export function isTestmaticError<T>(input: T | Error): input is TestmaticError {
+  return input instanceof TestmaticError;
+}
+
+export function throwIfError<T>(input: T | Error) {
+  if (isError(input)) {
+    throw input;
+  }
+  return input;
 }

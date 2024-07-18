@@ -2,13 +2,12 @@ import { exec } from "child_process";
 import { createCommand } from "commander";
 
 import {
-  isError,
   projectGetTagByNameOrTitle,
   projectGetTagLinkByHrefOrTitle,
   projectMdRead,
+  throwIfError,
 } from "../../framework";
-import { PARAM_LINK_HREF_OR_TITLE } from "../link";
-import { logError } from "../utils";
+import { PARAM_LINK_HREF } from "../link";
 
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 
@@ -20,35 +19,27 @@ type TagLinkOpenParameter = [
 export const cliTagLinkOpenCommand = createCommand("open")
   .description("Open a tag link in the browser")
   .argument(PARAM_TAG_NAME_OR_TITLE.name, PARAM_TAG_NAME_OR_TITLE.description)
-  .argument(PARAM_LINK_HREF_OR_TITLE.name, PARAM_LINK_HREF_OR_TITLE.description)
+  .argument(PARAM_LINK_HREF.name, PARAM_LINK_HREF.description)
   .action(cliTagOpen);
 
 export function cliTagOpen(
-  ...[tagNameOrTitle, linkHrefOrTitle]: TagLinkOpenParameter
+  ...[lookupTagNameOrTitle, lookupLinkHref]: TagLinkOpenParameter
 ) {
-  const project = projectMdRead();
+  const project = throwIfError(projectMdRead());
 
-  if (!project) {
-    return;
-  }
+  const tag = throwIfError(
+    projectGetTagByNameOrTitle({
+      project,
+      lookupTagNameOrTitle,
+    })
+  );
 
-  const getTagResult = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
-  if (isError(getTagResult)) {
-    logError(getTagResult.message);
-    return;
-  }
-
-  const tag = getTagResult;
-
-  const getTagLinkResult = projectGetTagLinkByHrefOrTitle({
-    tag,
-    linkHrefOrTitle,
-  });
-  if (isError(getTagLinkResult)) {
-    logError(getTagLinkResult.message);
-    return;
-  }
-  const link = getTagLinkResult;
+  const link = throwIfError(
+    projectGetTagLinkByHrefOrTitle({
+      tag,
+      lookupLinkHref,
+    })
+  );
 
   exec(`open "${link.href}"`);
 }

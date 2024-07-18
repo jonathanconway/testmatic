@@ -1,19 +1,18 @@
 import { createCommand } from "commander";
+import { isError } from "lodash";
 
 import {
   ProjectView,
   createTagFromName,
-  isError,
   isNotFoundError,
   projectAddTag,
   projectAddTestTag,
   projectGetTagByNameOrTitle,
-  projectGetTestByNameOrTitle,
   projectMdRead,
   projectMdWrite,
+  throwIfError,
 } from "../../framework";
 import { PARAM_TAG_NAME_OR_TITLE } from "../tag";
-import { logError } from "../utils";
 
 import { PARAM_TEST_NAME_OR_TITLE } from "./param-test-name-or-title";
 
@@ -29,23 +28,45 @@ export const cliTestTagAddCommand = createCommand("add")
   .action(cliTestTagAdd);
 
 export function cliTestTagAdd(...args: TestTagAddParameters) {
-  const project = projectMdRead();
-  if (!project) {
-    return;
-  }
+  const project = throwIfError(projectMdRead());
 
-  const createTestTagResult = createTestTagFromArgs(project, args);
-  if (isError(createTestTagResult)) {
-    logError(createTestTagResult.message);
-    return;
-  }
-  const updatedProject = createTestTagResult;
+  const updatedProject = throwIfError(createTestTagFromArgs(project, args));
 
   projectMdWrite(updatedProject);
 }
 
-function createTagFromArgs(project: ProjectView, tagNameOrTitle: string) {
-  const getTagResult = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
+function createTestTagFromArgs(
+  project: ProjectView,
+  [lookupTestNameOrTitle, lookupTagNameOrTitle]: TestTagAddParameters
+): ProjectView | Error {
+  const createTagFromArgsResult = throwIfError(
+    createTagFromArgs({ project, lookupTagNameOrTitle })
+  );
+
+  const { tag, updatedProject } = createTagFromArgsResult;
+
+  const projectAddTestTagResult = throwIfError(
+    projectAddTestTag({
+      project: updatedProject,
+      lookupTestNameOrTitle,
+      tag,
+    })
+  );
+
+  return projectAddTestTagResult!;
+}
+
+function createTagFromArgs({
+  project,
+  lookupTagNameOrTitle,
+}: {
+  readonly project: ProjectView;
+  readonly lookupTagNameOrTitle: string;
+}) {
+  const getTagResult = projectGetTagByNameOrTitle({
+    project,
+    lookupTagNameOrTitle,
+  });
 
   if (!isError(getTagResult)) {
     return {
@@ -55,61 +76,33 @@ function createTagFromArgs(project: ProjectView, tagNameOrTitle: string) {
   }
 
   if (isNotFoundError(getTagResult)) {
-    const createTagResult = createTagFromName(tagNameOrTitle);
-
-    if (isError(createTagResult)) {
-      return createTagResult;
-    }
-
-    const newTag = createTagResult;
-
-    const addTagResult = projectAddTag({
+    return createAndAddTagFromArgs({
       project,
-      newTag,
+      lookupTagNameOrTitle,
     });
-
-    if (isError(addTagResult)) {
-      return addTagResult;
-    }
-
-    const tag = newTag;
-
-    const updatedProject = project;
-
-    return {
-      tag,
-      updatedProject,
-    };
   }
 
   return getTagResult;
 }
 
-function createTestTagFromArgs(
-  project: ProjectView,
-  [testNameOrTitle, tagNameOrTitle]: TestTagAddParameters
-): ProjectView | Error {
-  const getTestResult = projectGetTestByNameOrTitle({
-    project,
-    testNameOrTitle,
-  });
-  if (isError(getTestResult)) {
-    return getTestResult;
-  }
-  const test = getTestResult;
+function createAndAddTagFromArgs({
+  project,
+  lookupTagNameOrTitle,
+}: {
+  readonly project: ProjectView;
+  readonly lookupTagNameOrTitle: string;
+}) {
+  const newTag = throwIfError(createTagFromName(lookupTagNameOrTitle));
 
-  const createTagFromArgsResult = createTagFromArgs(project, tagNameOrTitle);
-  if (isError(createTagFromArgsResult)) {
-    return createTagFromArgsResult;
-  }
+  const updatedProject = throwIfError(
+    projectAddTag({
+      project,
+      newTag,
+    })
+  );
 
-  const { tag, updatedProject } = createTagFromArgsResult;
-
-  const projectAddTestTagResult = projectAddTestTag({
-    project: updatedProject,
-    test,
-    tag,
-  });
-
-  return projectAddTestTagResult!;
+  return {
+    tag: newTag,
+    updatedProject,
+  };
 }

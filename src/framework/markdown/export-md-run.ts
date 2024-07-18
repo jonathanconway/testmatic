@@ -10,6 +10,12 @@ export function exportMdTestRun(test: Test, run: Run) {
 
 ${RESULT_LINE_PREFIX} ${run.result ? sentenceCase(run.result) : "-"}
 
+## Steps
+
+${run.steps
+  .map((step) => `- [${step.isCompleted ? "x" : " "}] ${step.text}`)
+  .join("\n")}
+
 ## Links
 
 ${run.links.map((link) => `- ${exportMdLink(link)}`).join("\n")}

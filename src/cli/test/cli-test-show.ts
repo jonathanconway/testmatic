@@ -8,13 +8,14 @@ import {
   getRunFilepath,
   getTagFilename,
   getTestFilename,
-  isError,
   projectGetTestByNameOrTitle,
   projectMdRead,
   sentenceCase,
+  throwIfError,
 } from "../../framework";
-import { logError, logHeading, logTable } from "../utils";
+import { logHeading, logTable } from "../utils";
 
+import { formatStepText } from "./format-step-text";
 import { PARAM_TEST_NAME_OR_TITLE } from "./param-test-name-or-title";
 
 type TestShowParameter = string /* testNameOrTitle */;
@@ -24,20 +25,15 @@ export const cliTestShowCommand = createCommand("show")
   .argument(PARAM_TEST_NAME_OR_TITLE.name, PARAM_TEST_NAME_OR_TITLE.description)
   .action(cliTestShow);
 
-export function cliTestShow(testNameOrTitle: TestShowParameter) {
-  const project = projectMdRead();
-  if (!project) {
-    return;
-  }
+export function cliTestShow(lookupTestNameOrTitle: TestShowParameter) {
+  const project = throwIfError(projectMdRead());
 
-  const getTestResult = projectGetTestByNameOrTitle({
-    project,
-    testNameOrTitle,
-  });
-  if (isError(getTestResult)) {
-    logError(getTestResult.message);
-    return;
-  }
+  const getTestResult = throwIfError(
+    projectGetTestByNameOrTitle({
+      project,
+      lookupTestNameOrTitle,
+    })
+  );
 
   const test = getTestResult;
 
@@ -85,17 +81,6 @@ function logSteps({ steps }: Test) {
   logTable(testStepsTable);
 
   console.log();
-}
-
-function formatStepText(step: Step) {
-  let stepText = step.text;
-  for (const tag of step.tags) {
-    stepText = stepText.replaceAll(
-      `(${tag.title.toLowerCase()})`,
-      chalk.greenBright(`(${tag.title.toLowerCase()})`)
-    );
-  }
-  return stepText;
 }
 
 function logLinks({ links }: Test) {

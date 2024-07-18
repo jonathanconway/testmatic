@@ -2,13 +2,12 @@ import { exec } from "child_process";
 import { createCommand } from "commander";
 
 import {
-  isError,
   projectGetTestByNameOrTitle,
   projectGetTestLinkByHrefOrTitle,
   projectMdRead,
+  throwIfError,
 } from "../../framework";
-import { PARAM_LINK_HREF_OR_TITLE } from "../link";
-import { logError } from "../utils";
+import { PARAM_LINK_HREF } from "../link";
 
 import { PARAM_TEST_NAME_OR_TITLE } from "./param-test-name-or-title";
 
@@ -20,38 +19,27 @@ type TestLinkOpenParameter = [
 export const cliTestLinkOpenCommand = createCommand("open")
   .description("Open a test link in the browser")
   .argument(PARAM_TEST_NAME_OR_TITLE.name, PARAM_TEST_NAME_OR_TITLE.description)
-  .argument(PARAM_LINK_HREF_OR_TITLE.name, PARAM_LINK_HREF_OR_TITLE.description)
+  .argument(PARAM_LINK_HREF.name, PARAM_LINK_HREF.description)
   .action(cliTestOpen);
 
 export function cliTestOpen(
-  ...[testNameOrTitle, linkHrefOrTitle]: TestLinkOpenParameter
+  ...[lookupTestNameOrTitle, lookupLinkHref]: TestLinkOpenParameter
 ) {
-  const project = projectMdRead();
+  const project = throwIfError(projectMdRead());
 
-  if (!project) {
-    return;
-  }
+  const test = throwIfError(
+    projectGetTestByNameOrTitle({
+      project,
+      lookupTestNameOrTitle,
+    })
+  );
 
-  const getTestResult = projectGetTestByNameOrTitle({
-    project,
-    testNameOrTitle,
-  });
-  if (isError(getTestResult)) {
-    logError(getTestResult.message);
-    return;
-  }
-
-  const test = getTestResult;
-
-  const getTestLinkResult = projectGetTestLinkByHrefOrTitle({
-    test,
-    linkHrefOrTitle,
-  });
-  if (isError(getTestLinkResult)) {
-    logError(getTestLinkResult.message);
-    return;
-  }
-  const link = getTestLinkResult;
+  const link = throwIfError(
+    projectGetTestLinkByHrefOrTitle({
+      test,
+      lookupLinkHref,
+    })
+  );
 
   exec(`open "${link.href}"`);
 }

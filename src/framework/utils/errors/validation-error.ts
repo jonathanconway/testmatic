@@ -1,4 +1,6 @@
-export class ValidationError extends Error {
+import { TestmaticError } from "./testmatic-error";
+
+export class ValidationError extends TestmaticError {
   public name = "ValidationError";
 }
 

@@ -2,26 +2,36 @@
 
 > ⚡️ Supercharge your test cases ⚙️
 
-Testmatic is a system for quickly and easily writing and organising human-readable test cases.
+Testmatic is a test-case manager for quickly writing and organising human-readable test cases.
 
-✅ simple lists of [**_steps_**](#tests-and-steps)
+- ✅ simple lists of [**_steps_**](#tests-and-steps)
+- 🧪 are grouped into [**_tests_**](#tests-and-steps)
+- 🏷️ which can be organised by [**_tags_**](#tags)
+- 🏃 with results tracked in [**_runs_**](#runs)
 
-🧪 are grouped into [**_tests_**](#tests-and-steps)
-
-🏷️ which can be organised by [**_tags_**](#tags)
-
-🏃 with results tracked in [**_runs_**](#runs)
+<table>
+  <tr>
+    <td>
+      <img src="./docs/ui-demo.gif">
+    </td>
+    <td>
+      <img src="./docs/cli-demo.gif">
+    </td>
+  </tr>
+</table>
 
 Everything is stored in Markdown files, for easy viewing, editing, searching and version control. If pushed to a server, links to Markdown files can be shared within your org, via e.g. Wiki pages, Chat posts, email, etc.
 
-The main benefit of using Testmatic is the ability to rapidly create, organise and find human-readable test cases. This helps you to perform [manual testing](#benefits-of-manual-testing) in an organised, consistent and rigorous manner.
+The main benefit of using Testmatic is that it helps you to perform [manual testing](#benefits-of-manual-testing) in an organised, consistent, rigorous, systematic manner.
 
-Manual testing can offer fast benefits when automated test coverage is limited, development time is constrained and rapid delivery is required while minimising defects. However, if/when you are ready to add automated tests, Testmatic can help you there too: code generators automatically convert your test cases into unit test files.
+Manual testing can offer fast benefits when automated test coverage is limited, development time is constrained and rapid delivery is required while minimising defects.
+
+Whenever you are ready to add automation, Testmatic can help you there too: code generators automatically convert your test cases into unit test files.
 
 ## Contents
 
-- [Intro](#intro)
 - [Concepts](#concepts)
+- [Getting started](#getting-started)
 - [UI](#ui)
 - [CLI](#cli)
 - [Advanced](#advanced)
@@ -31,41 +41,7 @@ Manual testing can offer fast benefits when automated test coverage is limited, 
 - [Troubleshooting](#troubleshooting)
 - [Contact](#contact)
 
-## Getting started
-
-### Via the CLI
-
-Get started by installing Testmatic via the CLI.
-
-#### What you'll need
-
-- [Node.js](https://nodejs.org/en/download/) version 16.14 or above.
-
-#### Install Testmatic
-
-Install globally via NPM:
-
-```bash
-npm install -g testmatic
-```
-
-#### Create a project
-
-A Testmatic project consists of a `.testmatic` folder in your current working directory, containing sub-folders for `tests`, `tags` and `runs`.
-
-You can generate the folders using the `init` command:
-
-```bash
-testmatic init
-```
-
-### Via the Web UI
-
-If you want to play around with Testmatic or use it lightly without doing a full local installation, you can immediately get started with the Web UI.
-
-Simply navigate to: http://testmatic.surge.sh and begin adding tests.
-
-Instructions for using the UI can be found here: [UI](#ui).
+<!-- ------------------------------------------------------------------------------------------------- -->
 
 ## Concepts
 
@@ -184,15 +160,147 @@ Your search might turn up a list of tests like this:
 
 Now you can run some or all of these tests and check how the Sign up button behaves under various scenarios. If you change introduced a bug in one of the tests, you'll have a chance to find the bug and fix it early rather than waiting for it to crop up in production.
 
-## UI
+<!-- ------------------------------------------------------------------------------------------------- -->
 
-### UI usage
+## Getting started
 
-#### Creating a test
+### Installing the CLI
 
-#### Adding tags
+Get started by installing Testmatic via the CLI.
 
-#### Finding tests by tag
+#### What you'll need
+
+- [Node.js](https://nodejs.org/en/download/) version 16.14 or above.
+
+#### Install Testmatic
+
+Install globally via NPM:
+
+```bash
+npm install -g testmatic
+```
+
+You can verify the installation by running:
+
+```bash
+testmatic
+```
+
+### Installing the local UI
+
+Get started by installing Testmatic via the UI.
+
+#### What you'll need
+
+- [Node.js](https://nodejs.org/en/download/) version 16.14 or above.
+
+#### Install Testmatic local UI
+
+Install globally via NPM:
+
+```bash
+npm install -g testmatic-ui
+```
+
+#### Run the Testmatic local UI
+
+You can start the UI from your command line.
+
+```bash
+testmatic-ui
+```
+
+You will want to first switch to the directory where you want to locate your Testmatic project.
+
+For example, if you want to put your Testmatic project under `~/Sources/my-app`, run this:
+
+```bash
+cd ~/Sources/my-app
+testmatic-ui
+```
+
+This will set up your Testmatic project in the following folder: `~/Sources/my-app/.testmatic`.
+
+### Using the hosted UI
+
+If you just want to play around with Testmatic or use it lightly, you can immediately get started with the hosted UI.
+
+The hosted UI can be used immediately, without any local installation.
+
+Simply navigate to: http://testmatic.surge.sh and begin adding your tests.
+
+You can find instructions for using the hosted UI at [UI guide](#ui-guide).
+
+<!-- ------------------------------------------------------------------------------------------------- -->
+
+## UI guide
+
+### Starting a project in the UI
+
+There is no need to explicitly create a new project in the UI. As soon as you open the UI, a new test project will be created if one does not already exist.
+
+#### Switching to a different project in the local UI
+
+If you are running the Testmatic local UI, you can switch to a project in a different folder.
+
+Simply exit the running Testmatic local UI instance (Ctrl+C or Cmd+C), use `cd` to switch to a different folder, then re-run `testmatic-ui`.
+
+For example:
+
+```bash
+~/Sources/project-one $ testmatic-ui
+
+Running Testmatic UI...
+...
+
+{ Cmd+C }
+
+~/Sources/project-one $ cd ../project-two
+
+~/Sources/project-two $ testmatic-ui
+
+Running Testmatic UI...
+...
+```
+
+### Creating a test in the UI
+
+To create a new test, click the Add button in the Project explorer (top-left of the screen).
+
+![Screenshot of the Testmatic UI with an empty project and clicking the Add button](/docs/ui_guide/creating_a_test_in_the_ui/click_add.png)
+
+You can then enter a title and steps.
+
+![Screenshot of the Testmatic UI entering text into the title field](/docs/ui_guide/creating_a_test_in_the_ui/enter_title.png)
+
+![Screenshot of the Testmatic UI entering text into the steps fields](/docs/ui_guide/creating_a_test_in_the_ui/enter_steps.png)
+
+When you're ready to save your new test, click Create (top-right of the screen).
+
+![Screenshot of the Testmatic UI clicking create on a new test](/docs/ui_guide/creating_a_test_in_the_ui/click_create.png)
+
+It will now appear in the Project explorer.
+
+![Screenshot of the Testmatic UI showing createed test in Project explorer](/docs/ui_guide/creating_a_test_in_the_ui/view_created_test_in_project_explorer.png)
+
+### Adding tags in the UI
+
+> ℹ️ **Tags** are re-usable tokens that can be used to group and organise tests.
+>
+> For more info, see [tags](#tags).
+
+You can add tags to steps or to the test as a whole.
+
+#### Adding tags to steps
+
+Focus on the step textbox and type in an "open backet" - `(`. Enter your tag name. Then type in "close bracket" - `)`.
+
+You'll notice that a suggestion box appears – feel free to use this to quickly insert pre-existing tags.
+
+- Keyboard - You can navigate with arrow keys and select a tag with the enter/return or tab key.
+- Mouse - You can scroll up/down and click one of the tags in the list
+
+### Finding tests by tag in the UI
 
 ### Advanced UI usage
 
@@ -202,11 +310,21 @@ Now you can run some or all of these tests and check how the Sign up button beha
 
 #### Using Impacts in the CLI
 
-## CLI
+<!-- ------------------------------------------------------------------------------------------------- -->
 
-### CLI usage
+## CLI guide
 
-#### Creating a test in the CLI
+### Starting a project in the CLI
+
+A Testmatic project consists of a `.testmatic` folder in your current working directory, containing sub-folders for `tests`, `tags` and `runs`.
+
+You can generate the folders using the `init` command:
+
+```bash
+testmatic init
+```
+
+### Creating a test in the CLI
 
 You can create your first test by running the `test add` command and answering prompt questions, pressing Enter/Return when done.
 

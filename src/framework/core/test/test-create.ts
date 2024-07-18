@@ -29,7 +29,7 @@ export const createTestParamsValidator = object({
     ZOD_REGEX_START_WITH_ALPHA.message
   ),
   description: string().optional(),
-  stepTexts: array(string()).nonempty(),
+  stepTexts: array(string()),
   linkNames: array(string()).optional(),
   tagNames: array(string()).optional(),
 });

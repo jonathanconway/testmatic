@@ -17,9 +17,7 @@ export function projectDeleteTestLink({
     links: test.links.filter((link) => link.href !== linkToDelete.href),
   };
 
-  const tests = project.tests.map((tag) =>
-    tag.name === updatedTest.name ? updatedTest : tag
-  );
+  const tests = project.tests.upsert("name", test.name, updatedTest);
 
   return createProjectView({
     ...project,

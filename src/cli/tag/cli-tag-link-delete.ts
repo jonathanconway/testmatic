@@ -1,19 +1,16 @@
 import { createCommand } from "commander";
 
 import {
-  isError,
   projectDeleteTagLink,
-  projectGetTagByNameOrTitle,
-  projectGetTagLinkByHrefOrTitle,
   projectMdRead,
   projectMdWrite,
+  throwIfError,
 } from "../../framework";
-import { PARAM_LINK_HREF_OR_TITLE } from "../link";
-import { logError } from "../utils";
+import { PARAM_LINK_HREF } from "../link";
 
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 
-type TagDeleteParameter = [
+type TagLinkDeleteParameter = [
   string /* tagNameOrTitle */,
   string /* linkHrefOrTitle */
 ];
@@ -21,37 +18,21 @@ type TagDeleteParameter = [
 export const cliTagLinkDeleteCommand = createCommand("delete")
   .description("Delete a link from a tag")
   .argument(PARAM_TAG_NAME_OR_TITLE.name, PARAM_TAG_NAME_OR_TITLE.description)
-  .argument(PARAM_LINK_HREF_OR_TITLE.name, PARAM_LINK_HREF_OR_TITLE.description)
+  .argument(PARAM_LINK_HREF.name, PARAM_LINK_HREF.description)
   .action(cliTagDelete);
 
 export function cliTagDelete(
-  ...[tagNameOrTitle, linkHrefOrTitle]: TagDeleteParameter
+  ...[lookupTagNameOrTitle, lookupLinkHref]: TagLinkDeleteParameter
 ) {
-  const project = projectMdRead();
+  const project = throwIfError(projectMdRead());
 
-  if (!project) {
-    return;
-  }
-
-  const getTagResult = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
-  if (isError(getTagResult)) {
-    logError(getTagResult.message);
-    return;
-  }
-
-  const tag = getTagResult;
-
-  const getTagLinkResult = projectGetTagLinkByHrefOrTitle({
-    tag,
-    linkHrefOrTitle,
-  });
-  if (isError(getTagLinkResult)) {
-    logError(getTagLinkResult.message);
-    return;
-  }
-  const linkToDelete = getTagLinkResult;
-
-  const updatedProject = projectDeleteTagLink({ project, tag, linkToDelete });
+  const updatedProject = throwIfError(
+    projectDeleteTagLink({
+      project,
+      lookupTagNameOrTitle,
+      lookupLinkHref,
+    })
+  );
 
   projectMdWrite(updatedProject);
 }

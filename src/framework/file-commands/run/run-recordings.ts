@@ -1,5 +1,6 @@
 import { isError } from "lodash";
 
+import { logError } from "../../../cli";
 import {
   projectGetTestByNameOrTitle,
   projectGetTestRunByDateTimeOrLatest,
@@ -7,21 +8,22 @@ import {
 import { projectMdRead } from "../../fs";
 
 export function runRecordings({
-  testNameOrTitle,
-  runDateTime,
+  lookupTestNameOrTitle,
+  lookupRunDateTime,
 }: {
-  readonly testNameOrTitle: string;
-  readonly runDateTime?: string;
+  readonly lookupTestNameOrTitle: string;
+  readonly lookupRunDateTime?: string;
 }) {
   const project = projectMdRead();
 
-  if (!project) {
+  if (isError(project)) {
+    logError(project.message);
     return;
   }
 
   const getTestResult = projectGetTestByNameOrTitle({
     project,
-    testNameOrTitle,
+    lookupTestNameOrTitle,
   });
 
   if (isError(getTestResult)) {
@@ -31,8 +33,10 @@ export function runRecordings({
   const test = getTestResult;
 
   const getRunResult = projectGetTestRunByDateTimeOrLatest({
+    project,
     test,
-    runDateTime,
+    lookupRunDateTime,
+    lookupTestNameOrTitle,
   });
 
   if (isError(getRunResult)) {

@@ -1,4 +1,6 @@
-import { ProjectView, createProjectView } from ".";
+import { ProjectView, createProjectView, projectGetTestByNameOrTitle } from ".";
+
+import { isError } from "lodash";
 
 import { AlreadyExistsError } from "../../utils";
 import { Run } from "../run";
@@ -6,13 +8,22 @@ import { Test } from "../test";
 
 export function projectAddTestRun({
   project,
-  test,
+  lookupTestNameOrTitle,
   newRun,
 }: {
   readonly project: ProjectView;
-  readonly test: Test;
+  readonly lookupTestNameOrTitle: string;
   readonly newRun: Run;
 }) {
+  const test = projectGetTestByNameOrTitle({
+    project,
+    lookupTestNameOrTitle,
+  });
+
+  if (isError(test)) {
+    return test;
+  }
+
   if (testRunAlreadyExists(test, newRun)) {
     return new AlreadyExistsError(
       `Run with date/time stamp ${newRun.dateTime} already exists in test "${test.title}".`
@@ -28,9 +39,7 @@ export function projectAddTestRun({
 
   const updatedProject = createProjectView({
     ...project,
-    tests: project.tests.map((existingTest) =>
-      existingTest.name === updatedTest.name ? updatedTest : existingTest
-    ),
+    tests: project.tests.upsert("name", updatedTest.name, updatedTest),
   });
 
   return updatedProject;

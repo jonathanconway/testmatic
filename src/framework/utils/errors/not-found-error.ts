@@ -1,4 +1,6 @@
-export class NotFoundError extends Error {
+import { TestmaticError } from "./testmatic-error";
+
+export class NotFoundError extends TestmaticError {
   public name = "NotFoundError";
 }
 

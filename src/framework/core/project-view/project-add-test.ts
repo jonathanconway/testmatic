@@ -3,6 +3,8 @@ import { ProjectView, createProjectView } from ".";
 import { AlreadyExistsError } from "../../utils";
 import { Test } from "../test";
 
+import { projectAddNewTagsFromUpdatedTest } from "./project-add-new-tags-from-test";
+
 export function projectAddTest({
   project,
   newTest,
@@ -10,37 +12,16 @@ export function projectAddTest({
   readonly project: ProjectView;
   readonly newTest: Test;
 }) {
-  if (testAlreadyExists(project, newTest)) {
+  if (getDoesTestAlreadyExist(project, newTest)) {
     return new AlreadyExistsError(`Test "${newTest.title}" already exists.`);
   }
 
   const tests = [...project.tests, newTest];
 
-  const newTestTags = newTest.tags.map(
-    (newTestTag) => project.tagsByName[newTestTag.name] ?? newTestTag
-  );
-
-  const newTestStepTags = newTest.steps
-    .flatMap((step) => step.tags)
-    .map(
-      (newTestStepTag) =>
-        project.tagsByName[newTestStepTag.name] ?? newTestStepTag
-    );
-
-  const newTags = [...newTestTags, ...newTestStepTags];
-
-  const newTagsByName = Object.fromEntries(
-    newTags.map((newTag) => [newTag.name, newTag])
-  );
-
-  const matchedExistingTags = project.tags.map(
-    (tag) => newTagsByName[tag.name] ?? project.tagsByName[tag.name]
-  );
-  const notMatchedNewTags = newTags.filter(
-    (tag) => !project.tagsByName[tag.name]
-  );
-
-  const tags = [...matchedExistingTags, ...notMatchedNewTags];
+  const tags = projectAddNewTagsFromUpdatedTest({
+    project,
+    updatedTest: newTest,
+  });
 
   const updatedProject = createProjectView({
     tests,
@@ -50,6 +31,6 @@ export function projectAddTest({
   return updatedProject;
 }
 
-function testAlreadyExists(project: ProjectView, test: Test) {
+function getDoesTestAlreadyExist(project: ProjectView, test: Test) {
   return Boolean(project.testsByName[test.name]);
 }

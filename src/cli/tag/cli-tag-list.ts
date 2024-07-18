@@ -1,6 +1,6 @@
 import { createCommand } from "commander";
 
-import { projectMdRead } from "../../framework";
+import { projectMdRead, throwIfError } from "../../framework";
 import { logTable } from "../utils";
 
 import { convertTagToOutputRow } from "./tag-list-output-row";
@@ -10,10 +10,7 @@ export const cliTagListCommand = createCommand("list")
   .action(cliTagList);
 
 export function cliTagList() {
-  const project = projectMdRead();
-  if (!project) {
-    return;
-  }
+  const project = throwIfError(projectMdRead());
 
   const { tags } = project;
 

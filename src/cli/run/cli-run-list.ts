@@ -4,12 +4,12 @@ import {
   Test,
   formatRunResult,
   getRunFilepath,
-  isError,
   projectGetTestByNameOrTitle,
   projectMdRead,
+  throwIfError,
 } from "../../framework";
 import { PARAM_TEST_NAME_OR_TITLE } from "../test";
-import { logError, logHeading, logTable } from "../utils";
+import { logHeading, logTable } from "../utils";
 
 type RunListParameters = string /* testNameOrTitle */;
 
@@ -19,20 +19,14 @@ export const cliRunListCommand = createCommand("list")
   .action(cliRunList);
 
 export function cliRunList(testNameOrTitle: RunListParameters) {
-  const project = projectMdRead();
-  if (!project) {
-    return;
-  }
+  const project = throwIfError(projectMdRead());
 
-  const getTestResult = projectGetTestByNameOrTitle({
-    project,
-    testNameOrTitle,
-  });
-  if (isError(getTestResult)) {
-    logError(getTestResult.message);
-    return;
-  }
-  const test = getTestResult;
+  const test = throwIfError(
+    projectGetTestByNameOrTitle({
+      project,
+      lookupTestNameOrTitle: testNameOrTitle,
+    })
+  );
 
   logTitle(test);
 

@@ -6,15 +6,15 @@ import {
   Test,
   formatDateTimeString,
   getRunFiles,
-  isError,
   projectGetTestByNameOrTitle,
   projectGetTestRunByDateTimeOrLatest,
   projectMdRead,
   sentenceCase,
+  throwIfError,
 } from "../../framework";
 import { runResultEmoji } from "../../framework/core/run/run-result-emoji";
 import { PARAM_TEST_NAME_OR_TITLE } from "../test";
-import { logError, logHeading, logTable } from "../utils";
+import { logHeading } from "../utils";
 
 import { PARAM_RUN_DATETIME } from "./param-run-datetime";
 
@@ -30,32 +30,25 @@ export const cliRunShowCommand = createCommand("recordings")
   .action(cliRunShow);
 
 export function cliRunShow(
-  ...[testNameOrTitle, runDateTime]: RunRecordingsParameter
+  ...[lookupTestNameOrTitle, lookupRunDateTime]: RunRecordingsParameter
 ) {
-  const project = projectMdRead();
-  if (!project) {
-    return;
-  }
+  const project = throwIfError(projectMdRead());
 
-  const getTestResult = projectGetTestByNameOrTitle({
-    project,
-    testNameOrTitle,
-  });
-  if (isError(getTestResult)) {
-    logError(getTestResult.message);
-    return;
-  }
-  const test = getTestResult;
+  const test = throwIfError(
+    projectGetTestByNameOrTitle({
+      project,
+      lookupTestNameOrTitle,
+    })
+  );
 
-  const getRunResult = projectGetTestRunByDateTimeOrLatest({
-    test,
-    runDateTime,
-  });
-  if (isError(getRunResult)) {
-    logError(getRunResult.message);
-    return;
-  }
-  const run = getRunResult;
+  const run = throwIfError(
+    projectGetTestRunByDateTimeOrLatest({
+      project,
+      test,
+      lookupRunDateTime,
+      lookupTestNameOrTitle,
+    })
+  );
 
   const files = getRunFiles({ test, run });
 

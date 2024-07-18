@@ -1,8 +1,7 @@
 import { createCommand } from "commander";
 
-import { isError, runOpen } from "../../framework";
+import { runOpen, throwIfError } from "../../framework";
 import { PARAM_TEST_NAME_OR_TITLE } from "../test";
-import { logError } from "../utils";
 
 import { PARAM_RUN_DATETIME } from "./param-run-datetime";
 
@@ -20,8 +19,10 @@ export const cliRunOpenCommand = createCommand("open")
 export function cliRunOpen(
   ...[testNameOrTitle, runDateTime]: RunOpenParameter
 ) {
-  const runOpenResult = runOpen({ testNameOrTitle, runDateTime });
-  if (isError(runOpenResult)) {
-    logError(runOpenResult.message);
-  }
+  throwIfError(
+    runOpen({
+      lookupTestNameOrTitle: testNameOrTitle,
+      lookupRunDateTime: runDateTime,
+    })
+  );
 }

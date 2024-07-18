@@ -1,4 +1,4 @@
-export const PARAM_LINK_HREF_OR_TITLE = {
-  name: "<linkHrefOrTitle>",
-  description: "Href or title of the link",
+export const PARAM_LINK_HREF = {
+  name: "<lookupLinkHref>",
+  description: "Href of the link",
 };

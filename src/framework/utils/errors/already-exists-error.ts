@@ -1,4 +1,6 @@
-export class AlreadyExistsError extends Error {
+import { TestmaticError } from "./testmatic-error";
+
+export class AlreadyExistsError extends TestmaticError {
   public name = "AlreadyExistsError";
 }
 

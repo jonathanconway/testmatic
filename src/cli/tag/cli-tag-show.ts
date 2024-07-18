@@ -5,13 +5,13 @@ import {
   Test,
   getTagFilename,
   getTestFilename,
-  isError,
   projectGetTagByNameOrTitle,
   projectGetTestsByTag,
   projectMdRead,
   sentenceCase,
+  throwIfError,
 } from "../../framework";
-import { logError, logHeading, logTable } from "../utils";
+import { logHeading, logTable } from "../utils";
 
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 
@@ -22,19 +22,15 @@ export const cliTagShowCommand = createCommand("show")
   .argument(PARAM_TAG_NAME_OR_TITLE.name, PARAM_TAG_NAME_OR_TITLE.description)
   .action(cliTagShow);
 
-export function cliTagShow(tagNameOrTitle: TagShowParameter) {
-  const project = projectMdRead();
-  if (!project) {
-    return;
-  }
+export function cliTagShow(lookupTagNameOrTitle: TagShowParameter) {
+  const project = throwIfError(projectMdRead());
 
-  const getTagResult = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
-  if (isError(getTagResult)) {
-    logError(getTagResult.message);
-    return;
-  }
-
-  const tag = getTagResult;
+  const tag = throwIfError(
+    projectGetTagByNameOrTitle({
+      project,
+      lookupTagNameOrTitle,
+    })
+  );
 
   const tests = projectGetTestsByTag({ project, tag });
 

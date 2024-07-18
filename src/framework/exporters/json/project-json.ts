@@ -5,6 +5,7 @@ import {
   ProjectView,
   Run,
   RunResult,
+  RunStep,
   Step,
   Tag,
   Test,
@@ -109,6 +110,12 @@ interface ProjectJSONRun {
   readonly result?: RunResult;
   readonly links: readonly ProjectJSONLink[];
   readonly recordings: readonly string[];
+  readonly steps: readonly ProjectJSONRunStep[];
+}
+
+interface ProjectJSONRunStep {
+  readonly text: string;
+  readonly isCompleted: boolean;
 }
 
 function convertRunToProjectRunJSON(run: Run): ProjectJSONRun {
@@ -117,6 +124,7 @@ function convertRunToProjectRunJSON(run: Run): ProjectJSONRun {
     result: run.result,
     links: run.links.map(convertLinkToProjectJSONLink),
     recordings: run.recordings,
+    steps: run.steps,
   };
 }
 
@@ -132,7 +140,7 @@ function convertProjectJSONTestToTest(
     steps: projectJSONTest.stepTexts.map(
       convertProjectJSONStepToStep(projectJSON)
     ),
-    runs: projectJSONTest.runs.map(convertProjectJSONRunToRun),
+    runs: projectJSONTest.runs.map(convertProjectJSONRunToRun(projectJSON)),
     links: projectJSONTest.links.map(convertProjectJSONLinkToLink),
     tags: projectJSONTest.tagNames
       .map(convertProjectJSONTestTagToTag(projectJSON))
@@ -175,11 +183,29 @@ function convertProjectJSONLinkToLink(projectJSONRun: ProjectJSONLink): Link {
   };
 }
 
-function convertProjectJSONRunToRun(projectJSONRun: ProjectJSONRun): Run {
-  return {
-    dateTime: projectJSONRun.dateTime,
-    result: projectJSONRun.result,
-    links: projectJSONRun.links,
-    recordings: projectJSONRun.recordings,
+function convertProjectJSONRunToRun(projectJSON: ProjectJSON) {
+  return (projectJSONRun: ProjectJSONRun): Run => {
+    return {
+      dateTime: projectJSONRun.dateTime,
+      result: projectJSONRun.result,
+      links: projectJSONRun.links,
+      recordings: projectJSONRun.recordings,
+      steps: projectJSONRun.steps?.map(
+        convertProjectJSONRunStepToRunStep(projectJSON)
+      ),
+    };
+  };
+}
+
+function convertProjectJSONRunStepToRunStep(projectJSON: ProjectJSON) {
+  return (projectJSONRunStep: ProjectJSONRunStep): RunStep => {
+    return {
+      text: projectJSONRunStep.text,
+      tags: parseTagNames(projectJSONRunStep.text)
+        .map(snakeCase)
+        .map(convertProjectJSONTestTagToTag(projectJSON))
+        .map(convertProjectJSONTagToTag),
+      isCompleted: projectJSONRunStep.isCompleted,
+    };
   };
 }

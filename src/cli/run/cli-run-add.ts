@@ -3,18 +3,17 @@ import { createCommand } from "commander";
 
 import {
   RunResult,
+  Test,
   createRun,
   getRunFilepath,
-  isError,
-  isValidationError,
   nowDateTimeString,
   projectAddTestRun,
   projectGetTestByNameOrTitle,
   projectMdRead,
   projectMdWrite,
+  throwIfError,
 } from "../../framework";
 import { PARAM_TEST_NAME_OR_TITLE } from "../test";
-import { logError } from "../utils";
 
 type RunAddParameters = [
   string /* testNameOrTitle */,
@@ -47,47 +46,43 @@ Optional.
   .action(cliTagAdd);
 
 export function cliTagAdd(...args: RunAddParameters) {
-  const project = projectMdRead();
-  if (!project) {
-    return;
-  }
+  const project = throwIfError(projectMdRead());
 
   const [testNameOrTitle] = args;
 
-  const getTestResult = projectGetTestByNameOrTitle({
-    project,
-    testNameOrTitle,
-  });
-  if (isError(getTestResult)) {
-    logError(getTestResult.message);
-    return;
-  }
-  const test = getTestResult;
+  const test = throwIfError(
+    projectGetTestByNameOrTitle({
+      project,
+      lookupTestNameOrTitle: testNameOrTitle,
+    })
+  );
 
-  const createRunResult = createRunFromArgs(args);
-  if (isValidationError(createRunResult)) {
-    logError(createRunResult.message);
-    return;
-  }
-  const newRun = createRunResult;
+  const newRun = throwIfError(createRunFromArgs({ test, args }));
 
-  const addTestRunResult = projectAddTestRun({ project, test, newRun });
-  if (isError(addTestRunResult)) {
-    logError(addTestRunResult.message);
-    return;
-  }
-  const updatedProject = addTestRunResult;
+  const updatedProject = throwIfError(
+    projectAddTestRun({
+      project,
+      lookupTestNameOrTitle: testNameOrTitle,
+      newRun,
+    })
+  );
 
   projectMdWrite(updatedProject);
 
   exec(`open "${getRunFilepath(test, newRun)}"`);
 }
 
-function createRunFromArgs([
-  ,
-  { dateTime = nowDateTimeString(), result },
-]: RunAddParameters) {
+function createRunFromArgs({
+  test,
+  args,
+}: {
+  readonly test: Test;
+  readonly args: RunAddParameters;
+}) {
+  const [, { dateTime = nowDateTimeString(), result }] = args;
+
   const createTagResult = createRun({
+    test,
     dateTime,
     result,
   });

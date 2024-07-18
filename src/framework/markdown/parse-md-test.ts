@@ -30,7 +30,7 @@ export function parseMdTest(
 
   const tags = parseMdTestTags(root, existingTagsByName);
 
-  const runs = parseMdRuns(runsDirFileTree, name);
+  const runs = parseMdRuns(runsDirFileTree, name, existingTagsByName);
 
   return {
     type: "test",

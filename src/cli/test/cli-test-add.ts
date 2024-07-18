@@ -1,15 +1,16 @@
 import { createCommand } from "commander";
+import { isError } from "lodash";
 
 import {
   CreateTestParams,
   createTest,
   isCancelledError,
-  isError,
   projectAddTest,
   projectMdRead,
   projectMdWrite,
+  throwIfError,
 } from "../../framework";
-import { logError, promptValue, promptValues } from "../utils";
+import { promptValue, promptValues } from "../utils";
 
 interface TestAddParameters {
   readonly title: string;
@@ -72,24 +73,11 @@ Optional.
   .action(cliTestAdd);
 
 export function cliTestAdd(args: TestAddParameters) {
-  const project = projectMdRead();
-  if (!project) {
-    return;
-  }
+  const project = throwIfError(projectMdRead());
 
-  const createTestResult = createTestFromArgsOrPrompts(args);
-  if (isError(createTestResult)) {
-    logError(createTestResult.message);
-    return;
-  }
+  const newTest = throwIfError(createTestFromArgsOrPrompts(args));
 
-  const newTest = createTestResult;
-
-  const addTestResult = projectAddTest({ project, newTest });
-  if (isError(addTestResult)) {
-    logError(addTestResult.message);
-    return;
-  }
+  const addTestResult = throwIfError(projectAddTest({ project, newTest }));
 
   const updatedProject = addTestResult;
 

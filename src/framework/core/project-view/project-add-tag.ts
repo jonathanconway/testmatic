@@ -11,7 +11,7 @@ export function projectAddTag({
   readonly newTag: Tag;
 }) {
   if (tagAlreadyExists(project, newTag)) {
-    return new AlreadyExistsError(`Tag "${newTag.name}" already exists.`);
+    return new AlreadyExistsError(`Tag "${newTag.title}" already exists.`);
   }
 
   const tags = [...project.tags, newTag];

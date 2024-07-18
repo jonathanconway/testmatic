@@ -1,22 +1,25 @@
+import { isError } from "lodash";
+
 import { Tag } from "../tag";
 
+import { projectGetTagByNameOrTitle } from "./project-get-tag-by-name-or-title";
 import { ProjectView, createProjectView } from "./project-view";
 
 export function projectUpdateTag({
   project,
-  tagNameOrTitle,
+  lookupTagNameOrTitle,
   updatedTag,
 }: {
   readonly project: ProjectView;
-  readonly tagNameOrTitle: string;
+  readonly lookupTagNameOrTitle: string;
   readonly updatedTag: Tag;
 }) {
-  const tag =
-    project.tagsByName[tagNameOrTitle] ?? project.tagsByTitle[tagNameOrTitle];
+  const tag = projectGetTagByNameOrTitle({ project, lookupTagNameOrTitle });
+  if (isError(tag)) {
+    return tag;
+  }
 
-  const updatedTags = project.tags.map((existingTag) =>
-    existingTag.name === tag.name ? updatedTag : existingTag
-  );
+  const updatedTags = project.tags.upsert("name", tag.name, updatedTag);
 
   return createProjectView({
     ...project,

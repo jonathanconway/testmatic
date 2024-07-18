@@ -1,32 +1,55 @@
+import { isError } from "lodash";
+
 import { Run } from "../run";
-import { Test } from "../test";
 
-import { ProjectView, createProjectView } from "./project-view";
+import { projectGetTestByNameOrTitle } from "./project-get-test-by-name-or-title";
+import { projectGetTestRunByDateTime } from "./project-get-test-run-by-datetime";
+import { projectUpdateTest } from "./project-update-test";
+import { ProjectView } from "./project-view";
 
+// todo: allow latest
 export function projectUpdateTestRun({
   project,
-  test,
-  updatedRun,
+  lookupTestNameOrTitle,
+  lookupRunDateTime,
+  updateRunChanges,
 }: {
   readonly project: ProjectView;
-  readonly test: Test;
-  readonly updatedRun: Run;
+  readonly lookupTestNameOrTitle: string;
+  readonly lookupRunDateTime: string;
+  readonly updateRunChanges: Partial<Run>;
 }) {
-  const updatedRuns = test.runs.map((run) =>
-    run.dateTime === updatedRun.dateTime ? updatedRun : run
-  );
+  const test = projectGetTestByNameOrTitle({
+    project,
+    lookupTestNameOrTitle,
+  });
 
-  const updatedTest = {
-    ...test,
-    runs: updatedRuns,
+  if (isError(test)) {
+    return test;
+  }
+
+  const run = projectGetTestRunByDateTime({
+    project,
+    lookupTestNameOrTitle,
+    lookupRunDateTime,
+  });
+
+  if (isError(run)) {
+    return run;
+  }
+
+  const updatedRun: Run = {
+    ...run,
+    ...updateRunChanges,
   };
 
-  const updatedTests = project.tests.map((existingTest) =>
-    existingTest.name === updatedTest.name ? updatedTest : existingTest
-  );
+  const runs = test.runs.upsert("dateTime", lookupRunDateTime, updatedRun);
 
-  return createProjectView({
-    ...project,
-    tests: updatedTests,
+  return projectUpdateTest({
+    project,
+    lookupTestNameOrTitle,
+    updateTestChanges: {
+      runs,
+    },
   });
 }

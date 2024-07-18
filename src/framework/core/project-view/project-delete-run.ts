@@ -1,17 +1,29 @@
-import { Run } from "../run";
-import { Test } from "../test";
+import { isError } from "lodash";
 
+import { Run } from "../run";
+
+import { projectGetTestByNameOrTitle } from "./project-get-test-by-name-or-title";
 import { ProjectView, createProjectView } from "./project-view";
 
 export function projectDeleteRun({
   project,
-  test,
+  lookupTestNameOrTitle,
   runToDelete,
 }: {
   readonly project: ProjectView;
-  readonly test: Test;
+  readonly lookupTestNameOrTitle: string;
   readonly runToDelete: Run;
 }) {
+  const projectGetTestByNameOrTitleResult = projectGetTestByNameOrTitle({
+    project,
+    lookupTestNameOrTitle,
+  });
+  if (isError(projectGetTestByNameOrTitleResult)) {
+    return projectGetTestByNameOrTitleResult;
+  }
+
+  const test = projectGetTestByNameOrTitleResult;
+
   const updatedRuns = test.runs.filter(
     (run) => run.dateTime !== runToDelete.dateTime
   );
@@ -21,8 +33,10 @@ export function projectDeleteRun({
     runs: updatedRuns,
   };
 
-  const updatedTests = project.tests.map((existingTest) =>
-    existingTest.name === updatedTest.name ? updatedTest : existingTest
+  const updatedTests = project.tests.upsert(
+    "name",
+    updatedTest.name,
+    updatedTest
   );
 
   return createProjectView({

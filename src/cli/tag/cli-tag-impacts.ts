@@ -3,12 +3,12 @@ import { createCommand } from "commander";
 import {
   Tag,
   getTagImpactedTests,
-  isError,
   projectGetTagByNameOrTitle,
   projectMdRead,
   pruneImpactItems,
+  throwIfError,
 } from "../../framework";
-import { logError, logHeading, logImpacts } from "../utils";
+import { logHeading, logImpacts } from "../utils";
 
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
 
@@ -19,19 +19,15 @@ export const cliTagImpactsCommand = createCommand("impacts")
   .argument(PARAM_TAG_NAME_OR_TITLE.name, PARAM_TAG_NAME_OR_TITLE.description)
   .action(cliTagImpacts);
 
-export function cliTagImpacts(tagNameOrTitle: TagImpactsParameter) {
-  const project = projectMdRead();
-  if (!project) {
-    return;
-  }
+export function cliTagImpacts(lookupTagNameOrTitle: TagImpactsParameter) {
+  const project = throwIfError(projectMdRead());
 
-  const getTagResult = projectGetTagByNameOrTitle({ project, tagNameOrTitle });
-  if (isError(getTagResult)) {
-    logError(getTagResult.message);
-    return;
-  }
-
-  const tag = getTagResult;
+  const tag = throwIfError(
+    projectGetTagByNameOrTitle({
+      project,
+      lookupTagNameOrTitle,
+    })
+  );
 
   const impacts = pruneImpactItems(
     getTagImpactedTests({

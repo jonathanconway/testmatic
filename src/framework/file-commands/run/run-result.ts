@@ -10,48 +10,59 @@ import {
 import { projectMdRead, projectMdWrite } from "../../fs";
 
 export function runResult({
-  testNameOrTitle,
+  lookupTestNameOrTitle,
   runResultValue,
-  runDateTime,
+  lookupRunDateTime,
   projectPath,
 }: {
-  readonly testNameOrTitle: string;
+  readonly lookupTestNameOrTitle: string;
   readonly runResultValue: RunResult;
-  readonly runDateTime?: string;
+  readonly lookupRunDateTime?: string;
   readonly projectPath?: string;
 }) {
   const project = projectMdRead(projectPath);
-  if (!project) {
-    return;
+
+  if (isError(project)) {
+    return project;
   }
 
-  const getTestResult = projectGetTestByNameOrTitle({
+  const test = projectGetTestByNameOrTitle({
     project,
-    testNameOrTitle,
+    lookupTestNameOrTitle,
   });
-  if (isError(getTestResult)) {
-    return getTestResult;
+
+  if (isError(test)) {
+    return test;
   }
 
-  const test = getTestResult;
-
-  const getRunResult = projectGetTestRunByDateTimeOrLatest({
+  const run = projectGetTestRunByDateTimeOrLatest({
+    project,
     test,
-    runDateTime,
+    lookupRunDateTime,
+    lookupTestNameOrTitle,
   });
-  if (isError(getRunResult)) {
-    return getRunResult;
-  }
 
-  const run = getRunResult;
+  if (isError(run)) {
+    return run;
+  }
 
   const result = parseRunResult(runResultValue);
+
   const updatedRun = {
     ...run,
     result,
   };
 
-  const updatedProject = projectUpdateTestRun({ project, test, updatedRun });
+  const updatedProject = projectUpdateTestRun({
+    project,
+    lookupTestNameOrTitle,
+    lookupRunDateTime: run.dateTime,
+    updateRunChanges: updatedRun,
+  });
+
+  if (isError(updatedProject)) {
+    return updatedProject;
+  }
 
   projectMdWrite(updatedProject, projectPath);
 }

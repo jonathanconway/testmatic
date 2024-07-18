@@ -1,13 +1,12 @@
 import { createCommand } from "commander";
 
 import {
-  isError,
   projectDeleteTest,
   projectGetTestByNameOrTitle,
   projectMdRead,
   projectMdWrite,
+  throwIfError,
 } from "../../framework";
-import { logError } from "../utils";
 
 import { PARAM_TEST_NAME_OR_TITLE } from "./param-test-name-or-title";
 
@@ -19,21 +18,14 @@ export const cliTestDeleteCommand = createCommand("delete")
   .action(cliTestDelete);
 
 export function cliTestDelete(testNameOrTitle: TestDeleteParameter) {
-  const project = projectMdRead();
-  if (!project) {
-    return;
-  }
+  const project = throwIfError(projectMdRead());
 
-  const getTestResult = projectGetTestByNameOrTitle({
-    project,
-    testNameOrTitle,
-  });
-  if (isError(getTestResult)) {
-    logError(getTestResult.message);
-    return;
-  }
-
-  const testToDelete = getTestResult;
+  const testToDelete = throwIfError(
+    projectGetTestByNameOrTitle({
+      project,
+      lookupTestNameOrTitle: testNameOrTitle,
+    })
+  );
 
   const updatedProject = projectDeleteTest({ project, testToDelete });
 

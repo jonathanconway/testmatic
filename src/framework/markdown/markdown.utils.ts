@@ -66,3 +66,14 @@ export function getMdTextContent(token?: Token) {
 export function getMdListItemTexts(stepsList: Tokens.List) {
   return stepsList.items.filter(isMdListItem).map(getMdTextContent);
 }
+
+export function getMdCheckCheckListItems(stepsList: Tokens.List) {
+  return stepsList.items.filter(isMdListItem).map(getMdCheckCheckListItem);
+}
+
+export function getMdCheckCheckListItem(checkListItem: Tokens.ListItem) {
+  return {
+    text: checkListItem.text,
+    checked: checkListItem.checked ?? false,
+  };
+}

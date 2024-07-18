@@ -1,4 +1,5 @@
-import { isError } from "../../../utils";
+import { isError } from "lodash";
+
 import {
   MOCK_NEW_TAGS,
   MOCK_NEW_TAG_ONE,

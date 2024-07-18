@@ -29,9 +29,7 @@ export function projectDeleteTestTag({
 
   const updatedProject = createProjectView({
     ...project,
-    tests: project.tests.map((existingTest) =>
-      existingTest.name === test.name ? updatedTest : existingTest
-    ),
+    tests: project.tests.upsert("name", test.name, updatedTest),
   });
 
   return updatedProject;
