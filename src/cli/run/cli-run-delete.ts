@@ -2,11 +2,10 @@ import { createCommand } from "commander";
 
 import {
   projectDeleteRun,
-  projectGetTestByNameOrTitle,
-  projectGetTestRunByDateTimeOrLatest,
   projectMdRead,
   projectMdWrite,
   throwIfError,
+  throwIfResultWithDataError,
 } from "../../framework";
 import { PARAM_TEST_NAME_OR_TITLE } from "../test";
 
@@ -28,27 +27,11 @@ export function cliRunDelete(
 ) {
   const project = throwIfError(projectMdRead());
 
-  const test = throwIfError(
-    projectGetTestByNameOrTitle({
-      project,
-      lookupTestNameOrTitle,
-    })
-  );
-
-  const runToDelete = throwIfError(
-    projectGetTestRunByDateTimeOrLatest({
-      project,
-      test,
-      lookupRunDateTime,
-      lookupTestNameOrTitle,
-    })
-  );
-
-  const updatedProject = throwIfError(
+  const { data: updatedProject } = throwIfResultWithDataError(
     projectDeleteRun({
       project,
       lookupTestNameOrTitle,
-      runToDelete,
+      lookupRunDateTime,
     })
   );
 

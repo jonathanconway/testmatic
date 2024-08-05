@@ -5,6 +5,7 @@ import {
   projectMdRead,
   projectMdWrite,
   throwIfError,
+  throwIfResultWithDataError,
 } from "../../framework";
 
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
@@ -19,7 +20,7 @@ export const cliTagDeleteCommand = createCommand("delete")
 export function cliTagDelete(tagNameOrTitle: TagDeleteParameter) {
   const project = throwIfError(projectMdRead());
 
-  const updatedProject = throwIfError(
+  const { data: updatedProject } = throwIfResultWithDataError(
     projectDeleteTag({
       project,
       lookupTagNameOrTitle: tagNameOrTitle,

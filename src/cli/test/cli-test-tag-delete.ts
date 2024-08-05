@@ -2,19 +2,19 @@ import { createCommand } from "commander";
 
 import {
   projectDeleteTestTag,
-  projectGetTagByNameOrTitle,
-  projectGetTestByNameOrTitle,
   projectMdRead,
   projectMdWrite,
   throwIfError,
+  throwIfResultWithDataError,
 } from "../../framework";
 import { PARAM_TAG_NAME_OR_TITLE } from "../tag";
+import { logSuccess } from "../utils";
 
 import { PARAM_TEST_NAME_OR_TITLE } from "./param-test-name-or-title";
 
 type TestTagDeleteParameter = [
-  string /* testNameOrTitle */,
-  string /* tagNameOrTitle */
+  string /* lookupTestNameOrTitle */,
+  string /* lookupTagNameOrTitle */
 ];
 
 export const cliTestTagDeleteCommand = createCommand("delete")
@@ -29,27 +29,15 @@ export function cliTestTagDelete([
 ]: TestTagDeleteParameter) {
   const project = throwIfError(projectMdRead());
 
-  const test = throwIfError(
-    projectGetTestByNameOrTitle({
+  const updatedProject = throwIfResultWithDataError(
+    projectDeleteTestTag({
       project,
-      lookupTestNameOrTitle: lookupTestNameOrTitle,
-    })
-  );
-
-  const tag = throwIfError(
-    projectGetTagByNameOrTitle({
-      project,
+      lookupTestNameOrTitle,
       lookupTagNameOrTitle,
     })
   );
 
-  const updatedProject = throwIfError(
-    projectDeleteTestTag({
-      project,
-      test,
-      tag,
-    })
-  );
+  projectMdWrite(updatedProject.data);
 
-  projectMdWrite(updatedProject);
+  logSuccess(updatedProject.message);
 }

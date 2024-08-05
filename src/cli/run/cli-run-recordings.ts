@@ -12,7 +12,7 @@ import {
   sentenceCase,
   throwIfError,
 } from "../../framework";
-import { runResultEmoji } from "../../framework/core/run/run-result-emoji";
+import { runResultEmoji } from "../../framework/core/entities/run/run-result-emoji";
 import { PARAM_TEST_NAME_OR_TITLE } from "../test";
 import { logHeading } from "../utils";
 

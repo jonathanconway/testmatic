@@ -1,7 +1,7 @@
 import { isObject, isString } from "lodash";
 import { marked } from "marked";
 
-import { RUN_RECORDING_EXTENSIONS, Run, RunResult, Tag } from "../core";
+import { ProjectView, RUN_RECORDING_EXTENSIONS, Run, RunResult } from "../core";
 import { DirFileTree } from "../files";
 import { hasOneOfExtensions } from "../utils";
 
@@ -17,7 +17,7 @@ import {
 export function parseMdRun(
   dateTime: string,
   runDir: DirFileTree | string | undefined,
-  existingTagsByName: Record<string, Tag>
+  project: ProjectView
 ): Run | undefined {
   if (!isObject(runDir)) {
     // Todo: report error here
@@ -46,7 +46,7 @@ export function parseMdRun(
 
   const recordings = files.filter(hasOneOfExtensions(RUN_RECORDING_EXTENSIONS));
 
-  const steps = parseMdRunSteps(root, existingTagsByName);
+  const steps = parseMdRunSteps(root, project);
 
   return {
     dateTime,

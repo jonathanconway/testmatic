@@ -10,6 +10,7 @@ import {
   projectMdRead,
   projectMdWrite,
   throwIfError,
+  throwIfResultWithDataError,
 } from "../../framework";
 import { PARAM_LINK_HREF } from "../link";
 
@@ -46,7 +47,7 @@ export function cliTestLinkAdd(...args: TestLinkAddParameters) {
 
   const newLink = createTestLinkFromArgsOrPrompts(args);
 
-  const updatedProject = throwIfError(
+  const updatedProject = throwIfResultWithDataError(
     projectAddTestLink({
       project,
       lookupTestNameOrTitle,
@@ -54,7 +55,7 @@ export function cliTestLinkAdd(...args: TestLinkAddParameters) {
     })
   );
 
-  projectMdWrite(updatedProject);
+  projectMdWrite(updatedProject.data);
 }
 
 function createTestLinkFromArgsOrPrompts(args: TestLinkAddParameters): Link {
@@ -81,11 +82,13 @@ function createTestLinkFromArgsOrPrompts(args: TestLinkAddParameters): Link {
   return createLinkResult;
 }
 
+const prompt = promptSync();
+
 function getTestAddParamsFromPrompts(paramsSoFar: Partial<CreateLinkParams>) {
   let params: Partial<CreateLinkParams> = {};
 
   if (!paramsSoFar.href) {
-    const href = getTestAddHrefFromPrompt();
+    const href = prompt("Please enter link href: ");
     params = {
       ...params,
       href,
@@ -93,7 +96,7 @@ function getTestAddParamsFromPrompts(paramsSoFar: Partial<CreateLinkParams>) {
   }
 
   if (!paramsSoFar.href && !paramsSoFar.title) {
-    const title = getTestAddTitleFromPrompt();
+    const title = prompt("Please enter link title:\n(Empty line to skip)\n");
     params = {
       ...params,
       title,
@@ -101,14 +104,4 @@ function getTestAddParamsFromPrompts(paramsSoFar: Partial<CreateLinkParams>) {
   }
 
   return params;
-}
-
-const prompt = promptSync();
-
-function getTestAddHrefFromPrompt() {
-  return prompt("Please enter link href: ");
-}
-
-function getTestAddTitleFromPrompt() {
-  return prompt("Please enter link title:\n(Empty line to skip)\n");
 }

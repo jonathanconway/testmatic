@@ -12,11 +12,12 @@ import {
   projectMdRead,
   projectMdWrite,
   throwIfError,
+  throwIfResultWithDataError,
 } from "../../framework";
 import { PARAM_TEST_NAME_OR_TITLE } from "../test";
 
 type RunAddParameters = [
-  string /* testNameOrTitle */,
+  string /* lookupTestNameOrTitle */,
   {
     readonly dateTime?: string;
     readonly result?: RunResult;
@@ -48,21 +49,21 @@ Optional.
 export function cliTagAdd(...args: RunAddParameters) {
   const project = throwIfError(projectMdRead());
 
-  const [testNameOrTitle] = args;
+  const [lookupTestNameOrTitle] = args;
 
   const test = throwIfError(
     projectGetTestByNameOrTitle({
       project,
-      lookupTestNameOrTitle: testNameOrTitle,
+      lookupTestNameOrTitle,
     })
   );
 
   const newRun = throwIfError(createRunFromArgs({ test, args }));
 
-  const updatedProject = throwIfError(
+  const { data: updatedProject } = throwIfResultWithDataError(
     projectAddTestRun({
       project,
-      lookupTestNameOrTitle: testNameOrTitle,
+      lookupTestNameOrTitle,
       newRun,
     })
   );

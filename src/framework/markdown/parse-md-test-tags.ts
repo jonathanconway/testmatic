@@ -1,16 +1,13 @@
 import { snakeCase } from "lodash";
 import { TokensList } from "marked";
 
-import { Tag, projectGetOrCreateTagByName } from "../core";
+import { ProjectView, Tag, projectGetOrCreateTagByName } from "../core";
 import { getNextElements, isNotNil } from "../utils";
 
 import { getMdTextContent, isMdList, isMdListItem } from "./markdown.utils";
 import { getHeadingsNodesByText } from "./parse-md.utils";
 
-export function parseMdTestTags(
-  root: TokensList,
-  existingTagsByName: Record<string, Tag>
-) {
+export function parseMdTestTags(root: TokensList, project: ProjectView) {
   const headingsByText = getHeadingsNodesByText(root);
   const tagsHeading = headingsByText["Tags"];
 
@@ -26,7 +23,7 @@ export function parseMdTestTags(
       .filter(isNotNil)
       .map(getMdTextContent)
       .map(snakeCase)
-      .map(projectGetOrCreateTagByName(existingTagsByName)) ?? [];
+      .map(projectGetOrCreateTagByName(project)) ?? [];
 
   return tags;
 }

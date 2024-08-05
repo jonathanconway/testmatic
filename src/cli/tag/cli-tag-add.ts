@@ -9,6 +9,7 @@ import {
   projectMdRead,
   projectMdWrite,
   throwIfError,
+  throwIfResultWithDataError,
 } from "../../framework";
 
 interface TagAddParameters {
@@ -73,7 +74,9 @@ export function cliTagAdd(args: TagAddParameters) {
 
   const newTag = throwIfError(createTagFromArgsOrPrompts(args));
 
-  const updatedProject = throwIfError(projectAddTag({ project, newTag }));
+  const { data: updatedProject } = throwIfResultWithDataError(
+    projectAddTag({ project, newTag })
+  );
 
   projectMdWrite(updatedProject);
 

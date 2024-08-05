@@ -2,11 +2,10 @@ import { createCommand } from "commander";
 
 import {
   projectDeleteTestLink,
-  projectGetTestByNameOrTitle,
-  projectGetTestLinkByHrefOrTitle,
   projectMdRead,
   projectMdWrite,
   throwIfError,
+  throwIfResultWithDataError,
 } from "../../framework";
 import { PARAM_LINK_HREF } from "../link";
 
@@ -24,31 +23,17 @@ export const cliTestLinkDeleteCommand = createCommand("delete")
   .action(cliTestDelete);
 
 export function cliTestDelete(
-  ...[lookupTestNameOrTitle, lookupLinkHref]: TestDeleteParameter
+  ...[lookupTestNameOrTitle, lookupTestLinkHref]: TestDeleteParameter
 ) {
   const project = throwIfError(projectMdRead());
 
-  const test = throwIfError(
-    projectGetTestByNameOrTitle({
-      project,
-      lookupTestNameOrTitle,
-    })
-  );
-
-  const linkToDelete = throwIfError(
-    projectGetTestLinkByHrefOrTitle({
-      test,
-      lookupLinkHref,
-    })
-  );
-
-  const updatedProject = throwIfError(
+  const updatedProject = throwIfResultWithDataError(
     projectDeleteTestLink({
       project,
-      test,
-      linkToDelete,
+      lookupTestNameOrTitle,
+      lookupTestLinkHref,
     })
   );
 
-  projectMdWrite(updatedProject);
+  projectMdWrite(updatedProject.data);
 }

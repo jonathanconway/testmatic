@@ -6,6 +6,7 @@ import {
   projectMdWrite,
   projectUpdateTag,
   throwIfError,
+  throwIfResultWithDataError,
 } from "../../framework";
 
 import { PARAM_TAG_NAME_OR_TITLE } from "./param-tag-name-or-title";
@@ -39,7 +40,7 @@ export function cliTagLinkAdd(...args: TagTypeParameters) {
     tagType,
   };
 
-  const updatedProject = throwIfError(
+  const { data: updatedProject } = throwIfResultWithDataError(
     projectUpdateTag({
       project,
       lookupTagNameOrTitle,

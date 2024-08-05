@@ -5,6 +5,7 @@ import {
   projectMdRead,
   projectMdWrite,
   throwIfError,
+  throwIfResultWithDataError,
 } from "../../framework";
 import { PARAM_LINK_HREF } from "../link";
 
@@ -26,7 +27,7 @@ export function cliTagDelete(
 ) {
   const project = throwIfError(projectMdRead());
 
-  const updatedProject = throwIfError(
+  const { data: updatedProject } = throwIfResultWithDataError(
     projectDeleteTagLink({
       project,
       lookupTagNameOrTitle,

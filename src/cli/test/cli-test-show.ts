@@ -1,8 +1,6 @@
-import chalk from "chalk";
 import { createCommand } from "commander";
 
 import {
-  Step,
   Test,
   formatDateTimeString,
   getRunFilepath,

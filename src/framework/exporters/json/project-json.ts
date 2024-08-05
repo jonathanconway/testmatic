@@ -12,6 +12,7 @@ import {
   createProjectView,
   createTagFromName,
   parseTagNames,
+  tagCreateNameFromTitle,
 } from "../../core";
 import { fieldOrEmpty } from "../../utils";
 
@@ -143,7 +144,7 @@ function convertProjectJSONTestToTest(
     runs: projectJSONTest.runs.map(convertProjectJSONRunToRun(projectJSON)),
     links: projectJSONTest.links.map(convertProjectJSONLinkToLink),
     tags: projectJSONTest.tagNames
-      .map(convertProjectJSONTestTagToTag(projectJSON))
+      .map(convertProjectJSONTagNameToTag(projectJSON))
       .map((tag) => tagsByName[tag.name] ?? tag),
   });
 }
@@ -151,14 +152,30 @@ function convertProjectJSONTestToTest(
 function convertProjectJSONStepToStep(projectJSON: ProjectJSON) {
   return (projectJSONStep: string): Step => ({
     text: projectJSONStep,
-    tags: parseTagNames(projectJSONStep)
-      .map(snakeCase)
-      .map(convertProjectJSONTestTagToTag(projectJSON))
-      .map(convertProjectJSONTagToTag),
+    tags: parseTagNames(projectJSONStep).map(
+      convertProjectJSONTagTitleToTag(projectJSON)
+    ),
   });
 }
 
-function convertProjectJSONTestTagToTag(projectJSON: ProjectJSON) {
+function convertProjectJSONTagTitleToTag(projectJSON: ProjectJSON) {
+  return (tagTitle: string): Tag => {
+    const tagName = tagCreateNameFromTitle(tagTitle);
+    const existingTag = projectJSON.tags[tagName];
+
+    if (existingTag) {
+      return convertProjectJSONTagToTag(existingTag);
+    }
+
+    return convertProjectJSONTagToTag({
+      name: tagName,
+      title: tagTitle,
+      links: [],
+    });
+  };
+}
+
+function convertProjectJSONTagNameToTag(projectJSON: ProjectJSON) {
   return (tagName: string): Tag =>
     (projectJSON.tags[tagName] as Tag) ?? createTagFromName(tagName);
 }
@@ -203,7 +220,7 @@ function convertProjectJSONRunStepToRunStep(projectJSON: ProjectJSON) {
       text: projectJSONRunStep.text,
       tags: parseTagNames(projectJSONRunStep.text)
         .map(snakeCase)
-        .map(convertProjectJSONTestTagToTag(projectJSON))
+        .map(convertProjectJSONTagNameToTag(projectJSON))
         .map(convertProjectJSONTagToTag),
       isCompleted: projectJSONRunStep.isCompleted,
     };

@@ -15,7 +15,7 @@ export function parseMd({
     ? projectFileTree["tags"]
     : {};
 
-  const { tags, tagsByName } = parseMdTags(tagsDirFileTree);
+  const { tags, tagsByName, tagsByTitle } = parseMdTags(tagsDirFileTree);
 
   const testsDirFileTree = isObject(projectFileTree["tests"])
     ? projectFileTree["tests"]
@@ -25,11 +25,13 @@ export function parseMd({
     ? projectFileTree["runs"]
     : {};
 
-  const { tests, testTags } = parseMdTests(
-    testsDirFileTree,
-    runsDirFileTree,
-    tagsByName
-  );
+  const { tests, testTags } = parseMdTests(testsDirFileTree, runsDirFileTree, {
+    tests: [],
+    testsByName: {},
+    tags,
+    tagsByName,
+    tagsByTitle,
+  } as ProjectView);
 
   return createProjectView({
     tests,

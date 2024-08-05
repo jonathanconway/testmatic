@@ -1,5 +1,11 @@
-import { MOCK_TAG_LOGIN_FLOW, MOCK_TAG_LOGIN_SCREEN, Tag } from "../../core";
-import { MOCK_TAG, MOCK_TEST, MOCK_TEST_WITH_MAPPED_TAGS } from "../../core";
+import {
+  MOCK_PROJECT_VIEW,
+  MOCK_TAG,
+  MOCK_TAG_LOGIN_FLOW,
+  MOCK_TAG_LOGIN_SCREEN,
+  MOCK_TEST,
+  MOCK_TEST_WITH_MAPPED_TAGS,
+} from "../../core";
 import { parseMdTag } from "../parse-md-tag";
 import { parseMdTest } from "../parse-md-test";
 
@@ -55,7 +61,7 @@ This flow covers an existing user logging into the website.
   
   - Log in flow        
     `.trim(),
-        {},
+        MOCK_PROJECT_VIEW,
         {}
       );
 
@@ -88,8 +94,11 @@ This flow covers an existing user logging into the website.
   - Log in flow        
     `.trim(),
         {
-          log_in_flow: MOCK_TAG_LOGIN_FLOW,
-          login_screen: MOCK_TAG_LOGIN_SCREEN,
+          ...MOCK_PROJECT_VIEW,
+          tagsByName: {
+            log_in_flow: MOCK_TAG_LOGIN_FLOW,
+            login_screen: MOCK_TAG_LOGIN_SCREEN,
+          },
         },
         {}
       );

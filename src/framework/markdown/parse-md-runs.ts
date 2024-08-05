@@ -1,6 +1,6 @@
 import { isObject } from "lodash";
 
-import { Run, Tag } from "../core";
+import { ProjectView, Run } from "../core";
 import { DirFileTree } from "../files";
 import { isNotNil } from "../utils";
 
@@ -9,7 +9,7 @@ import { parseMdRun } from "./parse-md-run";
 export function parseMdRuns(
   runsDirFileTree: DirFileTree,
   testName: string,
-  existingTagsByName: Record<string, Tag>
+  project: ProjectView
 ): Run[] {
   const runsTestDir = Object.entries(runsDirFileTree[testName] ?? {});
 
@@ -18,9 +18,7 @@ export function parseMdRuns(
   );
 
   const runs = runsTestDirRuns
-    .map(([timestamp, runDir]) =>
-      parseMdRun(timestamp, runDir, existingTagsByName)
-    )
+    .map(([timestamp, runDir]) => parseMdRun(timestamp, runDir, project))
     .filter(isNotNil);
 
   return runs;

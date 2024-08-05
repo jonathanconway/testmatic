@@ -2,6 +2,7 @@ import { isError } from "lodash";
 
 import {
   RunResult,
+  isResultError,
   parseRunResult,
   projectGetTestByNameOrTitle,
   projectGetTestRunByDateTimeOrLatest,
@@ -60,9 +61,9 @@ export function runResult({
     updateRunChanges: updatedRun,
   });
 
-  if (isError(updatedProject)) {
+  if (isResultError(updatedProject)) {
     return updatedProject;
   }
 
-  projectMdWrite(updatedProject, projectPath);
+  projectMdWrite(updatedProject.data, projectPath);
 }

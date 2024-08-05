@@ -21,13 +21,13 @@ export const cliTestImpactsCommand = createCommand("impacts")
   .argument(PARAM_TEST_NAME_OR_TITLE.name, PARAM_TEST_NAME_OR_TITLE.description)
   .action(cliTestImpacts);
 
-export function cliTestImpacts(testNameOrTitle: TestImpactsParameter) {
+export function cliTestImpacts(lookupTestNameOrTitle: TestImpactsParameter) {
   const project = throwIfError(projectMdRead());
 
   const test = throwIfError(
     projectGetTestByNameOrTitle({
       project,
-      lookupTestNameOrTitle: testNameOrTitle,
+      lookupTestNameOrTitle,
     })
   );
 

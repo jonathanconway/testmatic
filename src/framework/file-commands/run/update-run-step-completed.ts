@@ -1,6 +1,7 @@
 import { isError, isNil } from "lodash";
 
 import {
+  isResultError,
   projectGetTestByNameOrTitle,
   projectGetTestRunByDateTimeOrLatest,
   projectUpdateTestRun,
@@ -71,9 +72,9 @@ export function updateRunStepCompleted({
     updateRunChanges: updatedRun,
   });
 
-  if (isError(updatedProject)) {
+  if (isResultError(updatedProject)) {
     return updatedProject;
   }
 
-  projectMdWrite(updatedProject, projectPath);
+  projectMdWrite(updatedProject.data, projectPath);
 }

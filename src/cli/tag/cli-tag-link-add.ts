@@ -9,6 +9,7 @@ import {
   projectMdRead,
   projectMdWrite,
   throwIfError,
+  throwIfResultWithDataError,
 } from "../../framework";
 
 import { PARAM_TAG_LINK_HREF } from "./param-tag-link-href";
@@ -45,7 +46,7 @@ export function cliTagLinkAdd(...args: TagLinkAddParameters) {
 
   const newLink = createTagLinkFromArgsOrPrompts(args);
 
-  const updatedProject = throwIfError(
+  const { data: updatedProject } = throwIfResultWithDataError(
     projectAddTagLink({
       project,
       lookupTagNameOrTitle,

@@ -1,15 +1,16 @@
 import { TokensList } from "marked";
 
-import { Tag, parseTagNames, projectGetOrCreateTagByName } from "../core";
+import {
+  ProjectView,
+  parseTagNames,
+  projectGetOrCreateTagByName,
+} from "../core";
 import { getNextElements } from "../utils";
 
 import { getMdCheckCheckListItems, isMdList } from "./markdown.utils";
 import { getHeadingsNodesByText } from "./parse-md.utils";
 
-export function parseMdRunSteps(
-  root: TokensList,
-  existingTagsByName: Record<string, Tag>
-) {
+export function parseMdRunSteps(root: TokensList, project: ProjectView) {
   const headingsByText = getHeadingsNodesByText(root);
 
   const stepsHeading = headingsByText["Steps"];
@@ -22,7 +23,7 @@ export function parseMdRunSteps(
     text: checkListItem.text,
     isCompleted: checkListItem.checked,
     tags: parseTagNames(checkListItem.text).map(
-      projectGetOrCreateTagByName(existingTagsByName)
+      projectGetOrCreateTagByName(project)
     ),
   }));
 

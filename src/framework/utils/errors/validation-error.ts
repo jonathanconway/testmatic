@@ -1,5 +1,8 @@
 import { TestmaticError } from "./testmatic-error";
 
+/**
+ * User input was incorrect.
+ */
 export class ValidationError extends TestmaticError {
   public name = "ValidationError";
 }

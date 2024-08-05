@@ -11,5 +11,7 @@ export function parseMdTags(fileTree: DirFileTree) {
 
   const tagsByName = fromPairs(tags.map((tag) => [tag.name, tag]));
 
-  return { tags, tagsByName };
+  const tagsByTitle = fromPairs(tags.map((tag) => [tag.title, tag]));
+
+  return { tags, tagsByName, tagsByTitle };
 }

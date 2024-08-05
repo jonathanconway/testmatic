@@ -1,5 +1,8 @@
 import { TestmaticError } from "./testmatic-error";
 
+/**
+ * User cancelled the operation.
+ */
 export class CancelledError extends TestmaticError {
   public name = "CancelledError";
 

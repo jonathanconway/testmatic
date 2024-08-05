@@ -1,5 +1,5 @@
 export * from "./ascii";
-export * from "./error";
+export * from "./console";
 export * from "./heading";
 export * from "./impacts";
 export * from "./prompt";

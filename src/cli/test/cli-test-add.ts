@@ -5,12 +5,13 @@ import {
   CreateTestParams,
   createTest,
   isCancelledError,
-  projectAddTest,
+  projectAddNewTest,
   projectMdRead,
   projectMdWrite,
   throwIfError,
+  throwIfResultWithDataError,
 } from "../../framework";
-import { promptValue, promptValues } from "../utils";
+import { logSuccess, promptValue, promptValues } from "../utils";
 
 interface TestAddParameters {
   readonly title: string;
@@ -77,11 +78,15 @@ export function cliTestAdd(args: TestAddParameters) {
 
   const newTest = throwIfError(createTestFromArgsOrPrompts(args));
 
-  const addTestResult = throwIfError(projectAddTest({ project, newTest }));
+  const addTestResult = throwIfResultWithDataError(
+    projectAddNewTest({ project, newTest })
+  );
 
   const updatedProject = addTestResult;
 
-  projectMdWrite(updatedProject);
+  projectMdWrite(updatedProject.data);
+
+  logSuccess(updatedProject.message);
 }
 
 function createTestFromArgsOrPrompts(args: TestAddParameters) {

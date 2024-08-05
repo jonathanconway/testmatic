@@ -1,5 +1,8 @@
 import { TestmaticError } from "./testmatic-error";
 
+/**
+ * Cannot find the specified entity.
+ */
 export class NotFoundError extends TestmaticError {
   public name = "NotFoundError";
 }
