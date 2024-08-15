@@ -5,9 +5,9 @@ import {
   ResultOkWithData,
   ResultWithData,
   isResultError,
-} from "../../core";
+} from "../core/result/result";
 
-import { TestmaticError } from "./testmatic-error";
+import { TestmaticError } from "./errors/testmatic-error";
 
 export function isTestmaticError<T>(input: T | Error): input is TestmaticError {
   return input instanceof TestmaticError;

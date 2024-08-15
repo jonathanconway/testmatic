@@ -34,5 +34,5 @@ export function nowDateTimeString() {
 }
 
 export function isDateTimeString(input: string) {
-  return ZOD_REGEX_DATE_TIME_STRING.regex.test(input);
+  return ZOD_REGEX_DATE_TIME_STRING[0].test(input);
 }

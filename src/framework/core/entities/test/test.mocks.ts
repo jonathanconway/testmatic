@@ -11,6 +11,7 @@ import {
 } from "../tag/tag.mocks";
 
 import { Test } from "./test";
+import { CreateTestParams } from "./test-create";
 
 export const MOCK_TEST_LOG_IN = {
   type: "test",
@@ -254,9 +255,9 @@ export const MOCK_TEST_WITH_MAPPED_TAGS_2 = {
 
 export const MOCK_TESTS = [MOCK_TEST_LOG_IN, MOCK_TEST_PASSWORD_RESET];
 
-export const MOCK_CREATE_TEST_PARAMS = {
+export const MOCK_CREATE_TEST_PARAMS: CreateTestParams = {
   title: "Mock test",
-  steps: ["step one", "step two", "step three (with tag)"],
+  stepTexts: ["step one", "step two", "step three (with tag)"],
   description: "Mock test description",
 };
 

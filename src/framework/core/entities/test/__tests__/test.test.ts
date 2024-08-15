@@ -1,7 +1,7 @@
 import { omit } from "lodash";
 
 import { ValidationError, isValidationError } from "../../../../utils";
-import { createTest } from "../test-create";
+import { CreateTestParams, createTest } from "../test-create";
 import { MOCK_CREATE_TEST_PARAMS } from "../test.mocks";
 
 describe("test", () => {
@@ -10,6 +10,7 @@ describe("test", () => {
       const test = createTest(MOCK_CREATE_TEST_PARAMS);
 
       expect(test).toEqual({
+        type: "test",
         name: "mock_test",
         title: "Mock test",
         description: "Mock test description",
@@ -18,7 +19,9 @@ describe("test", () => {
           { text: "step two", tags: [] },
           {
             text: "step three (with tag)",
-            tags: [{ name: "with_tag", title: "With tag", links: [] }],
+            tags: [
+              { type: "tag", name: "with_tag", title: "With tag", links: [] },
+            ],
           },
         ],
         links: [],
@@ -27,11 +30,11 @@ describe("test", () => {
       });
     });
 
-    it.each(["title", "steps"])(
+    it.each(["title"])(
       "returns an error if required fields are not provided",
       (notProvidedField) => {
         const result = createTest(
-          omit(MOCK_CREATE_TEST_PARAMS, notProvidedField)
+          omit(MOCK_CREATE_TEST_PARAMS, notProvidedField) as CreateTestParams
         );
 
         expect(isValidationError(result)).toBeTruthy();
@@ -40,17 +43,5 @@ describe("test", () => {
         );
       }
     );
-
-    it("returns an error if steps are not provided", () => {
-      const result = createTest({
-        ...MOCK_CREATE_TEST_PARAMS,
-        stepTexts: [],
-      });
-
-      expect(isValidationError(result)).toBeTruthy();
-      expect((result as ValidationError).message).toEqual(
-        `Validation error: Array must contain at least 1 element(s) at \"steps\"`
-      );
-    });
   });
 });

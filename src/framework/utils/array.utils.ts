@@ -8,6 +8,8 @@ import {
   without,
 } from "lodash";
 
+import { ScalarValue } from "./type.utils";
+
 export function isNotNil<T>(item?: T | undefined | null | false): item is T {
   return Boolean(item);
 }
@@ -158,4 +160,13 @@ export function insertAt<T>(
       itemIndex === atIndex ? [itemToInsert, item] : [item]
     )
     .flat();
+}
+
+/**
+ * Checks if array elements are unique.
+ * @param array
+ * @see https://stackoverflow.com/questions/57001262/jest-expect-only-unique-elements-in-an-array
+ */
+export function isUnique<T extends ScalarValue>(array: T[] | readonly T[]) {
+  return new Set(array).size === array.length;
 }

@@ -1,5 +1,7 @@
 import { ImpactItem } from "../impact";
-import { Test, testGetTags } from "../test";
+import { ItemTypes } from "../item";
+import { Test } from "../test/test";
+import { testGetTags } from "../test/test-get-tags";
 
 import { Tag } from "./tag";
 
@@ -34,7 +36,7 @@ export function getTagImpactedTests({
       (testTag) =>
         ({
           item: testTag,
-          itemType: "tag",
+          itemType: ItemTypes.Tag,
           items: getTagImpactedTests({ tests, tag: testTag, depth: depth - 1 }),
         } as ImpactItem)
     );

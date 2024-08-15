@@ -101,7 +101,7 @@ function createTestFromArgsOrPrompts(args: TestAddParameters) {
   const params = {
     ...paramsFromArgs,
     ...paramsFromPrompts,
-  };
+  } as CreateTestParams;
 
   const createTestResult = createTest(params);
 

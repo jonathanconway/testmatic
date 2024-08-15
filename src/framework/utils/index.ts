@@ -2,6 +2,7 @@ export * from "./array.utils";
 export * from "./assertion.utils";
 export * from "./date-time.utils";
 export * from "./errors";
+export * from "./error.utils";
 export * from "./filter.utils";
 export * from "./filename.utils";
 export * from "./object.utils";

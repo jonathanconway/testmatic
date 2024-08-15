@@ -6,10 +6,7 @@ import { linkValidator } from "../link";
 import { RunResults } from "./run-result";
 
 export const runValidator = object({
-  dateTime: string().regex(
-    ZOD_REGEX_DATE_TIME_STRING.regex,
-    ZOD_REGEX_DATE_TIME_STRING.message
-  ),
+  dateTime: string().regex(...ZOD_REGEX_DATE_TIME_STRING),
   result: zEnum([
     RunResults.Passed,
     RunResults.Mixed,

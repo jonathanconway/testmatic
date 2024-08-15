@@ -1,6 +1,6 @@
 import { byEquals } from "../../../utils";
 import { Step } from "../step";
-import { Test } from "../test";
+import { Test } from "../test/test";
 
 import { Tag } from "./tag";
 

@@ -3,7 +3,7 @@ import { isError } from "lodash";
 import { AlreadyExistsError } from "../../utils";
 import { Link, ProjectView, Tag, createProjectView } from "../entities";
 import { projectGetTagByNameOrTitle } from "../queries/get-tag-by-name-or-title";
-import { resultError, resultOk, resultOkWithData } from "../result";
+import { resultError, resultOkWithData } from "../result";
 
 import { Action } from "./action";
 import { ProjectAction } from "./project-action";
@@ -30,7 +30,7 @@ export const projectAddTagLink: ProjectAction<AddTagLink> = ({
     return resultError(tag);
   }
 
-  if (tagLinkAlreadyExists(project, tag, newLink)) {
+  if (getTagLinkAlreadyExists(project, tag, newLink)) {
     return resultError(
       new AlreadyExistsError(
         `Link "${newLink.href}" already exists in tag "${tag.title}".`
@@ -55,7 +55,7 @@ export const projectAddTagLink: ProjectAction<AddTagLink> = ({
   return resultOkWithData(updatedProject, "Tag link added.");
 };
 
-function tagLinkAlreadyExists(project: ProjectView, tag: Tag, link: Link) {
+function getTagLinkAlreadyExists(project: ProjectView, tag: Tag, link: Link) {
   const matchedTag = project.tagsByName[tag.name];
   return Boolean(
     matchedTag.links.map((tagLink: Link) => tagLink.href).includes(link.href)

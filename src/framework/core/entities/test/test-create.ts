@@ -1,4 +1,3 @@
-import { snakeCase } from "lodash";
 import { array, object, string } from "zod";
 
 import {
@@ -7,6 +6,7 @@ import {
   createValidationErrorFromZodError,
   sentenceCase,
 } from "../../../utils";
+import { ItemTypes } from "../item";
 import { createLinkFromInput } from "../link";
 import { createTestStepFromText } from "../step";
 import { createTagFromName, isTag } from "../tag";
@@ -18,25 +18,20 @@ import { testValidator } from "./test-validator";
 export interface CreateTestParams {
   readonly title: string;
   readonly description?: string;
-  readonly stepTexts: readonly string[];
+  readonly stepTexts?: readonly string[];
   readonly linkNames?: readonly string[];
   readonly tagNames?: readonly string[];
 }
 
 export const createTestParamsValidator = object({
-  title: string().regex(
-    ZOD_REGEX_START_WITH_ALPHA.regex,
-    ZOD_REGEX_START_WITH_ALPHA.message
-  ),
+  title: string().regex(...ZOD_REGEX_START_WITH_ALPHA),
   description: string().optional(),
   stepTexts: array(string()),
   linkNames: array(string()).optional(),
   tagNames: array(string()).optional(),
 });
 
-export function createTest(
-  params: CreateTestParams | object
-): Test | ValidationError {
+export function createTest(params: CreateTestParams): Test | ValidationError {
   const paramsValidatorResult = createTestParamsValidator.safeParse(params);
   if (!paramsValidatorResult.success) {
     return createValidationErrorFromZodError(paramsValidatorResult.error);
@@ -46,11 +41,11 @@ export function createTest(
     params as CreateTestParams;
 
   const newTest = {
-    type: "test",
+    type: ItemTypes.Test,
     name: testCreateNameFromTitle(title),
     title: sentenceCase(title),
     description,
-    steps: stepTexts.map(createTestStepFromText),
+    steps: stepTexts?.map(createTestStepFromText) ?? [],
     links: linkNames?.map(createLinkFromInput) ?? [],
     tags: tagNames?.map(createTagFromName).filter(isTag) ?? [],
     runs: [],

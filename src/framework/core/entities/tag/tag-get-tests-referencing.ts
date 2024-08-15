@@ -1,8 +1,8 @@
-import { Test } from "../test";
+import { Test } from "../test/test";
 
 import { Tag } from "./tag";
 
-// remove, replace with project fn
+// remove, replace with project query fn
 export function getTestsReferencingTag(tests: readonly Test[], tag: Tag) {
   return tests.filter(
     (test) =>

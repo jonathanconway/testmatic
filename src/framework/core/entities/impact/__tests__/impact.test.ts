@@ -1,3 +1,4 @@
+import { isUnique } from "../../../../utils";
 import {
   MOCK_NEW_TAG_FOUR,
   MOCK_NEW_TAG_ONE,
@@ -5,12 +6,14 @@ import {
   MOCK_NEW_TAG_TWO,
 } from "../../tag/tag.mocks";
 import { MOCK_NEW_TEST, MOCK_TEST } from "../../test/test.mocks";
-import { ImpactItem, pruneImpacts } from "../impact";
+import { ImpactItem } from "../impact";
+import { getItemAndSubItemNames } from "../impact-names";
+import { pruneImpacts } from "../impact-prune";
 
 describe("impact", () => {
   describe("pruneImpacts", () => {
     it("removes repeated sub-trees of items from impact tree", () => {
-      const impactItems = [
+      const MOCK_IMPACT_ITEMS = [
         {
           item: MOCK_TEST,
           itemType: "test",
@@ -52,9 +55,11 @@ describe("impact", () => {
         },
       ] as readonly ImpactItem[];
 
-      const result = pruneImpacts(impactItems, []);
+      const result = pruneImpacts(MOCK_IMPACT_ITEMS, []);
 
-      console.log(JSON.stringify(result));
+      result.map((result) => result.item.name);
+
+      expect(isUnique(getItemAndSubItemNames(result))).toBe(true);
     });
   });
 });

@@ -7,6 +7,7 @@ import {
   createValidationErrorFromZodError,
   sentenceCase,
 } from "../../../utils";
+import { ItemTypes } from "../item";
 import { createLinkFromInput } from "../link";
 
 import { Tag } from "./tag";
@@ -22,18 +23,13 @@ export interface CreateTagParams {
 }
 
 export const createTagParamsValidator = object({
-  title: string().regex(
-    ZOD_REGEX_START_WITH_ALPHA.regex,
-    ZOD_REGEX_START_WITH_ALPHA.message
-  ),
+  title: string().regex(...ZOD_REGEX_START_WITH_ALPHA),
   tagType: string().optional(),
   description: string().optional(),
   links: array(string()).optional(),
 });
 
-export function createTag(
-  params: CreateTagParams | object
-): Tag | ValidationError {
+export function createTag(params: CreateTagParams): Tag | ValidationError {
   const validatorResult = createTagParamsValidator.safeParse(params);
   if (!validatorResult.success) {
     return createValidationErrorFromZodError(validatorResult.error);
@@ -42,7 +38,7 @@ export function createTag(
   const { title, tagType, description, links } = params as CreateTagParams;
 
   const newTag = {
-    type: "tag",
+    type: ItemTypes.Tag,
     name: tagCreateNameFromTitle(title),
     title: tagCreateTitleFromName(title),
     ...(tagType?.trim() ? { tagType } : {}),
@@ -60,7 +56,7 @@ export function createTag(
 
 export function createTagFromName(name: string): Tag | ValidationError {
   const createTagParams = {
-    type: "tag",
+    type: ItemTypes.Tag,
     name: snakeCase(name),
     title: sentenceCase(name),
     links: [],
