@@ -30,8 +30,8 @@ Whenever you are ready to add automation, Testmatic can help you there too: code
 
 ## Contents
 
-- [Concepts](#concepts)
 - [Getting started](#getting-started)
+- [Concepts](#concepts)
 - [UI](#ui)
 - [CLI](#cli)
 - [Advanced](#advanced)
@@ -40,125 +40,6 @@ Whenever you are ready to add automation, Testmatic can help you there too: code
 - [Contributing](#contributing)
 - [Troubleshooting](#troubleshooting)
 - [Contact](#contact)
-
-<!-- ------------------------------------------------------------------------------------------------- -->
-
-## Concepts
-
-### Tests and steps
-
-At the heart of Testmatic is **tests** which are simple numbered lists of **steps**.
-
-You simply follow the the steps to test the system.
-
-Here's an example of a test:
-
-![Sign in \n 1. Go to the website \n 2. Click the sign in button \n 3. Enter the username and password of a registered user \n 4. Click the submit button \n 5. Observe that you are signed in](/docs/concepts/tests_and_steps/test_example.svg)
-
-<!--
-**Sign in**
-
-1. Go to the website
-2. Click the sign in button
-3. Enter the username and password of a registered user
-4. Click the submit button
-5. Observe that you are signed in
--->
-
-You'll notice some steps are actions, such as:
-
-> 2. Click the sign in button
-
-Whereas others are expectations, such as:
-
-> 5. Observe that you are signed in
-
-The **actions** tell us what to do but the **expectations** tell us how the system should behave or respond.
-
-If the system does not behave as expected then either there is a fault in the system or our expectation is wrong.
-
-The title and steps should be as short and succinct as possible but also clear and specific enough to easily follow and understand.
-
-### Tags
-
-As you write many tests, you'll no doubt notice common recurring elements.
-
-These elements can be referenced by **tags**, which are re-usable tokens that can be used to group and organise tests.
-
-Tags are indicated in steps by surrounding a piece of text with round brackets like this: `(tag)`.
-
-For example, the "sign in" button might be a recurring element. Here's how it would look if we make it tag:
-
-![Reset password \n 1. Go to the website \n 2. Click the (sign in button) \n 3. Enter the username and incorrect password of a registered user \n 4. Click the submit button \n 5. Observe that an error appears indicating the incorrect password \n 6. Observe that a forgotten password link appears \n 7. Click the forgotten password link \n 8. Open your email, copy the code \n 9. Switch back to the website, paste in the code \n 10. Enter a new password and click submit \n 11. Click the (sign in button) again \n 12. Enter the username and new password \n 13. Observe that you are signed in](/docs/concepts/tags/tags_example.svg)
-
-<!--
-**Reset password**
-
-1. Go to the website
-2. Click the (sign in button)
-3. Enter the username and incorrect password of a registered user
-4. Click the submit button
-5. Observe that an error appears indicating the incorrect password
-6. Observe that a forgotten password link appears
-7. Click the forgotten password link
-8. Open your email, copy the code
-9. Switch back to the website, paste in the code
-10. Enter a new password and click submit
-11. Click the (sign in button) again
-12. Enter the username and new password
-13. Observe that you are signed in
--->
-
-Tags can be the following:
-
-- Visual elements in the UI
-- Pages of a website
-- Screens of an app
-- Test user accounts
-- Flows, e.g. sign in flow
-- Anything else that might be common between different tests
-
-Note: You can also attach tags to a test itself. This is useful when you want a tag to apply to a whole test, not just one or more steps.
-
-### Runs
-
-After you have written a test you might follow the steps of that test any number of times, to ensure the system is behaving correctly.
-
-What if you want to keep track of the results? This is what **test runs** are for.
-
-Each test can have multiple runs. Each run has a date/time stamp indicating when it was performed as well as a result and a list of checked/unchecked test steps.
-
-You can mark each run with a **result**:
-
-- _Passed_ - the system behaved correctly
-- _Failed_ - there was some problem so the whole test failed
-- _Mixed_ - some steps passed, some failed
-- _Unset_ - you haven't performed the test yet
-
-You can also check off individual test steps as you go through the run. This could be useful when making a screen recording, to show which steps have been executed, or just to keep track of the steps.
-
-Each run has a date/time stamped folder containing the run file.
-
-You can put screenshots or screen recording files into this folder as well. That way they will be easier to locate if/when you need them.
-
-Runs are a powerful feature for measuring and organising your test results. You can quickly see which tests have passed or failed and keep your screen recordings organised.
-
-### Impacts
-
-Part of the benefit of tags (discussed earlier) is their usefulness for grouping and locating tests. If two or more tests reference the same tag then you can locate these tests by filtering by that tag.
-
-This gives you a way of finding **impacts** – which tests might be impacted by a particular tag.
-
-For example, suppose you are making a visual change to the website header, which might impact the sign up button. You can search for all tests that reference the `(sign up button)` tag.
-
-Your search might turn up a list of tests like this:
-
-- Sign in as user
-- Sign in as admin
-- Reset password
-- Sign out
-
-Now you can run some or all of these tests and check how the Sign up button behaves under various scenarios. If you change introduced a bug in one of the tests, you'll have a chance to find the bug and fix it early rather than waiting for it to crop up in production.
 
 <!-- ------------------------------------------------------------------------------------------------- -->
 
@@ -233,6 +114,117 @@ You can find instructions for using the hosted UI at [UI guide](#ui-guide).
 
 <!-- ------------------------------------------------------------------------------------------------- -->
 
+## Concepts
+
+### Tests and steps
+
+At the heart of Testmatic is **tests** which are simple numbered lists of **steps**.
+
+You simply follow the the steps to test the system.
+
+Here's an example of a test:
+
+> User can login
+>
+> 1. Go to the homepage
+> 2. Click the sign in button
+> 3. Enter the username and password of a registered user
+> 4. Click the sign in submit button
+> 5. Observe that you are now signed in
+
+Notice some steps are **_actions_**, such as:
+
+> 2. Click the sign in button
+
+Whereas others are **_expectations_**, such as:
+
+> 5. Observe that you are signed in
+
+The **_actions_** tell us what to do but the **_expectations_** tell us how the system should behave or respond.
+
+If the system does not behave as expected then either there is a fault in the system or our expectation is wrong.
+
+The title and steps should be as short and succinct as possible but also clear and specific enough to easily follow and understand.
+
+### Tags
+
+As you write many tests, you'll no doubt notice common recurring elements.
+
+These elements can be referenced by **tags**, which are re-usable tokens that can be used to group and organise tests.
+
+Tags are indicated in steps by surrounding a piece of text with round brackets like this: `(tag)`.
+
+For example, the "sign in" button might be a recurring element. Here's how it would look if we made it tag:
+
+> Reset password
+>
+> 1. Go to the website
+> 2. Click the **(sign in button)** `<----------`
+> 3. Enter the username and incorrect password of a registered user
+> 4. Click the submit button
+> 5. Observe that an error appears indicating the incorrect password
+> 6. Observe that a forgotten password link appears
+> 7. Click the forgotten password link
+> 8. Open your email, copy the code
+> 9. Switch back to the website, paste in the code
+> 10. Enter a new password and click submit
+> 11. Click the **(sign in button)** again `<----------`
+> 12. Enter the username and new password
+> 13. Observe that you are signed in
+
+Tags can be the following:
+
+- Visual elements in the UI
+- Pages of a website
+- Screens of an app
+- Test user accounts
+- Flows, e.g. sign in flow
+- Anything else that might be common between different tests
+
+Note: You can also attach tags to a test itself. This is useful when you want a tag to apply to a whole test, not just one or more steps.
+
+### Runs
+
+After you have written a test you might follow the steps of that test any number of times, to ensure the system is behaving correctly.
+
+What if you want to keep track of the results? This is what **test runs** are for.
+
+Each test can have multiple runs. Each run has a date/time stamp indicating when it was performed as well as a result and a list of checked/unchecked test steps.
+
+You can mark each run with a **result**:
+
+- _Passed_ - the system behaved correctly
+- _Failed_ - there was some problem so the whole test failed
+- _Mixed_ - some steps passed, some failed
+- _Unset_ - you haven't performed the test yet
+
+You can also check off individual test steps as you go through the run. This could be useful when making a screen recording, to show which steps have been executed, or just to keep track of the steps.
+
+Each run has a date/time stamped folder containing the run file.
+
+You can put screenshots or screen recording files into this folder as well. That way they will be easier to locate if/when you need them.
+
+Runs are a powerful feature for measuring and organising your test results. You can quickly see which tests have passed or failed and keep your screen recordings organised.
+
+### Impacts
+
+Part of the benefit of tags (discussed earlier) is their usefulness for grouping and locating tests. If two or more tests reference the same tag then you can locate these tests by filtering by that tag.
+
+This gives you a way of finding **impacts** – which tests might be impacted by a particular tag.
+
+For example, suppose you are making a visual change to the website header, which might impact the sign up button. You can search for all tests that reference the `(sign up button)` tag.
+
+Your search might turn up a list of tests like this:
+
+- Sign in as user
+- Sign in as admin
+- Reset password
+- Sign out
+
+Now you can run some or all of these tests and check how the Sign up button behaves under various scenarios. If you change introduced a bug in one of the tests, you'll have a chance to find the bug and fix it early rather than waiting for it to crop up in production.
+
+<!-- ------------------------------------------------------------------------------------------------- -->
+
 ## UI guide
 
 ### Starting a project in the UI
@@ -270,19 +262,23 @@ To create a new test, click the Add button in the Project explorer (top-left of 
 
 ![Screenshot of the Testmatic UI with an empty project and clicking the Add button](/docs/ui_guide/creating_a_test_in_the_ui/click_add.png)
 
+It will now appear in the Project explorer.
+
+![Screenshot of the Testmatic UI showing createed test in Project explorer](/docs/ui_guide/creating_a_test_in_the_ui/view_created_test_in_project_explorer.png)
+
 You can then enter a title and steps.
 
 ![Screenshot of the Testmatic UI entering text into the title field](/docs/ui_guide/creating_a_test_in_the_ui/enter_title.png)
 
 ![Screenshot of the Testmatic UI entering text into the steps fields](/docs/ui_guide/creating_a_test_in_the_ui/enter_steps.png)
 
-When you're ready to save your new test, click Create (top-right of the screen).
+### Adding steps to a test in the UI
 
-![Screenshot of the Testmatic UI clicking create on a new test](/docs/ui_guide/creating_a_test_in_the_ui/click_create.png)
+Open a test by selected it in the project explorer on the left.
 
-It will now appear in the Project explorer.
+You can then enter some steps.
 
-![Screenshot of the Testmatic UI showing createed test in Project explorer](/docs/ui_guide/creating_a_test_in_the_ui/view_created_test_in_project_explorer.png)
+![Screenshot of the Testmatic UI entering text into the steps fields](/docs/ui_guide/creating_a_test_in_the_ui/enter_steps.png)
 
 ### Adding tags in the UI
 
@@ -303,13 +299,18 @@ You'll notice that a suggestion box appears – feel free to use this to quickly
 
 ### Finding tests by tag in the UI
 
-### Advanced UI usage
+Tags appear in the Project explorer under the Tags section.
+
+Simply click a tag to view its associated tests.
+
+<!-- ### Advanced UI usage
 
 #### Using Runs in the CLI
 
 #### Using Links in the CLI
 
 #### Using Impacts in the CLI
+ -->
 
 <!-- ------------------------------------------------------------------------------------------------- -->
 
